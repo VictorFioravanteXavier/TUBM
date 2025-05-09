@@ -4,17 +4,18 @@ const router = express.Router();
 const homeController = require('./src/controllers/homeController');
 const loginController = require('./src/controllers/loginController');
 const contatoController = require('./src/controllers/contatoController');
+const vendasController = require('./src/controllers/vendasController');
 
 const { loginRequired } = require('./src/middlewares/middleware')
 
-// Rotas da Home
-router.get('/', homeController.index);
+// Rotas da Login
+router.get('/', loginController.index);
+router.post('/login', loginController.login); // <- ESSENCIAL para autenticação
+router.get('/logout', loginController.logout)
+router.post('/register', loginController.register)
 
-//Rotas login 
-router.get('/login/index', loginController.index)
-router.post('/login/register', loginController.register)
-router.post('/login/login', loginController.login)
-router.get('/login/logout', loginController.logout)
+/* Rotas Vendas */
+router.get('/vendas', loginRequired,vendasController.index);
 
 // Rotas contato
 router.get('/contato/index', loginRequired, contatoController.index)

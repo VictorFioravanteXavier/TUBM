@@ -1,90 +1,85 @@
 const mongoose = require('mongoose');
-const validator = require('validator')
 const bcryptjs = require('bcryptjs')
 
 const LoginSchema = new mongoose.Schema({
-    email: { type: String, required: true },
-    password: { type: String, required: true },
-})
+    username: { type: String, required: true, unique: true },
+    password: { type: String, required: true }
+});
+
 
 const LoginModule = mongoose.model('Login', LoginSchema);
 
 class Login {
     constructor(body) {
-        this.body = body
-        this.errors = []
-        this.user = null
+        this.body = body;
+        this.errors = [];
+        this.user = null;
     }
 
     async login() {
-        this.valida()
-        if (this.errors.length > 0) return
+        this.valida();
+        if (this.errors.length > 0) return;
 
-        this.user = await LoginModule.findOne({ email: this.body.email })
-
-        if (!this.user) { 
-            this.errors.push("Usuário não existe.") 
-            return
+        const user = await LoginModule.findOne({ username: this.body.username });
+        if (!user) {
+            this.errors.push('Usuário não existe.');
+            return;
         }
 
-        if (!bcryptjs.compareSync(this.body.password, this.user.password)) {
-            this.errors.push('Senha invalida.')
-            this.user = null;
-            return
+        const senhaValida = bcryptjs.compareSync(this.body.password, user.password);
+        if (!senhaValida) {
+            this.errors.push('Senha inválida.');
+            return;
         }
 
+        this.user = user;
     }
 
     async register() {
-        this.valida()
-        if (this.errors.length > 0) return
+        this.valida();
+        if (this.errors.length > 0) return;
 
-        await this.userExists()
+        const user = await LoginModule.findOne({ username: this.body.username });
+        if (user) {
+            this.errors.push("Usuário já existe.");
+            return;
+        }
 
-        if (this.errors.length > 0) return
+        const salt = bcryptjs.genSaltSync();
+        this.body.password = bcryptjs.hashSync(this.body.password, salt);
 
-        const salt = bcryptjs.genSaltSync()
-        this.body.password = bcryptjs.hashSync(this.body.password, salt)
-
-        this.user = await LoginModule.create(this.body)
+        this.user = await LoginModule.create({
+            username: this.body.username,
+            password: this.body.password
+        });
     }
 
     valida() {
-        this.cleanUp()
+        this.cleanUp();
 
-        // Validação
-        // O e-mail precisa ser válido
-        if (!validator.isEmail(this.body.email)) {
-            this.errors.push('E-mail inválido')
+        if (!this.body.username || this.body.username.length < 3 || this.body.username.length > 50) {
+            this.errors.push("Nome de usuário inválido.");
         }
 
-        // A senha precisa ter entre 3 a 50 caracteres 
-        if (this.body.password.length < 3 || this.body.password.length > 50) {
-            this.errors.push("A senha precisa ter entre 3 a 50 caracteres.")
+        if (!this.body.password || this.body.password.length < 3 || this.body.password.length > 50) {
+            this.errors.push("A senha precisa ter entre 3 a 50 caracteres.");
         }
     }
 
     cleanUp() {
-        for (const key in this.body) {
+        for (let key in this.body) {
             if (typeof this.body[key] !== 'string') {
-                this.body[key] = ''
+                this.body[key] = '';
             }
         }
 
         this.body = {
-            email: this.body.email,
-            password: this.body.password,
-        }
-    }
-
-    async userExists() {
-        const user = await LoginModule.findOne({ email: this.body.email })
-
-        if (user) {
-            this.errors.push("Usuário já existe.")
-        }
+            username: this.body.username,
+            password: this.body.password
+        };
     }
 }
+
 
 
 module.exports = Login // assim que se faz isso

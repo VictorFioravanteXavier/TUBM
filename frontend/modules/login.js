@@ -16,19 +16,20 @@ export default class Login {
             e.preventDefault();
             this.validate(e)
         });
+
+        document.querySelector('#showPassword')?.addEventListener('click', (event) => {
+            event.preventDefault();
+            this.showPassword();
+        });
+
     }
 
     validate(e) {
         const el = e.target
-        const emailInput = el.querySelector('input[name="email"]')
         const passwordInput = el.querySelector('input[name="password"]')
 
         let error = false
 
-        if (!validator.isEmail(emailInput.value)) {
-            alert('Email invalido ')
-            error = true
-        }
 
         if (passwordInput.value.length < 3 || passwordInput.value.length > 50) {
             alert('Senha precisa ter entre 3 a 50 caracteres ')
@@ -37,4 +38,20 @@ export default class Login {
 
         if (!error) el.submit()
     }
+
+    showPassword() {
+        const passwordInput = document.getElementById("password-login");
+        const toggleButton = document.getElementById("showPassword");
+        const icon = toggleButton.querySelector('i');
+      
+        if (passwordInput.type === "password") {
+          passwordInput.type = "text";
+          icon.classList.remove("fa-eye-slash");
+          icon.classList.add("fa-eye");
+        } else {
+          passwordInput.type = "password";
+          icon.classList.remove("fa-eye");
+          icon.classList.add("fa-eye-slash");
+        }
+      }
 }
