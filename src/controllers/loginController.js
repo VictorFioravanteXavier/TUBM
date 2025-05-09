@@ -37,7 +37,7 @@ exports.login = async (req, res) => {
         if (login.errors.length > 0) {
             req.flash("errors", login.errors)
             req.session.save(function () {
-                return res.redirect('/vendas/')
+                return res.redirect('/estoque/')
             })
             return
         }
@@ -45,7 +45,7 @@ exports.login = async (req, res) => {
         req.flash("success", "Você entrou no sistema.")
         req.session.user = login.user;
         req.session.save(function () {
-            return res.redirect('/vendas/')
+            return res.redirect('/estoque/')
         })
     } catch (e) {
         console.log(e);

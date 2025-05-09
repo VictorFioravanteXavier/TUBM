@@ -1,0 +1,99 @@
+.container-grid {
+    display: grid;
+    grid-template-areas:
+        "top-left top-right"
+        "bottom-left bottom-right";
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 2rem;
+    width: 100%;
+    margin: auto;
+    box-sizing: border-box;
+}
+
+
+/* Grid area assignment */
+.top-left {
+    grid-area: top-left;
+}
+
+.top-right {
+    grid-area: top-right;
+    justify-self: end;
+}
+
+.bottom-left {
+    grid-area: bottom-left;
+}
+
+.bottom-right {
+    grid-area: bottom-right;
+    justify-self: end;
+}
+
+
+h1 {
+    font-size: 24px;
+}
+
+.btn {
+    background-color: #B82627;
+    color: #fff;
+    padding: 7.5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border-radius: 8px;
+
+    &:hover {
+        background-color: #8a1c1c;
+        color: #fff;
+
+    }
+}
+
+.pesquisa .form-group {
+    display: flex;
+    align-items: center;
+}
+
+.pesquisa .form-group .btn {
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
+    padding: 0.375rem;
+}
+
+.pesquisa .form-group input {
+    border-end-end-radius: 0;
+    border-start-end-radius: 0;
+
+    &:focus {
+        outline: none;
+        box-shadow: none;
+    }
+}
+
+table th, table td {
+    text-align: center;
+}
+
+table tbody .actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;;
+}
+
+table tbody .actions button {
+    font-size: 16px;
+    width: 30px;
+    height: 30px;
+    border-radius: 7.5px;
+    border: none;
+    background-color: #e7e7e7;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #cccccc;
+    }
+}

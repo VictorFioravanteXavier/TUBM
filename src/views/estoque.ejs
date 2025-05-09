@@ -1,0 +1,97 @@
+<%- include('includes/head')%>
+<%- include('includes/nav')%>
+<link rel="stylesheet" href="/frontend/assets/css/estoque/style.css">
+<div class="container">
+  <div class="row">
+
+    <div class="col-lg my-5">
+      <div class="container-grid">
+        <h1>Itens em Estoque</h1>
+        <div class="top-right"><button class="btn"><i class="fas fa-plus"></i>Adicionar Novo Item</button></div>
+        <div class="bottom-left">
+          <form class="pesquisa" action="" method="post">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Pesquisar por nome">
+              <button type="submit" class="btn">Pesquisar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <%- include('includes/messages') %>
+
+      <div class="responsive-table">
+        <table class="table my-3">
+          <thead>
+            <tr>
+              <th>Nome do Produto</th>
+              <th>Código</th>
+              <th>Quantidade</th>
+              <th>Custo</th>
+              <th>Valor Venda</th>
+              <th>Ações</th> 
+            </tr>
+          </thead>
+            
+          <tbody> 
+            <tr>
+              <td>Vela vermelha</td>
+              <td>Cod0001</td>
+              <td>10</td>
+              <td>R$1,00</td>
+              <td>R$2,00</td>
+              <td>
+                <div class="actions">
+                  <button>
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button>
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>Vela vermelha</td>
+              <td>Cod0001</td>
+              <td>10</td>
+              <td>R$1,00</td>
+              <td>R$2,00</td>
+              <td>
+                <div class="actions">
+                  <button>
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button>
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>  
+            <tr>
+              <td>Vela vermelha</td>
+              <td>Cod0001</td>
+              <td>10</td>
+              <td>R$1,00</td>
+              <td>R$2,00</td>
+              <td>
+                <div class="actions">
+                  <button>
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button>
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </td>
+            </tr> 
+          </tbody>
+        </table>
+      </div>
+    
+    </div>
+
+  </div>
+</div>
+
+<%- include('includes/footer')%>

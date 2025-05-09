@@ -4,7 +4,7 @@ const router = express.Router();
 const homeController = require('./src/controllers/homeController');
 const loginController = require('./src/controllers/loginController');
 const contatoController = require('./src/controllers/contatoController');
-const vendasController = require('./src/controllers/vendasController');
+const estoqueController = require('./src/controllers/estoqueController');
 
 const { loginRequired } = require('./src/middlewares/middleware')
 
@@ -15,7 +15,7 @@ router.get('/logout', loginController.logout)
 router.post('/register', loginController.register)
 
 /* Rotas Vendas */
-router.get('/vendas', loginRequired,vendasController.index);
+router.get('/estoque', loginRequired, estoqueController.index);
 
 // Rotas contato
 router.get('/contato/index', loginRequired, contatoController.index)

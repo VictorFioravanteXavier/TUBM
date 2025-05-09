@@ -1,0 +1,29 @@
+.navbar {
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.navbar a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    &:hover {
+        color: #B82627;
+        text-decoration: underline;
+    }
+}
+
+.navbar a img {
+    border-radius: 50%;
+}
+
+.navbar-brand {
+    color: #B82627;
+    font-weight: bold;
+}
+
+.selected {
+    color: #B82627;
+    text-decoration: underline;
+    font-weight: bold;
+}
