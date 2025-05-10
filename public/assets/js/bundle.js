@@ -1,6 +1,64 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./frontend/modules/estoque.js":
+/*!*************************************!*\
+  !*** ./frontend/modules/estoque.js ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Estoque: () => (/* binding */ Estoque)
+/* harmony export */ });
+class Estoque {
+  constructor() {}
+  init() {
+    this.events();
+  }
+  events() {
+    this.buttonsActionsConfigure();
+    this.searchConfigure();
+  }
+  buttonsActionsConfigure() {
+    document.querySelectorAll('.btn-edit-estoque').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        window.location.href = `/produto/${id}`;
+      });
+    });
+    document.querySelectorAll('.btn-delete-estoque').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        if (confirm("Deseja realmente excluir esse produto?")) {
+          window.location.href = `/produto/delete/${id}`;
+        }
+      });
+    });
+  }
+  searchConfigure() {
+    const searchInput = document.getElementById('search-estoque');
+    if (searchInput) {
+      searchInput.addEventListener('input', function () {
+        const searchTerm = this.value.toLowerCase();
+        const rows = document.querySelectorAll('table tbody tr');
+        rows.forEach(row => {
+          const cols = row.querySelectorAll('td');
+          if (cols.length >= 2) {
+            const nome = cols[0].innerText.toLowerCase();
+            const codigo = cols[1].innerText.toLowerCase();
+            const match = nome.includes(searchTerm) || codigo.includes(searchTerm);
+            row.style.display = match ? '' : 'none';
+          }
+        });
+      });
+    }
+  }
+}
+
+/***/ }),
+
 /***/ "./frontend/modules/login.js":
 /*!***********************************!*\
   !*** ./frontend/modules/login.js ***!
@@ -24066,6 +24124,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! regenerator-runtime/runtime */ "./node_modules/regenerator-runtime/runtime.js");
 /* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _modules_login__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/login */ "./frontend/modules/login.js");
+/* harmony import */ var _modules_estoque__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/estoque */ "./frontend/modules/estoque.js");
+
 
 
 
@@ -24073,9 +24133,10 @@ __webpack_require__.r(__webpack_exports__);
 // Inicializa os formulários
 const loginForm = new _modules_login__WEBPACK_IMPORTED_MODULE_2__["default"]('.form-login');
 const registerForm = new _modules_login__WEBPACK_IMPORTED_MODULE_2__["default"]('.form-cadastro');
-document.show;
 loginForm.init();
 registerForm.init();
+const estoque = new _modules_estoque__WEBPACK_IMPORTED_MODULE_3__.Estoque();
+estoque.init();
 })();
 
 /******/ })()

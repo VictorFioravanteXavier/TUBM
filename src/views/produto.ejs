@@ -1,0 +1,64 @@
+<%- include('includes/head')%>
+<%- include('includes/nav')%>
+<link rel="stylesheet" href="/frontend/assets/css/produto/style.css">
+
+<main class="center">
+  <div class="container">
+    <div class="row center">
+  
+      <div class="col-lg-8 screen">
+        <% if(!produto._id) {%>
+          <h1 class="display-5 text-center">Cadastro de Produtos</h1>
+          <p class="text-center lead">Preencha os dados do produto</p>
+        <% } else {%>
+          <h1 class="display-5 text-center">Editar Produto</h1>
+          <p class="text-center lead">Edite os dados do produto</p>
+        <% } %>
+
+        <%- include('./includes/messages')%>
+  
+        <% if(produto._id) {%>
+          <form action="/produto/edit/<%= produto._id %>" method="post">
+        <% } else {%>
+          <form action="/produto/register/" method="post">
+        <% } %>
+  
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  
+          <div class="form-group">
+            <label class="required">Nome do Produto</label>
+            <input type="text" class="form-control" name="name" value="<%= produto.name %>" required>
+          </div>
+
+          <div class="inp-row">
+            <div class="form-group">
+              <label class="required">Quantidade em Estoque </label>
+              <input type="number" class="form-control" name="quantidade" value="<%= produto.quantidade %>" required>
+            </div>
+    
+            <div class="form-group">
+              <label class="required">Custo Unitário (R$)</label>
+              <input type="text" class="form-control" name="custo" value="<%= produto.custo ? (produto.custo/100).toFixed(2) : "" %>" placeholder="2,50" pattern="^\d+([.,]\d{0,2})?$" inputmode="decimal" required>
+            </div>
+          </div>
+  
+          <div class="inp-row">
+            <div class="form-group">
+              <label class="required">Valor de Venda (R$)</label>
+              <input type="text" class="form-control" name="valor_venda" value="<%= produto.valor_venda ? (produto.valor_venda/100).toFixed(2) : "" %>" placeholder="2,50" pattern="^\d+([.,]\d{0,2})?$" inputmode="decimal" required>
+            </div>
+          </div>
+
+          <div  class="buttons-group">
+            <a href="/estoque/"><button type="button" class="btn">Cancelar</button></a>
+            <button type="submit" class="btn">Salvar</button>
+          </div>
+        </form>
+      </div>
+  
+    </div>
+  </div>
+</main>
+
+
+<%- include('includes/footer')%>
