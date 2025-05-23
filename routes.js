@@ -6,6 +6,8 @@ const loginController = require('./src/controllers/loginController');
 const contatoController = require('./src/controllers/contatoController');
 const estoqueController = require('./src/controllers/estoqueController');
 const produtoController = require('./src/controllers/produtoController');
+const vendasController = require('./src/controllers/vendasController');
+const configuracoesController = require('./src/controllers/configuracoesController');
 
 const { loginRequired } = require('./src/middlewares/middleware')
 
@@ -25,6 +27,15 @@ router.get('/produto/:id', loginRequired, produtoController.editIndex);
 router.post('/produto/edit/:id', loginRequired, produtoController.edit);
 router.get('/produto/delete/:id', loginRequired, produtoController.delete);
 
+/* Rotas Vendas */
+router.get('/vendas/', loginRequired, vendasController.index);
+
+/* Rotas Confugurações */
+router.get('/configuracoes/', loginRequired, configuracoesController.index);
+router.post('/configuracoes/register/', loginRequired, configuracoesController.registrar);
+router.get('/configuracoes/:id', loginRequired, configuracoesController.editIndex);
+router.post('/configuracoes/edit/:id', loginRequired, configuracoesController.edit);
+router.get('/configuracoes/delete/:id', loginRequired, configuracoesController.delete);
 
 // Rotas contato
 router.get('/contato/index', loginRequired, contatoController.index)

@@ -1,0 +1,86 @@
+<%- include('includes/head')%>
+<%- include('includes/nav')%>
+<link rel="stylesheet" href="/frontend/assets/css/configuracoes/style.css">
+
+<main class="center">
+  <div class="container">
+    <div class="row center">
+  
+      <div class="col-lg-8 screen">
+        <% if(!conta._id) {%>
+          <h1 class="display-5 text-center">Cadastro de Contas</h1>
+          <p class="text-center lead">Preencha os dados da conta</p>
+        <% } else {%>
+          <h1 class="display-5 text-center">Editar Conta de "<%= conta.nome %>"</h1>
+          <p class="text-center lead">Edite os dados da conta</p>
+        <% } %>
+
+        <%- include('./includes/messages')%>
+  
+        <% if(conta._id) {%>
+          <form action="/configuracoes/edit/<%= conta._id %>" method="post">
+        <% } else {%>
+          <form action="/configuracoes/register/" method="post">
+        <% } %>
+  
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  
+          <div class="form-group">
+            <label class="required">Nome Conta</label>
+            <input type="text" class="form-control" name="nome" value="<%= conta.nome %>" required>
+          </div>
+
+          <div class="form-group">
+            <label class="required">CPF</label>
+            <input type="text" class="form-control" name="cpf" id="cpf-configuracoes" value="<%= conta.cpf %>" required>
+          </div>
+    
+          <div class="form-group">
+            <label class="required">Telefone</label>
+            <input type="tel" class="form-control" name="telefone" id="tel-configuracoes" value="<%= conta.telefone %>" required>
+          </div>
+  
+          <button type="submit" class="btn"><%= !conta._id ? "Criar" : "Salvar" %></button>
+        </form>
+      </div>
+    </div>
+    <% if (!conta._id) {%>
+    <div class="responsive-table">
+      <table class="table my-3">
+        <thead>
+          <tr>
+            <th>Nome da Conta</th>
+            <th>Telefone</th>
+            <th>Data de criação</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <% if (contas.length > 0) { %>
+          <% contas.forEach(conta => { %>
+            <tbody> 
+              <tr>
+                <td><%= conta.nome %></td>
+                <td><%= conta.telefone %></td>
+                <td><%= new Date(conta.data_criacao).toLocaleDateString('pt-BR') %></td>
+                <td>
+                  <div class="actions">
+                    <button class="btn-edit-conta" data-id="<%= conta._id %>">
+                      <i class="fas fa-pencil-alt"></i>
+                    </button>
+                    <button class="btn-delete-conta" data-id="<%= conta._id %>">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          <% }) %>
+        <% } %>
+      </table>
+    </div>
+    <% } %>
+  </div>
+</main>
+
+
+<%- include('includes/footer')%>

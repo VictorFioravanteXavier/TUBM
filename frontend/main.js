@@ -3,6 +3,7 @@ import 'regenerator-runtime/runtime';
 
 import Login from './modules/login';
 import { Estoque } from './modules/estoque';
+import { Confugurações } from './modules/configuracoes';
 
 // Inicializa os formulários
 const loginForm = new Login('.form-login');
@@ -13,3 +14,6 @@ registerForm.init();
 
 const estoque = new Estoque();
 estoque.init()
+
+const configuracoes = new Confugurações()
+configuracoes.init()

@@ -1,6 +1,80 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./frontend/modules/configuracoes.js":
+/*!*******************************************!*\
+  !*** ./frontend/modules/configuracoes.js ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Confugurações": () => (/* binding */ Confugurações)
+/* harmony export */ });
+class Confugurações {
+  constructor() {}
+  init() {
+    this.events();
+  }
+  events() {
+    this.cpfStyle();
+    this.telStyle();
+    this.buttonsActionsConfigure();
+  }
+  cpfStyle() {
+    const cpfInput = document.getElementById('cpf-configuracoes');
+    if (cpfInput) {
+      cpfInput.addEventListener('input', function () {
+        let value = this.value.replace(/\D/g, ''); // Remove tudo que não for dígito
+
+        if (value.length > 11) value = value.slice(0, 11); // Limita a 11 dígitos
+
+        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+        value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+        this.value = value;
+      });
+    }
+  }
+  telStyle() {
+    const telInput = document.getElementById('tel-configuracoes');
+    if (telInput) {
+      telInput.addEventListener('input', function () {
+        let value = this.value.replace(/\D/g, ''); // Remove tudo que não for dígito
+
+        if (value.length > 11) value = value.slice(0, 11); // Limita a 11 dígitos
+
+        if (value.length >= 2) {
+          value = value.replace(/^(\d{2})(\d)/g, '($1) $2'); // DDD
+        }
+        if (value.length >= 7) {
+          value = value.replace(/(\d{5})(\d{1,4})$/, '$1-$2'); // Número
+        }
+        this.value = value;
+      });
+    }
+  }
+  buttonsActionsConfigure() {
+    document.querySelectorAll('.btn-edit-conta').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        window.location.href = `/configuracoes/${id}`;
+      });
+    });
+    document.querySelectorAll('.btn-delete-conta').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        if (confirm("Deseja realmente excluir essa conta?")) {
+          window.location.href = `/configuracoes/delete/${id}`;
+        }
+      });
+    });
+  }
+}
+
+/***/ }),
+
 /***/ "./frontend/modules/estoque.js":
 /*!*************************************!*\
   !*** ./frontend/modules/estoque.js ***!
@@ -24125,6 +24199,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _modules_login__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/login */ "./frontend/modules/login.js");
 /* harmony import */ var _modules_estoque__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/estoque */ "./frontend/modules/estoque.js");
+/* harmony import */ var _modules_configuracoes__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/configuracoes */ "./frontend/modules/configuracoes.js");
+
 
 
 
@@ -24137,6 +24213,8 @@ loginForm.init();
 registerForm.init();
 const estoque = new _modules_estoque__WEBPACK_IMPORTED_MODULE_3__.Estoque();
 estoque.init();
+const configuracoes = new _modules_configuracoes__WEBPACK_IMPORTED_MODULE_4__["Confugurações"]();
+configuracoes.init();
 })();
 
 /******/ })()
