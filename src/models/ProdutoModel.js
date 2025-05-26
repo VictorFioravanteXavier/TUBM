@@ -67,6 +67,13 @@ class Produto {
         return produtos;
     }
 
+    static async buscarProdutosEstoque() {
+    const produtos = await ProdutoModule.find({ quantidade: { $gt: 0 } })
+        .sort({ name: 1 })
+        .lean();
+    return produtos;
+}
+
     static async buscaPorId(id) {
         const produto = await ProdutoModule.findById(id).lean();
         return produto;
@@ -77,8 +84,15 @@ class Produto {
             this.errors.push('Nome é obrigatório');
         }
 
-        if (!this.body.quantidade || isNaN(Number(this.body.quantidade))) {
+       if (
+            this.body.quantidade === undefined ||
+            this.body.quantidade === null ||
+            this.body.quantidade === '' ||
+            isNaN(Number(this.body.quantidade))
+        ) {
             this.errors.push('Quantidade é obrigatória e deve ser numérica');
+        } else if (Number(this.body.quantidade) < 0) {
+            this.errors.push('Quantidade deve ser maior que zero');
         }
 
         if (!this.body.custo || isNaN(Number(this.body.custo))) {
@@ -89,6 +103,7 @@ class Produto {
             this.errors.push('Valor de venda é obrigatório e deve ser numérico');
         }
     }
+
 
 }
 

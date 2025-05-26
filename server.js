@@ -51,6 +51,16 @@ app.use(checkCsrfError)
 app.use(csrfMidlleware)
 app.use(routes);
 
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).render('404', {
+        error: err,
+        user: req.session.user,
+        currentUrl: req.originalUrl,
+        csrfToken: req.csrfToken()
+    });
+});
+
 app.on('pronto', () => {
     app.listen(3000, () => {
         console.log('Server running on port 3000');

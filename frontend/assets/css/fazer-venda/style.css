@@ -1,0 +1,251 @@
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    padding: 50px;
+    width: 100%;
+    flex: 1;
+    display: flex;
+}
+
+p,
+h2 {
+    margin: 0;
+}
+
+.required {
+    &::after {
+        content: "*";
+        color: #B82627;
+        margin-left: 5px;
+    }
+}
+
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.screen {
+    width: 100%;
+}
+
+form {
+    display: flex;
+    justify-content: space-between;
+}
+
+.circle-plus {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    border: 2px solid white;
+    /* Cor da borda */
+    border-radius: 50%;
+    background-color: transparent;
+    /* Círculo transparente */
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.circle-plus i {
+    font-size: 10px;
+}
+
+.circle-plus:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+    /* Efeito hover opcional */
+}
+
+
+.container-left {
+    align-self: flex-start;
+    padding: 20px;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    width: 70%;
+}
+
+.container-left .form-group {
+    display: flex;
+    flex-direction: column;
+    row-gap: 25px;
+}
+
+.container-left .inp-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.container-left .inp-group input {
+    padding: 10px;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    width: 100%;
+}
+
+.container-left .inp-group .inp-row {
+    display: flex;
+}
+
+.container-left .inp-group .inp-row input {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.container-left .inp-group .inp-row button#add-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #B82627;
+    border-bottom-right-radius: 8px;
+    border-top-right-radius: 8px;
+    color: white;
+    border: 1px solid #E5E7EB;
+    border-left-width: 0;
+}
+
+.container-left table {
+    border-radius: 8px;
+    overflow: hidden;
+    width: 100%;
+    table-layout: auto; /* (padrão, mas reforçando) */
+}
+
+.container-left table tbody tr {
+    background-color: #E5E7EB;
+    margin-bottom: 10px;
+}
+
+.container-left table tbody tr:not(:last-child) {
+    border-bottom: 1px solid #d1d5db;
+}
+
+.container-left table tbody tr td {
+    padding: 12px 0;
+    padding-left: 8px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap; 
+}
+
+.container-left table tbody tr td:last-child {
+    padding-right: 8px;
+    align-items: center;
+}
+
+.container-left table tbody tr td.nome-item {
+    text-align: left;
+    width: 100%;
+    font-weight: 600;
+}
+
+.container-left table tbody tr td input {
+    width: 40px;
+}
+
+.container-left table tbody tr td .circle-plus {
+    color: #9CA3AF;
+    border-color: #9CA3AF;
+
+    &:hover {
+        color: #B82627;
+        border-color: #B82627;
+    }   
+}
+
+.container-left .inp-group p {
+    margin-bottom: 10px;
+}
+
+.container-left .inp-group .status-container {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.container-left .inp-group .status-container label {
+    margin: 0 !important;
+}
+
+.container-left .inp-group .status-container .status-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.container-left .inp-group textarea {
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    width: 100%;
+    padding: 10px;
+}
+
+.container-rigth {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: fit-content;
+    width: 28%;
+
+    border: 1px solid #E5E7EB;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.container-rigth h2 {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.container-rigth .informacoes-venda {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-bottom: 1px solid #E5E7EB;
+    padding-bottom: 20px
+}
+
+.container-rigth .informacoes-venda .informacoes-venda-item p {
+    display: flex;
+    justify-content: space-between;
+    color: #4B5563;
+}
+
+.container-rigth .informacoes-venda .informacoes-venda-item span {
+    color: #000;
+    font-weight: 600;
+}
+
+.money::before {
+    content: "R$";
+    font-weight: 600;
+    margin-right: 5px;
+}
+
+.container-rigth .total-venda p {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+}
+
+.container-rigth button[type="submit"] {
+    background-color: #B82627;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+
+    &:hover {
+        background-color: #a12222;
+    }
+}

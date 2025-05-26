@@ -4,15 +4,16 @@ const { validarTelefone } = require('../utils/validaTelefone');
 
 const ContaSchema = new mongoose.Schema({
     nome: { type: String, required: true },
-    cpf: {type: String, required: true, unique: true},
-    telefone: {type: String, required: true},
+    cpf: { type: String, required: true, unique: true },
+    telefone: { type: String, required: true },
     data_criacao: { type: Date, default: Date.now() },
+    delete: { type: Boolean, default: false },
 })
 
 const ContaModule = mongoose.model('Conta', ContaSchema);
 
-class Conta{
-    constructor (body) {
+class Conta {
+    constructor(body) {
         this.body = body;
         this.errors = [];
         this.conta = null;
@@ -28,8 +29,8 @@ class Conta{
         this.conta = await ContaModule.create(this.body)
     }
 
-    static async buscarContas () {
-        const contas = await ContaModule.find().sort({ name: 1 }).lean();
+    static async buscarContas() {
+        const contas = await ContaModule.find({ delete: false }).sort({ name: 1 }).lean();
         return contas;
     }
 
@@ -49,11 +50,28 @@ class Conta{
     };
 
     static async delete(id) {
-        if (typeof id !== 'string') return
+        if (typeof id !== 'string') return;
 
-        const conta = await ContaModule.findOneAndDelete({ _id: id });
-        return conta
+        const conta = await ContaModule.findByIdAndUpdate(
+            id,
+            { delete: true },
+            { new: true }
+        );
+        return conta;
     }
+
+    static async restaurar(id) {
+        if (typeof id !== 'string') return;
+
+        const conta = await ContaModule.findByIdAndUpdate(
+            id,
+            { delete: false },
+            { new: true }
+        );
+        return conta;
+    }
+
+
 
     valida() {
         if (!this.body.nome) {

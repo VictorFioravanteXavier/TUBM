@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
-const homeController = require('./src/controllers/homeController');
 const loginController = require('./src/controllers/loginController');
 const contatoController = require('./src/controllers/contatoController');
 const estoqueController = require('./src/controllers/estoqueController');
 const produtoController = require('./src/controllers/produtoController');
 const vendasController = require('./src/controllers/vendasController');
 const configuracoesController = require('./src/controllers/configuracoesController');
+const fazerVendaController = require('./src/controllers/fazerVendaController');
 
 const { loginRequired } = require('./src/middlewares/middleware')
 
@@ -29,6 +29,10 @@ router.get('/produto/delete/:id', loginRequired, produtoController.delete);
 
 /* Rotas Vendas */
 router.get('/vendas/', loginRequired, vendasController.index);
+
+/* Rotas Fazer Venda */
+router.get('/fazer-venda/', loginRequired, fazerVendaController.index);
+router.post('/fazer-venda/register', loginRequired, fazerVendaController.registrar);
 
 /* Rotas Confugurações */
 router.get('/configuracoes/', loginRequired, configuracoesController.index);

@@ -17,7 +17,9 @@ exports.registrar = async (req, res) => {
         req.body.valor_venda = centTrasform(req.body.valor_venda);
 
         req.body.quantidade = Number(req.body.quantidade);
-    
+
+        console.log(req.body);
+        
         const produto = new Produto(req.body)
         await produto.registrar();
 

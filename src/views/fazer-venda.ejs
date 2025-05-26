@@ -1,0 +1,94 @@
+<%- include('includes/head')%>
+<%- include('includes/nav')%>
+<link rel="stylesheet" href="/frontend/assets/css/fazer-venda/style.css">
+
+<main class="center">
+  <div class="container">
+        <form action="/fazer-venda/register" method="POST" id="form-fazer-venda">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>"> 
+            <div class="container-left">
+                <div class="form-group">
+                    <div class="inp-group">
+                        <label for="cliente-fazer-venda" class="required">Cliente</label>
+                        <input list="lista-contas" name="cliente" id="cliente-fazer-venda" placeholder="Selecione ou digite o nome da conta do cliente">
+                        <input type="hidden" name="cliente_id" id="cliente-id">
+                        <datalist id="lista-contas">
+                            <% contas.forEach(conta => { %>
+                                <option value="<%= conta.nome %>" data-id="<%= conta._id %>">
+                            <% }) %>
+                        </datalist>
+                    </div>
+                    <div class="inp-group">
+                        <label for="itens-fazer-venda" class="required">Itens Vendidos</label>
+                        <div class="inp-row">
+                            <input list="lista-produtos" id="itens-fazer-venda" placeholder="Selecione ou digite o item vendido">
+                            <button type="button" id="add-item">
+                                <div class="circle-plus">
+                                    <i class="fa fa-plus"></i>
+                                </div>
+                            </button>
+                        </div>
+                     
+
+                        <datalist id="lista-produtos">
+                            <% produtos.forEach(produto => { %>
+                                <option value="<%= produto.name %>" data-id="<%= produto._id %>" data-valor_venda="<%= produto.valor_venda %>"></option>
+                            <% }) %>
+                        </datalist>
+                    </div>
+
+                    <table class="table-itens">
+                        <tbody id="lista-itens-venda">
+                            <!-- Itens adicionados aparecem aqui -->
+                        </tbody>
+                    </table>
+
+                    <div class="inp-group">
+                        <p class="required">Status</p>
+                        <div class="inp-row status-container">
+                            <div class="inp-row status-item">
+                                <input type="radio" id="status-fazer-venda-true" name="status-fazer-venda" value="true" checked>
+                                <label for="status-fazer-venda-true">Pago</label>
+                            </div>
+                            <div class="inp-row status-item">
+                                <input type="radio" id="status-fazer-venda-false" name="status-fazer-venda" value="false">
+                                <label for="status-fazer-venda-false">Pendente</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="inp-group">
+                        <label for="observacoes-fazer-venda">Observações</label>
+                        <textarea name="observacoes-fazer-venda" id="observacoes-fazer-venda" rows="3"></textarea>
+                    </div>
+
+                    <!-- Campos ocultos para enviar ao backend -->
+                    <input type="hidden" name="itens_venda" id="itens-venda-hidden">
+                </div>
+            </div>
+
+            <div class="container-rigth" >
+                <h2>Resumo da Venda</h2>
+                <div class="informacoes-venda">
+                    <div class="informacoes-venda-item">
+                        <p>Total de itens <span id="total-itens-venda">0</span></p>
+                    </div>
+                    <div class="informacoes-venda-item">
+                        <p>Subtotal <span class="money valor-total-venda">0</span></p>
+                    </div>
+                </div>
+                <div class="total-venda">
+                    <p>Total <span class="money valor-total-venda">0</span></p>
+                </div>
+
+                <button type="submit" id="enviar-venda">Confirmar</button>
+            </div>
+
+            <input type="hidden" name="enviar-back" id="enviar-back">
+        </form>
+  </div>
+
+</main>
+
+
+<%- include('includes/footer')%>
