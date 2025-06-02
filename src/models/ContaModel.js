@@ -71,8 +71,6 @@ class Conta {
         return conta;
     }
 
-
-
     valida() {
         if (!this.body.nome) {
             this.errors.push('Nome é obrigatório');

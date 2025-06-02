@@ -8,7 +8,8 @@ const ProdutoSchema = new mongoose.Schema({
     custo: { type: Number, required: true },
     valor_venda: { type: Number, required: true },
     data_cadastro: { type: Date, required: true },
-    data_atualizacao: { type: Date, required: true }
+    data_atualizacao: { type: Date, required: true },
+    delete: { type: Boolean, default: false }
 });
 
 const ProdutoModule = mongoose.model('Produto', ProdutoSchema);
@@ -41,12 +42,26 @@ class Produto {
     };
 
     static async delete(id) {
-        if (typeof id !== 'string') return
+        if (typeof id !== 'string') return;
 
-        const produto = await ProdutoModule.findOneAndDelete({ _id: id });
-        return produto
+        const conta = await ProdutoModule.findByIdAndUpdate(
+            id,
+            { delete: true },
+            { new: true }
+        );
+        return conta;
     }
 
+    static async restaurar(id) {
+        if (typeof id !== 'string') return;
+
+        const conta = await ProdutoModule.findByIdAndUpdate(
+            id,
+            { delete: false },
+            { new: true }
+        );
+        return conta;
+    }
 
     static async searchLastCode() {
         const ultimoProduto = await ProdutoModule.findOne().sort({ code: -1 }).lean();
@@ -63,16 +78,16 @@ class Produto {
     }
 
     static async buscarProdutos() {
-        const produtos = await ProdutoModule.find().sort({ name: 1 }).lean();
+        const produtos = await ProdutoModule.find({ delete: false }).sort({ name: 1 }).lean();
         return produtos;
     }
 
     static async buscarProdutosEstoque() {
-    const produtos = await ProdutoModule.find({ quantidade: { $gt: 0 } })
-        .sort({ name: 1 })
-        .lean();
-    return produtos;
-}
+        const produtos = await ProdutoModule.find({ quantidade: { $gt: 0 } })
+            .sort({ name: 1 })
+            .lean();
+        return produtos;
+    }
 
     static async buscaPorId(id) {
         const produto = await ProdutoModule.findById(id).lean();
@@ -84,7 +99,7 @@ class Produto {
             this.errors.push('Nome é obrigatório');
         }
 
-       if (
+        if (
             this.body.quantidade === undefined ||
             this.body.quantidade === null ||
             this.body.quantidade === '' ||

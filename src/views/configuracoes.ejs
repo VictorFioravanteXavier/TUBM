@@ -51,6 +51,7 @@
           <tr>
             <th>Nome da Conta</th>
             <th>Telefone</th>
+            <th>CPF</th>
             <th>Data de criação</th>
             <th>Ações</th>
           </tr>
@@ -61,6 +62,7 @@
               <tr>
                 <td><%= conta.nome %></td>
                 <td><%= conta.telefone %></td>
+                <td><%= conta.cpf %></td>
                 <td><%= new Date(conta.data_criacao).toLocaleDateString('pt-BR') %></td>
                 <td>
                   <div class="actions">

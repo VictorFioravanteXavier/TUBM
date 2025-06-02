@@ -18,7 +18,9 @@ const VendaSchema = new mongoose.Schema({
             preco_unitario: { type: Number, required: true },
             subtotal: { type: Number, required: true }
         }
-    ]
+    ],
+
+    delete: { type: Boolean, default: false }
 });
 
 const VendaModule = mongoose.model('Venda', VendaSchema);
