@@ -1,16 +1,21 @@
-const Login = require('../models/LoginModel')
+const User = require('../models/UserModel')
 
 
 exports.index = async (req, res) => {
     res.render('login');
 }
 
-exports.register = async (req, res) => {
-    try {
-        const login = new Login(req.body)
-        await login.register()
+exports.cadastro = async(req, res) => {
+    res.render('cadastrar');
+}
 
-        if (login.errors.length > 0) {
+exports.register = async (req, res) => {
+    console.log(req.body)
+    /* try {
+        const user = new User(req.body)
+        await user.register()
+
+        if (user.errors.length > 0) {
             req.flash("errors", login.errors)
             req.session.save(function () {
                 return res.redirect('/')
@@ -25,7 +30,7 @@ exports.register = async (req, res) => {
     } catch (e) {
         console.log(e);
         res.render('404')
-    }
+    } */
     
 }
 
@@ -51,7 +56,6 @@ exports.login = async (req, res) => {
         console.log(e);
         res.render('404')
     }
-    
 }
 
 exports.logout = (req, res) => {

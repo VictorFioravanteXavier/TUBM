@@ -47,3 +47,46 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+
+.required {
+    &::after {
+        content: "*";
+        color: #B82627;
+        margin-left: 5px;
+    }
+}
+
+.btn-primary {
+   background-color: #B82627;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+
+    &:hover {
+        background-color: #a12222;
+    }
+}
+
+.btn-secundary  {
+    margin: 0 !important;
+    border: 1px solid #B82627 !important;
+    color: #B82627;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+
+    &:hover {
+        background-color: #a12222;
+        color: white;
+
+    }
+}

@@ -10,13 +10,7 @@ main {
     flex: 1;
 }
 
-.required {
-    &::after {
-        content: "*";
-        color: #B82627;
-        margin-left: 5px;
-    }
-}
+
 
 h1 {
     font-size: 24px;
