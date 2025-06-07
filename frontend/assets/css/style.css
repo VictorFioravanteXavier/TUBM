@@ -56,7 +56,11 @@ table {
     }
 }
 
-.btn-primary {
+label {
+  margin: 0;
+}
+
+.button-primary {
    background-color: #B82627;
     color: white;
     border: none;
@@ -66,13 +70,17 @@ table {
     margin-top: 10px;
     margin-bottom: 20px;
     width: 100%;
+    box-shadow: none;
 
+    &:click {
+
+    }
     &:hover {
         background-color: #a12222;
     }
 }
 
-.btn-secundary  {
+.button-secundary  {
     margin: 0 !important;
     border: 1px solid #B82627 !important;
     color: #B82627;
@@ -83,6 +91,7 @@ table {
     margin-top: 10px;
     margin-bottom: 20px;
     width: 100%;
+    box-shadow: none;
 
     &:hover {
         background-color: #a12222;

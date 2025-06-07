@@ -65,7 +65,17 @@
                 <p class="error" id="p-password-repeat" hidden></p>
               </div>
 
-              <button type="submit" class="btn-primary">Cadastrar</button>
+              <div class="form-group">
+                <div class="input-group termos-uso">
+                  <input type="checkbox" name="termos-uso" id="termos-uso">
+                  <label for="termos-uso">
+                    Li e aceito os <a href="/termos-uso">termos de uso</a>
+                  </label>
+                </div>
+                <p class="error" id="p-termos" hidden></p>
+              </div>
+
+              <button type="submit" class="button-primary">Cadastrar</button>
             </form>
 
             <div>
@@ -75,7 +85,7 @@
                 <span></span>
               </div>
               <a href="/">
-                <button class="btn-secundary">Entrar</button>
+                <button class="button-secundary">Entrar</button>
               </a>
             </div>
           </div>

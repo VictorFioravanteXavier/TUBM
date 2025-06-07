@@ -263,6 +263,22 @@ export class Cadastro {
     }
   }
 
+  validTerms() {
+    const checkbox = document.querySelector('[name="termos-uso"]');
+    const p = document.querySelector("#p-termos");
+    p.innerHTML = "";
+    p.hidden = true;
+
+    if (!checkbox.checked) {
+      const div = document.createElement("div");
+      div.textContent = "Você deve aceitar os termos de uso.";
+      p.appendChild(div);
+      p.hidden = false;
+      return false;
+    }
+
+    return true;
+  }
 
   validForm() {
     let valid = true;
@@ -288,6 +304,10 @@ export class Cadastro {
     }
 
     if (!this.validRepeatPassword()) {
+      valid = false
+    }
+
+    if (!this.validTerms()) {
       valid = false
     }
 

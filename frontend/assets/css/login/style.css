@@ -92,6 +92,22 @@ input[name=password-repeat] {
     }
 }
 
+.termos-uso {
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.termos-uso a {
+    color: #B82627;
+    text-decoration: underline;
+
+    &:hover {
+        text-decoration: none;
+    }
+}
+
 
 @media (max-width: 425px) {
     body {
