@@ -10,27 +10,26 @@ exports.cadastro = async(req, res) => {
 }
 
 exports.register = async (req, res) => {
-    console.log(req.body)
-    /* try {
+    try {
         const user = new User(req.body)
         await user.register()
 
         if (user.errors.length > 0) {
-            req.flash("errors", login.errors)
+            req.flash("errors", user.errors)
             req.session.save(function () {
                 return res.redirect('/')
             })
             return
         }
 
-        req.flash("success", "Seu usuário foi criado com sucesso!")
+        req.flash("success", "Seu cadastro foi feito com sucesso!")
         req.session.save(function () {
             return res.redirect('/')
         })
     } catch (e) {
         console.log(e);
         res.render('404')
-    } */
+    }
     
 }
 

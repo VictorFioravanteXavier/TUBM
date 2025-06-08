@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const bcryptjs = require('bcryptjs')
 const { validarCPF } = require('../utils/validaCpf');
 const { validarTelefone } = require('../utils/validaTelefone');
+const validPassword = require('../utils/validPassword');
 const { default: isEmail } = require('validator/lib/isEmail');
 
 const UserSchema = new mongoose.Schema({
@@ -13,7 +14,7 @@ const UserSchema = new mongoose.Schema({
     create_date: { type: Date, default: Date.now() },
     update_date: { type: Date, default: Date.now() },
     role: { type: mongoose.Schema.Types.ObjectId, ref: "Role", default: new mongoose.Types.ObjectId("6841e5f407b42d061c4b7b3e") },
-    verified: {type: Boolean, default: false},
+    verified: { type: Boolean, default: false },
     delete: { type: Boolean, default: false },
 })
 
@@ -45,26 +46,36 @@ class User {
     }
 
     async register() {
-        this.valida();
-        if (this.errors.length > 0) return;
+        try {
+            this.valida();
+            if (this.errors.length > 0) return;
 
-        const user = await UserModule.findOne({ cpf: this.body.cpf });
-        if (user) {
-            this.errors.push("Usuário já existe.");
-            return;
+            const salt = bcryptjs.genSaltSync();
+            this.body.password = bcryptjs.hashSync(this.body.password, salt);
+
+            this.user = await UserModule.create({
+                name: this.body.name,
+                cpf: this.body.cpf,
+                password: this.body.password,
+                tel: this.body.tel,
+                email: this.body.email
+            });
         }
+        catch (e) {
+            if (e.code === 11000) {
+                if (e.keyValue?.cpf) {
+                    this.errors.push("O CPF fornecido já está em uso.");
+                } else if (e.keyValue?.email) {
+                    this.errors.push("O e-mail fornecido já está em uso.");
+                } else {
+                    this.errors.push("Já existe um cadastro com os dados fornecidos.");
+                }
+                return;
+            }
 
-        const salt = bcryptjs.genSaltSync();
-        this.body.password = bcryptjs.hashSync(this.body.password, salt);
-
-        this.user = await UserModule.create({
-            name: this.body.name,
-            cpf: this.body.cpf,
-            password: this.body.password,
-            tel: this.body.tel,
-            email: this.body.email
-        });
-
+            console.error(e);
+            this.errors.push("Ocorreu um erro interno ao tentar cadastrar o usuário.");
+        }
     }
 
     static async delete(id) {
@@ -94,8 +105,8 @@ class User {
             this.errors.push("Nome é obrigatório.");
         }
 
-        if (!this.body.password || this.body.password.length < 3 || this.body.password.length > 50) {
-            this.errors.push("A senha precisa ter entre 3 a 50 caracteres.");
+        if (!validPassword(this.body.password)) {
+            this.errors.push("A senha não é válida para fazer cadastro!");
         }
 
         if (!this.body.cpf || !validarCPF(this.body.cpf)) {

@@ -72,9 +72,6 @@ label {
     width: 100%;
     box-shadow: none;
 
-    &:click {
-
-    }
     &:hover {
         background-color: #a12222;
     }
