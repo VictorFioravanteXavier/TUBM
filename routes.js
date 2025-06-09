@@ -15,6 +15,7 @@ const { loginRequired } = require('./src/middlewares/middleware')
 router.get('/', loginController.index);
 router.post('/login', loginController.login); // <- ESSENCIAL para autenticação
 router.get('/logout', loginController.logout)
+router.get('/cadastro', loginController.cadastro)
 router.post('/register', loginController.register)
 
 /* Rotas Estoque */

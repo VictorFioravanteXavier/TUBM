@@ -1,8 +1,12 @@
 body {
     background-color: #FFF4E8;
+}
+
+main {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 40px 0;
 }
 
 .container {
@@ -13,7 +17,7 @@ body {
     padding: 50px;
 }
 
-.logo{
+.logo {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -33,7 +37,7 @@ p {
 }
 
 .icon {
-    width: 64px;              
+    width: 64px;
     height: 64px;
     padding: 0;
     font-size: 25px;
@@ -45,35 +49,73 @@ p {
     justify-content: center;
     margin-bottom: 20px;
 }
-  
+
 
 .input-group {
     display: flex;
 }
 
-input[name=password] {
+input[name=password],
+input[name=password-repeat] {
     border-right: none;
-
 }
 
-#showPassword {
+#showPassword,
+#showPassword-repeat {
     color: #9CA3AF;
     border: 1px solid #ced4da;
     border-left: none;
 }
 
-button[type=submit] {
-    background-color: #B82627;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-    margin-bottom: 20px;
+.separacao {
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #929497;
+    margin-bottom: 20px;
+}
+
+.separacao span {
+    height: 1px;
+    flex: 1;
+    background-color: #ced4da;
+}
+
+.error div {
+    font-size: 14px;
+    color: rgb(202, 30, 30);
+
+    &::before {
+        content: "* ";
+    }
+}
+
+.termos-uso {
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.termos-uso a {
+    color: #B82627;
+    text-decoration: underline;
 
     &:hover {
-        background-color: #a12222;
+        text-decoration: none;
+    }
+}
+
+
+@media (max-width: 425px) {
+    body {
+        padding: 0px;
+    }
+
+    .container {
+        width: 90%;
+        padding: 25px;
     }
 }

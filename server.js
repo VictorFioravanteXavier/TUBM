@@ -1,11 +1,12 @@
 require('dotenv').config();
-
+const createRoles = require('./src/utils/createRoles');
 const express = require('express');
 const { default: mongoose } = require('mongoose');
 
 const app = express();
 mongoose.connect(process.env.CONNECTIONSTRING)
     .then(() => {
+        
         app.emit('pronto')
     })
     .catch(e => console.log(e))

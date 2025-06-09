@@ -6,27 +6,8 @@ export class Confugurações {
     }
 
     events() {
-        this.cpfStyle();
         this.telStyle();
         this.buttonsActionsConfigure();
-    }
-
-    cpfStyle() {
-        const cpfInput = document.getElementById('cpf-configuracoes');
-
-        if (cpfInput) {
-            cpfInput.addEventListener('input', function () {
-                let value = this.value.replace(/\D/g, ''); // Remove tudo que não for dígito
-
-                if (value.length > 11) value = value.slice(0, 11); // Limita a 11 dígitos
-
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-
-                this.value = value;
-            });
-        }
     }
 
     telStyle() {
