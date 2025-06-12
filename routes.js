@@ -8,17 +8,22 @@ const produtoController = require('./src/controllers/produtoController');
 const vendasController = require('./src/controllers/vendasController');
 const configuracoesController = require('./src/controllers/configuracoesController');
 const fazerVendaController = require('./src/controllers/fazerVendaController');
+const choicesScreenController = require('./src/controllers/choicesScreenController');
 
-const { loginRequired } = require('./src/middlewares/middleware')
+const { loginRequired, roleFind } = require('./src/middlewares/middleware')
 
 // Rotas da Login
 router.get('/', loginController.index);
 router.post('/login', loginController.login); // <- ESSENCIAL para autenticação
 router.get('/logout', loginController.logout)
+router.get('/cadastro', loginController.cadastro)
 router.post('/register', loginController.register)
 
+// Rotas Choices User
+router.get('/escolha', loginRequired, roleFind, choicesScreenController.index)
+
 /* Rotas Estoque */
-router.get('/estoque', loginRequired, estoqueController.index);
+router.get('/estoque', loginRequired, roleFind, estoqueController.index);
 
 /* Rotas Produto */
 router.get('/produto/', loginRequired, produtoController.index);

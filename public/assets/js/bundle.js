@@ -1,6 +1,312 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./frontend/assets/util/validCpf.js":
+/*!******************************************!*\
+  !*** ./frontend/assets/util/validCpf.js ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   isValidCPF: () => (/* binding */ isValidCPF)
+/* harmony export */ });
+function isValidCPF(cpf) {
+  cpf = cpf.replace(/[^\d]+/g, '');
+  if (cpf.length !== 11) return false;
+  if (/^(\d)\1+$/.test(cpf)) return false;
+  let soma = 0;
+  let resto;
+  for (let i = 1; i <= 9; i++) {
+    soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);
+  }
+  resto = soma * 10 % 11;
+  if (resto === 10 || resto === 11) resto = 0;
+  if (resto !== parseInt(cpf.substring(9, 10))) return false;
+  soma = 0;
+  for (let i = 1; i <= 10; i++) {
+    soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+  }
+  resto = soma * 10 % 11;
+  if (resto === 10 || resto === 11) resto = 0;
+  if (resto !== parseInt(cpf.substring(10, 11))) return false;
+  return true;
+}
+
+/***/ }),
+
+/***/ "./frontend/modules/cadastro.js":
+/*!**************************************!*\
+  !*** ./frontend/modules/cadastro.js ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Cadastro: () => (/* binding */ Cadastro)
+/* harmony export */ });
+/* harmony import */ var _assets_util_validCpf__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../assets/util/validCpf */ "./frontend/assets/util/validCpf.js");
+
+class Cadastro {
+  constructor() {}
+  init() {
+    this.events();
+  }
+  events() {
+    document.querySelector('#showPassword')?.addEventListener('click', event => {
+      event.preventDefault();
+      this.showPassword();
+    });
+    document.querySelector('#showPassword-repeat')?.addEventListener('click', event => {
+      event.preventDefault();
+      this.showPasswordRepeat();
+    });
+    document.querySelector("form").addEventListener("submit", function (event) {
+      event.preventDefault();
+      if (!this.validForm()) {
+        console.log("Formulário com erros. Envio cancelado.");
+        return;
+      }
+      event.target.submit();
+    }.bind(this));
+  }
+  showPassword() {
+    const passwordInput = document.getElementById("password");
+    const toggleButton = document.getElementById("showPassword");
+    const icon = toggleButton.querySelector('i');
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+      icon.classList.remove("fa-eye-slash");
+      icon.classList.add("fa-eye");
+    } else {
+      passwordInput.type = "password";
+      icon.classList.remove("fa-eye");
+      icon.classList.add("fa-eye-slash");
+    }
+  }
+  showPasswordRepeat() {
+    const passwordInput = document.getElementById("password-repeat");
+    const toggleButton = document.getElementById("showPassword-repeat");
+    const icon = toggleButton.querySelector('i');
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+      icon.classList.remove("fa-eye-slash");
+      icon.classList.add("fa-eye");
+    } else {
+      passwordInput.type = "password";
+      icon.classList.remove("fa-eye");
+      icon.classList.add("fa-eye-slash");
+    }
+  }
+  validName() {
+    const form = document.querySelector("form");
+    const inp_name = form.querySelector('[name="name"]');
+    const p = document.querySelector("#p-name");
+    p.innerHTML = "";
+    p.hidden = true;
+    if (!inp_name || inp_name.value.trim() === "") {
+      const div = document.createElement('div');
+      div.textContent = "Adicione um nome válido";
+      p.appendChild(div);
+      p.hidden = false;
+      return false;
+    }
+    return true;
+  }
+  validCPF() {
+    const form = document.querySelector("form");
+    const inp_cpf = form.querySelector('[name="cpf"]');
+    const p = document.querySelector("#p-cpf");
+    const errors = [];
+    p.innerHTML = "";
+    if (!inp_cpf || inp_cpf.value.trim() === "") {
+      errors.push("Adicione um CPF");
+    } else {
+      const cpf = inp_cpf.value.trim();
+      if (!(0,_assets_util_validCpf__WEBPACK_IMPORTED_MODULE_0__.isValidCPF)(cpf)) {
+        errors.push("CPF inválido");
+      }
+    }
+    if (errors.length > 0) {
+      p.hidden = false;
+      errors.forEach(error => {
+        const div = document.createElement("div");
+        div.textContent = error;
+        p.appendChild(div);
+      });
+      return false;
+    } else {
+      p.hidden = true;
+      return true;
+    }
+  }
+  validEmail() {
+    const form = document.querySelector("form");
+    const inp_email = form.querySelector('[name="email"]');
+    const p = document.querySelector("#p-email");
+    const errors = [];
+    p.innerHTML = "";
+    if (!inp_email || inp_email.value.trim() === "") {
+      errors.push("Não é aceito o email vazio");
+    } else {
+      const email = inp_email.value.trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        errors.push("Formato de e-mail inválido");
+      }
+    }
+    if (errors.length > 0) {
+      errors.forEach(error => {
+        const div = document.createElement("div");
+        div.textContent = error;
+        p.appendChild(div);
+      });
+      p.hidden = false;
+      return false;
+    } else {
+      p.hidden = true;
+      return true;
+    }
+  }
+  validTel() {
+    const form = document.querySelector("form");
+    const inp_tel = form.querySelector('[name="tel"]');
+    const p = document.querySelector("#p-tel");
+    const errors = [];
+    p.innerHTML = ""; // limpa mensagens anteriores
+
+    if (!inp_tel || inp_tel.value.trim() === "") {
+      errors.push("O telefone não pode estar vazio.");
+    } else {
+      const tel = inp_tel.value.trim();
+      const telRegex = /^\(?\d{2}\)?[\s-]?\d{4,5}[-\s]?\d{4}$/;
+      if (!telRegex.test(tel)) {
+        errors.push("Formato de telefone inválido. Exemplo válido: (11) 91234-5678");
+      }
+    }
+    if (errors.length > 0) {
+      errors.forEach(error => {
+        const div = document.createElement("div");
+        div.textContent = error;
+        p.appendChild(div);
+      });
+      p.hidden = false;
+      return false;
+    } else {
+      p.hidden = true;
+      return true;
+    }
+  }
+  validPassword() {
+    const form = document.querySelector("form");
+    const inp_password = form.querySelector('[name="password"]');
+    const p = document.querySelector("#p-password");
+    const errors = [];
+    p.innerHTML = ""; // Limpa mensagens anteriores
+
+    if (!inp_password || inp_password.value.trim() === "") {
+      errors.push("A senha não pode estar vazia.");
+    } else {
+      const password = inp_password.value.trim();
+      if (password.length < 8) {
+        errors.push("A senha deve ter pelo menos 8 caracteres.");
+      }
+      if (!/[A-Z]/.test(password)) {
+        errors.push("A senha deve conter ao menos uma letra maiúscula.");
+      }
+      if (!/[a-z]/.test(password)) {
+        errors.push("A senha deve conter ao menos uma letra minúscula.");
+      }
+      if (!/[0-9]/.test(password)) {
+        errors.push("A senha deve conter ao menos um número.");
+      }
+      if (!/[!@#\$%\^&\*\(\)_\+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+        errors.push("A senha deve conter ao menos um caractere especial.");
+      }
+    }
+    if (errors.length > 0) {
+      errors.forEach(error => {
+        const div = document.createElement("div");
+        div.textContent = error;
+        p.appendChild(div);
+      });
+      p.hidden = false;
+      return false;
+    } else {
+      p.hidden = true;
+      return true;
+    }
+  }
+  validRepeatPassword() {
+    const form = document.querySelector("form");
+    const inp_password = form.querySelector('[name="password"]');
+    const inp_password_repeat = form.querySelector('[name="password-repeat"]');
+    const p = document.querySelector("#p-password-repeat");
+    const errors = [];
+    p.innerHTML = "";
+    if (!inp_password_repeat || inp_password_repeat.value.trim() === "" || !inp_password || inp_password.value.trim() === "") {
+      errors.push("O campo não pode estar vazio.");
+    } else if (inp_password_repeat.value !== inp_password.value) {
+      errors.push("As duas senhas devem ser iguais.");
+    }
+    if (errors.length > 0) {
+      p.hidden = false;
+      errors.forEach(error => {
+        const div = document.createElement("div");
+        div.textContent = error;
+        p.appendChild(div);
+      });
+      return false;
+    } else {
+      p.hidden = true;
+      return true;
+    }
+  }
+  validTerms() {
+    const checkbox = document.querySelector('[name="termos-uso"]');
+    const p = document.querySelector("#p-termos");
+    p.innerHTML = "";
+    p.hidden = true;
+    if (!checkbox.checked) {
+      const div = document.createElement("div");
+      div.textContent = "Você deve aceitar os termos de uso.";
+      p.appendChild(div);
+      p.hidden = false;
+      return false;
+    }
+    return true;
+  }
+  validForm() {
+    let valid = true;
+    if (!this.validName()) {
+      valid = false;
+    }
+    if (!this.validCPF()) {
+      valid = false;
+    }
+    if (!this.validEmail()) {
+      valid = false;
+    }
+    if (!this.validTel()) {
+      valid = false;
+    }
+    if (!this.validPassword()) {
+      valid = false;
+    }
+    if (!this.validRepeatPassword()) {
+      valid = false;
+    }
+    if (!this.validTerms()) {
+      valid = false;
+    }
+    return valid;
+  }
+}
+
+/***/ }),
+
 /***/ "./frontend/modules/configuracoes.js":
 /*!*******************************************!*\
   !*** ./frontend/modules/configuracoes.js ***!
@@ -18,24 +324,8 @@ class Confugurações {
     this.events();
   }
   events() {
-    this.cpfStyle();
     this.telStyle();
     this.buttonsActionsConfigure();
-  }
-  cpfStyle() {
-    const cpfInput = document.getElementById('cpf-configuracoes');
-    if (cpfInput) {
-      cpfInput.addEventListener('input', function () {
-        let value = this.value.replace(/\D/g, ''); // Remove tudo que não for dígito
-
-        if (value.length > 11) value = value.slice(0, 11); // Limita a 11 dígitos
-
-        value = value.replace(/(\d{3})(\d)/, '$1.$2');
-        value = value.replace(/(\d{3})(\d)/, '$1.$2');
-        value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-        this.value = value;
-      });
-    }
   }
   telStyle() {
     const telInput = document.getElementById('tel-configuracoes');
@@ -360,13 +650,33 @@ class Login {
   }
   validate(e) {
     const el = e.target;
-    const passwordInput = el.querySelector('input[name="password"]');
+    const inp_email = el.querySelector('input[name="email"]');
+    const p = document.querySelector("#p-email");
+    const errors = [];
+    p.innerHTML = "";
     let error = false;
-    if (passwordInput.value.length < 3 || passwordInput.value.length > 50) {
-      alert('Senha precisa ter entre 3 a 50 caracteres ');
+    if (!inp_email || inp_email.value.trim() === "") {
+      errors.push("Não é aceito o email vazio");
       error = true;
+    } else {
+      const email = inp_email.value.trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        errors.push("Formato de e-mail inválido");
+        error = true;
+      }
     }
-    if (!error) el.submit();
+    if (errors.length > 0) {
+      errors.forEach(errorMsg => {
+        const div = document.createElement("div");
+        div.textContent = errorMsg;
+        p.appendChild(div);
+      });
+      p.hidden = false;
+      return;
+    }
+    p.hidden = true;
+    el.submit();
   }
   showPassword() {
     const passwordInput = document.getElementById("password-login");
@@ -24396,6 +24706,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_estoque__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/estoque */ "./frontend/modules/estoque.js");
 /* harmony import */ var _modules_configuracoes__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/configuracoes */ "./frontend/modules/configuracoes.js");
 /* harmony import */ var _modules_fazer_venda__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/fazer-venda */ "./frontend/modules/fazer-venda.js");
+/* harmony import */ var _modules_cadastro__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/cadastro */ "./frontend/modules/cadastro.js");
 
 
 
@@ -24403,11 +24714,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-// Inicializa os formulários
-const loginForm = new _modules_login__WEBPACK_IMPORTED_MODULE_2__["default"]('.form-login');
-const registerForm = new _modules_login__WEBPACK_IMPORTED_MODULE_2__["default"]('.form-cadastro');
-loginForm.init();
-registerForm.init();
+
+// Classes
+if (window.location.pathname === '/') {
+  const loginForm = new _modules_login__WEBPACK_IMPORTED_MODULE_2__["default"]('.form-login');
+  loginForm.init();
+}
+if (window.location.pathname === "/cadastro") {
+  const cadastro = new _modules_cadastro__WEBPACK_IMPORTED_MODULE_6__.Cadastro();
+  cadastro.init();
+}
 const estoque = new _modules_estoque__WEBPACK_IMPORTED_MODULE_3__.Estoque();
 estoque.init();
 const configuracoes = new _modules_configuracoes__WEBPACK_IMPORTED_MODULE_4__["Confugurações"]();
@@ -24416,6 +24732,52 @@ if (window.location.pathname === '/fazer-venda/') {
   const fazer_venda = new _modules_fazer_venda__WEBPACK_IMPORTED_MODULE_5__.FazerVenda();
   fazer_venda.init();
 }
+
+// Funções fixas
+const cpfStyle = () => {
+  const cpfInputs = document.querySelectorAll('.cpf-style'); // Corrigido: '.' para classe
+
+  if (cpfInputs) {
+    cpfInputs.forEach(cpfInput => {
+      cpfInput.addEventListener('input', function () {
+        let value = this.value.replace(/\D/g, ''); // Remove tudo que não for dígito
+
+        if (value.length > 11) value = value.slice(0, 11); // Limita a 11 dígitos
+
+        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+        value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+        this.value = value;
+      });
+    });
+  }
+};
+const phoneStyle = () => {
+  const phoneInputs = document.querySelectorAll('.phone-style');
+  phoneInputs.forEach(phoneInput => {
+    phoneInput.addEventListener('input', function () {
+      let value = this.value.replace(/\D/g, ''); // Remove tudo que não for dígito
+
+      if (value.length > 11) value = value.slice(0, 11); // Limita a 11 dígitos
+
+      // Aplica a máscara
+      if (value.length <= 10) {
+        // Formato para telefone fixo (99) 9999-9999
+        value = value.replace(/(\d{2})(\d)/, '($1) $2');
+        value = value.replace(/(\d{4})(\d)/, '$1-$2');
+      } else {
+        // Formato para celular (99) 99999-9999
+        value = value.replace(/(\d{2})(\d)/, '($1) $2');
+        value = value.replace(/(\d{5})(\d)/, '$1-$2');
+      }
+      this.value = value;
+    });
+  });
+};
+document.addEventListener("DOMContentLoaded", () => {
+  cpfStyle();
+  phoneStyle();
+});
 })();
 
 /******/ })()
