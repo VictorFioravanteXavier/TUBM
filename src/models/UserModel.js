@@ -30,7 +30,7 @@ class User {
     async login() {
         if (this.errors.length > 0) return;
 
-        const user = await UserModule.findOne({ name: this.body.name });
+        const user = await UserModule.findOne({ email: this.body.email });
         if (!user) {
             this.errors.push('Usuário não existe.');
             return;

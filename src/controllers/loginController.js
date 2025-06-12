@@ -17,7 +17,7 @@ exports.register = async (req, res) => {
         if (user.errors.length > 0) {
             req.flash("errors", user.errors)
             req.session.save(function () {
-                return res.redirect('/')
+                return res.redirect('/cadastro')
             })
             return
         }
@@ -35,13 +35,13 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
     try {
-        const login = new Login(req.body)
+        const login = new User(req.body)
         await login.login()
 
-        if (login.errors.length > 0) {
+        if (login.errors.length > 0) {  
             req.flash("errors", login.errors)
             req.session.save(function () {
-                return res.redirect('/estoque/')
+                return res.redirect('/')
             })
             return
         }
@@ -49,7 +49,7 @@ exports.login = async (req, res) => {
         req.flash("success", "Você entrou no sistema.")
         req.session.user = login.user;
         req.session.save(function () {
-            return res.redirect('/estoque/')
+            return res.redirect('/escolha/')
         })
     } catch (e) {
         console.log(e);

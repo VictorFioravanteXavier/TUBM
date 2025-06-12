@@ -25,33 +25,55 @@ export default class Login {
     }
 
     validate(e) {
-        const el = e.target
-        const passwordInput = el.querySelector('input[name="password"]')
+        const el = e.target;
+        const inp_email = el.querySelector('input[name="email"]');
+        const p = document.querySelector("#p-email");
+        const errors = [];
 
-        let error = false
+        p.innerHTML = "";
+        let error = false;
 
+        if (!inp_email || inp_email.value.trim() === "") {
+            errors.push("Não é aceito o email vazio");
+            error = true;
+        } else {
+            const email = inp_email.value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if (passwordInput.value.length < 3 || passwordInput.value.length > 50) {
-            alert('Senha precisa ter entre 3 a 50 caracteres ')
-            error = true
+            if (!emailRegex.test(email)) {
+                errors.push("Formato de e-mail inválido");
+                error = true;
+            }
         }
 
-        if (!error) el.submit()
+        if (errors.length > 0) {
+            errors.forEach(errorMsg => {
+                const div = document.createElement("div");
+                div.textContent = errorMsg;
+                p.appendChild(div);
+            });
+            p.hidden = false;
+            return;
+        }
+
+        p.hidden = true;
+        el.submit();
     }
+    
 
     showPassword() {
         const passwordInput = document.getElementById("password-login");
         const toggleButton = document.getElementById("showPassword");
         const icon = toggleButton.querySelector('i');
-      
+
         if (passwordInput.type === "password") {
-          passwordInput.type = "text";
-          icon.classList.remove("fa-eye-slash");
-          icon.classList.add("fa-eye");
+            passwordInput.type = "text";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
         } else {
-          passwordInput.type = "password";
-          icon.classList.remove("fa-eye");
-          icon.classList.add("fa-eye-slash");
+            passwordInput.type = "password";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
         }
-      }
+    }
 }

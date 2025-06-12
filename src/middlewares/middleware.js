@@ -1,3 +1,5 @@
+const Role = require('../models/RoleModel');
+
 exports.middlewareGlobal = function (req, res, next) {
     res.locals.errors = req.flash('errors')
     res.locals.success = req.flash('success')
@@ -31,4 +33,20 @@ exports.loginRequired = (req, res, next) => {
     }
 
     next()
+}
+
+
+exports.roleFind = async (req, res, next) => {
+    const role = await Role.findOne({id: req.session.user.role});
+
+    if (role.name == "user") {
+        // TODO: Fazer as telas dos usuários
+        console.log("User");
+    } else if (role.name === "financeiro" || role.name === "venda") {
+        // TODO: Fazer a tela de escolhas do user
+        console.log("Tela escolhas");
+        next()
+    }
+
+    return
 }
