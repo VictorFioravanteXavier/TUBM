@@ -1,0 +1,103 @@
+main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+    background-color: #FFF4E8;
+}
+
+h1,
+h2,
+p {
+    margin: 0;
+}
+
+.container {
+    width: 50%;
+}
+
+.title {
+    margin-bottom: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.title h1 {
+    font-size: 24px;
+    color: #B82627;
+    text-align: center;
+}
+
+.title p {
+    color: #4B5563;
+}
+
+.cards {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.cards a {
+    width: 100%;
+    max-width: 342px;
+    &:hover {
+        color: inherit;
+        text-decoration: none;
+    }
+}
+
+.cards .card {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    flex-direction: row;
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid #B82627;
+    gap: 20px;
+
+    &:hover {
+        background-color: hsla(0, 66%, 44%, 0.514);
+    }
+}
+
+.cards .card .icon {
+    height: 48px;
+    width: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #B82627;
+    background-color: #FFF4E8;
+    font-size: 20px;
+    border-radius: 8px;
+}   
+.cards .card h2 {
+    color: #B82627;
+    font-size: 18px;
+}
+
+.cards .card:hover h2 {
+    color: #ffffff;
+}
+
+.cards .card p {
+    color: #4B5563;
+    font-size: 14px;
+}
+
+.cards .card:hover p {
+    color: #ffffff;
+}
+
+@media (max-width: 425px) {
+    .container {
+        width: 100%;
+    }
+}

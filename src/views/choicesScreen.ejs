@@ -1,8 +1,57 @@
 <%- include('includes/head')%>
+<link rel="stylesheet" href="/frontend/assets/css/choicesScreen/style.css">
 
 <main>
   <div class="container">
-    <%- include('includes/messages') %>
+
+    <div class="title">
+      <h1>Bem Vindo ao Sistema TUBM</h1>
+      <p>Selecione uma opção para começar</p>
+      <%- include('includes/messages') %>
+
+    </div>
+
+    <div class="cards">
+      <a href="/escolha">
+        <div class="card">
+          <div class="icon">
+            <i class="fas fa-user"></i>
+          </div>
+          <div>
+            <h2>Conta</h2>
+            <p>Gerencie suas compras</p>
+          </div>
+        </div>
+      </a>
+
+      <% if(user.role_name === "financeiro" || user.role_name === "venda") {%>
+        <a href="/escolha">
+          <div class="card">
+            <div class="icon">
+              <i class="fas fa-shopping-cart"></i>
+            </div>
+            <div>
+              <h2>Venda</h2>
+              <p>Registre as vendas</p>
+            </div>
+          </div>
+        </a>
+      <% } %>
+
+      <% if(user.role_name === "financeiro") {%>
+        <a href="/escolha">
+          <div class="card">
+            <div class="icon">
+              <i class="fas fa-money-bills"></i>
+            </div>
+            <div>
+              <h2>Financeiro</h2>
+              <p>Gerencie todo o sistema</p>
+            </div>
+          </div>
+        </a>
+      <% } %>
+    </div>
   </div>
 </main>
 
