@@ -1,3 +1,29 @@
+const User = require('../models/UserModel');
+const Role = require("../models/RoleModel")
+
 exports.index = (req, res) => {
     res.render('choicesScreen');
+}
+
+exports.financeiro = async (req, res) => {
+    const user = await User.findOne({ id: req.session.user?._id });
+    const role = await Role.findOne({ id: user.role });
+
+
+    if (role.name === "financeiro") {
+        req.flash("success", "Você logou como financeiro")
+
+        req.session.areaSolicitada = "financeiro";
+
+        req.session.save(function () {
+            return res.redirect('/estoque/');
+        });
+        return;
+    } else {
+        req.flash("errors", "Você não tem a autorização necessária!")
+        req.session.save(function () {
+            return res.redirect('/escolhas')
+        })
+        return
+    }
 }

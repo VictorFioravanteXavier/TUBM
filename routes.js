@@ -21,6 +21,7 @@ router.post('/register', loginController.register)
 
 // Rotas Choices User
 router.get('/escolha', loginRequired, roleFind, choicesScreenController.index)
+router.get('/financeiroValid', loginRequired, roleFind, choicesScreenController.financeiro)
 
 /* Rotas Estoque */
 router.get('/estoque', loginRequired, roleFind, estoqueController.index);

@@ -4,12 +4,16 @@ exports.middlewareGlobal = async function (req, res, next) {
     res.locals.errors = req.flash('errors')
     res.locals.success = req.flash('success')
 
-    const role = await Role.findOne({id: req.session.user.role});
-    req.session.user["role_name"] = role.name;
-
-
     res.locals.user = req.session.user;
-    res.locals.currentUrl = req.url; 
+    res.locals.role = req.session.areaSolicitada || '';
+
+    if (res.locals.user) {
+        const role = await Role.findOne({ id: req.session.user.role });
+        res.locals.user["role_name"] = role.name;
+    }
+
+    res.locals.areaSolicitada = ""
+    res.locals.currentUrl = req.url;
     next()
 }
 
@@ -44,10 +48,9 @@ exports.loginRequired = (req, res, next) => {
 exports.roleFind = async (req, res, next) => {
     if (req.session.user.role_name == "user") {
         // TODO: Fazer as telas dos usuários
+        res.redirect("#")
         console.log("User");
     } else if (req.session.user.role_name === "financeiro" || req.session.user.role_name === "venda") {
-        // TODO: Fazer a tela de escolhas do user
-        console.log(req.session.user.role_name)
         next()
     }
 

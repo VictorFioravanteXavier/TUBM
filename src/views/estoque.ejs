@@ -7,7 +7,10 @@
     <div class="col-lg my-5">
       <div class="container-grid">
         <h1>Itens em Estoque</h1>
+        <% if (role == "financeiro") {%>
         <div class="top-right"><a href="/produto/"><button class="btn"><i class="fas fa-plus"></i>Adicionar Novo Item</button></a></div>
+        <% } %>
+
         <div class="bottom-left">
           <div class="form-group">
             <input type="text" class="form-control" placeholder="Pesquisar por nome ou código" id="search-estoque">
@@ -24,10 +27,14 @@
               <th>Nome do Produto</th>
               <th>Código</th>
               <th>Quantidade</th>
+              <% if (role == "financeiro") {%>
               <th>Custo</th>
+              <% } %>
               <th>Valor Venda</th>
+              <% if (role == "financeiro") {%>
               <th>Ultima Atualização</th>
               <th>Ações</th> 
+              <% } %>
             </tr>
           </thead>
           <% if (produtos.length > 0) { %>
@@ -37,9 +44,15 @@
                   <td><%= produto.name %></td>
                   <td><%= produto.code %></td>
                   <td><%= produto.quantidade %></td>
+                  <% if (role == "financeiro") {%>
                   <td>R$<%= (produto.custo / 100).toFixed(2) %></td>
+                  <% } %>
+
                   <td>R$<%= (produto.valor_venda / 100).toFixed(2) %></td>
+
+                  <% if (role == "financeiro") {%>
                   <td><%= new Date(produto.data_atualizacao).toLocaleDateString('pt-BR') %></td>
+                  
                   <td>
                     <div class="actions">
                       <button class="btn-edit-estoque" data-id="<%= produto._id %>">
@@ -52,6 +65,7 @@
                       </a>
                     </div>
                   </td>
+                  <% } %>
                 </tr>
               </tbody>
             <% }) %>

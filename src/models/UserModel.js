@@ -78,6 +78,21 @@ class User {
         }
     }
 
+    static async findOne(obj) {
+        const query = {};
+
+        if (obj.id) {
+            if (!mongoose.Types.ObjectId.isValid(obj.id)) return null;
+            query._id = obj.id;
+        }
+
+        if (Object.keys(query).length === 0) return null;
+
+
+        const user = await UserModule.findOne(query);
+        return user;
+    }
+
     static async delete(id) {
         if (typeof id !== 'string') return;
 
