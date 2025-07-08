@@ -9,6 +9,7 @@ const vendasController = require('./src/controllers/vendasController');
 const configuracoesController = require('./src/controllers/configuracoesController');
 const fazerVendaController = require('./src/controllers/fazerVendaController');
 const choicesScreenController = require('./src/controllers/choicesScreenController');
+const UserScreenController = require('./src/controllers/UserScreenController');
 
 const { loginRequired, roleFind } = require('./src/middlewares/middleware')
 
@@ -22,6 +23,9 @@ router.post('/register', loginController.register)
 // Rotas Choices User
 router.get('/escolha', loginRequired, roleFind, choicesScreenController.index)
 router.get('/financeiroValid', loginRequired, roleFind, choicesScreenController.financeiro)
+
+/* Users */
+router.get("/usuarios/", loginRequired, roleFind, UserScreenController.index)
 
 /* Rotas Estoque */
 router.get('/estoque', loginRequired, roleFind, estoqueController.index);

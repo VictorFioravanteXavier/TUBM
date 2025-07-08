@@ -1,0 +1,1 @@
+1. Em vez de mostrar para as vendas pendentes para financeiro mostrar as contas que tem vendas pendentes
