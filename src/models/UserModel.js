@@ -93,6 +93,36 @@ class User {
         return user;
     }
 
+    static async findAll(page = 1) {
+        const limit = 10;
+        const skip = (page - 1) * limit;
+
+        const [users, total] = await Promise.all([
+            UserModule.find({ delete: false })
+                .sort({ name: -1 })
+                .skip(skip)
+                .limit(limit)
+                .populate({ path: 'role', select: 'name' }),
+
+            UserModule.countDocuments({ delete: false })
+        ]);
+
+        const mappedUsers = users.map(user => {
+            const obj = user.toObject();
+            obj.role_name = obj.role?.name || null;
+            delete obj.role;
+            return obj;
+        });
+
+        return {
+            users: mappedUsers,
+            totalPages: Math.ceil(total / limit),
+            currentPage: page
+        };
+    }
+
+
+
     static async delete(id) {
         if (typeof id !== 'string') return;
 

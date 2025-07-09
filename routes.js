@@ -26,6 +26,7 @@ router.get('/financeiroValid', loginRequired, roleFind, choicesScreenController.
 
 /* Users */
 router.get("/usuarios/", loginRequired, roleFind, UserScreenController.index)
+router.get("/usuarios/:page", loginRequired, roleFind, UserScreenController.index)
 
 /* Rotas Estoque */
 router.get('/estoque', loginRequired, roleFind, estoqueController.index);

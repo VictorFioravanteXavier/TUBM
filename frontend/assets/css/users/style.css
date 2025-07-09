@@ -200,11 +200,6 @@ tr td .name {
     color: #166534;
 }
 
-.blocked {
-    background-color: #FEE2E2;
-    color: #991B1B;
-}
-
 .no-count {
     background-color: #F3F4F6;
     color: #1F2937;
@@ -242,4 +237,24 @@ tr td .name {
 .dropdown-item.activate-count:hover {
     background-color: #D1FAE5; /* verde claro agradável */
     color: #065F46;             /* verde escuro confiável */
+}
+
+.pagination {
+    justify-content: flex-end;
+}
+
+.pagination .page-item .page-link {
+    color: #4B5563;
+}
+
+.pagination .page-link:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #B82627 !important;
+    border: none;
+    color: white;
+    box-shadow: none;
 }
