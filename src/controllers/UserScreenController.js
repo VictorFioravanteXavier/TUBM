@@ -6,9 +6,10 @@ exports.index = async (req, res) => {
     let users, totalPages, currentPage;
 
     try {
-        if (req.query.status || req.query.cargo) {
+        if (req.query.status || req.query.cargo || req.query.search) {
             let status;
             let role;
+            let search;
 
             if (req.query.status === "ativo") {
                 status = true;
@@ -20,7 +21,11 @@ exports.index = async (req, res) => {
                 role = await Role.findOne({ name: req.query.cargo });
             }
 
-            const result = await User.findAllFiltred(page, status, role?._id);
+            if (req.query.search && typeof req.query.search === "string" && req.query.search.trim() !== "") {
+                search = req.query.search
+            }
+
+            const result = await User.findAllFiltred(page, status, role?._id, search);
             users = result.users;
             totalPages = result.totalPages;
             currentPage = result.currentPage;

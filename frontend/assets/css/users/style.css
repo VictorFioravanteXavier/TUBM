@@ -50,6 +50,17 @@
     }
 }
 
+
+#search-form {
+    display: flex;
+}
+
+#search-form button {
+    border-left: 1px solid #E5E7EB ;
+    padding-left: 10px;
+    height: 100%;
+}
+
 .filters {
     display: flex;
     align-items: center;

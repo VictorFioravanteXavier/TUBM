@@ -8,7 +8,11 @@
       <div class="actions">
         <div class="search-cotainer">
           <i class="fa fa-search"></i>
-          <input type="text" name="search-user" id="search-user" placeholder="Buscar usuários...">
+          <form id="search-form" method="GET" action="/usuarios">
+            <input type="text" id="search-input" name="search" placeholder="Buscar por nome">
+            <button type="submit">Buscar</button>
+          </form>
+
         </div>
         <div class="filters">
           <div class="btn-group">

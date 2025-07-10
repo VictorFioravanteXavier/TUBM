@@ -13,6 +13,7 @@ export class UsersScreen {
         this.buttonsStatsEventsActivated()
         this.buttonsRoleEvents()
         this.buttonsRoleEventsActivated()
+        this.searchUserName();
     }
 
     cacheSelectors() {
@@ -119,5 +120,30 @@ export class UsersScreen {
                 break;
         }
     }
+
+    searchUserName() {
+        document.getElementById("search-form").addEventListener("submit", function (e) {
+            e.preventDefault(); // sempre previne o envio padrão
+
+            const input = document.getElementById("search-input");
+            const value = input.value.trim();
+
+            // Pega os parâmetros atuais da URL para preservar filtros
+            const params = new URLSearchParams(window.location.search);
+
+            if (!value) {
+                // Se vazio, remove o parâmetro "search" da URL e redireciona
+                params.delete("search");
+                window.location.href = `/usuarios/?${params.toString()}`;
+                return;
+            }
+
+            // Se tem valor, seta o parâmetro search e redireciona
+            params.set("search", value);
+            window.location.href = `/usuarios/?${params.toString()}`;
+        });
+    }
+
+
 
 }

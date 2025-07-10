@@ -121,7 +121,7 @@ class User {
         };
     }
 
-    static async findAllFiltred(page = 1, verified, role) {
+    static async findAllFiltred(page = 1, verified, role, searchName) {
         const limit = 10;
         const skip = (page - 1) * limit;
         const errors = [];
@@ -161,6 +161,10 @@ class User {
             filters.role = role;
         }
 
+        if (searchName && typeof searchName === 'string' && searchName.trim() !== '') {
+            filters.name = { $regex: new RegExp(searchName, 'i') }; // busca parcial e case-insensitive
+        }
+
         const [users, total] = await Promise.all([
             UserModule.find(filters)
                 .sort({ name: -1 })
@@ -182,8 +186,7 @@ class User {
             totalPages: Math.ceil(total / limit),
             currentPage: page
         };
-    }  
-
+    }
 
     static async delete(id) {
         if (typeof id !== 'string') return;
