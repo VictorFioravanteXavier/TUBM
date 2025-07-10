@@ -12,15 +12,15 @@
         </div>
         <div class="filters">
           <div class="btn-group">
-            <button type="button" class="btn btn-active ">Ativos</button>
+            <button type="button" class="btn btn-active">Ativos</button></a>
             <button type="button" class="btn btn-no-count">Sem Conta</button>
-            <button type="button" class="btn btn-all selected">Todos</button>
+            <button type="button" class="btn btn-all">Todos</button>
           </div>
           <div class="btn-group">
             <button type="button" class="btn btn-role-financeiro ">Financeiro</button>
             <button type="button" class="btn btn-role-venda">Venda</button>
             <button type="button" class="btn btn-role-user">Usuários</button>
-            <button type="button" class="btn btn-role-todos selected">Todos</button>
+            <button type="button" class="btn btn-role-todos">Todos</button>
           </div>
         </div>
       </div>
@@ -92,21 +92,18 @@
       <nav aria-label="Page navigation example">
         <ul class="pagination">
 
-          <!-- Botão Anterior -->
           <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
             <a class="page-link" href="/usuarios/<%= currentPage - 1 %>" aria-label="Previous">
               <span aria-hidden="true">&laquo;</span>
             </a>
           </li>
 
-          <!-- Páginas -->
           <% for (let i = 1; i <= totalPages; i++) { %>
             <li class="page-item <%= i === currentPage ? 'active' : '' %>">
               <a class="page-link" href="/usuarios/<%= i %>"><%= i %></a>
             </li>
           <% } %>
 
-          <!-- Botão Próximo -->
           <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
             <a class="page-link" href="/usuarios/<%= currentPage + 1 %>" aria-label="Next">
               <span aria-hidden="true">&raquo;</span>

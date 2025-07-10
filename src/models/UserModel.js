@@ -121,6 +121,68 @@ class User {
         };
     }
 
+    static async findAllFiltred(page = 1, verified, role) {
+        const limit = 10;
+        const skip = (page - 1) * limit;
+        const errors = [];
+
+        let verifiedBool;
+        if (typeof verified === 'boolean') {
+            verifiedBool = verified;
+        } else if (verified === 'true') {
+            verifiedBool = true;
+        } else if (verified === 'false') {
+            verifiedBool = false;
+        } else if (verified === undefined || verified === null) {
+            verifiedBool = undefined;
+        } else {
+            verifiedBool = null;
+        }
+
+        if (verified !== undefined && verifiedBool === null) {
+            errors.push("Erro ao filtrar o status");
+        }
+
+        if (role && !mongoose.Types.ObjectId.isValid(role)) {
+            errors.push("Role inválida");
+        }
+
+        if (errors.length > 0) {
+            throw new Error(errors.join(', '));
+        }
+
+        const filters = { delete: false };
+
+        if (verifiedBool !== undefined) {
+            filters.verified = verifiedBool;
+        }
+
+        if (role) {
+            filters.role = role;
+        }
+
+        const [users, total] = await Promise.all([
+            UserModule.find(filters)
+                .sort({ name: -1 })
+                .skip(skip)
+                .limit(limit)
+                .populate({ path: 'role', select: 'name' }),
+            UserModule.countDocuments(filters)
+        ]);
+
+        const mappedUsers = users.map(user => {
+            const obj = user.toObject();
+            obj.role_name = obj.role?.name || null;
+            delete obj.role;
+            return obj;
+        });
+
+        return {
+            users: mappedUsers,
+            totalPages: Math.ceil(total / limit),
+            currentPage: page
+        };
+    }  
 
 
     static async delete(id) {
