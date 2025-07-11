@@ -18,6 +18,7 @@ export class UsersScreen {
         this.buttonsRoleEventsActivated();
         this.searchUserName();
         this.openEditUserModal();
+        this.deleteUserButton();
 
         // Salva a instância atual da classe
         const self = this;
@@ -44,6 +45,8 @@ export class UsersScreen {
         this.btn_role_todos = document.querySelector(".btn-role-todos");
 
         this.form_modal = document.querySelector("#edit-user-form");
+
+        this.delete_user_buttons = document.querySelectorAll(".delet-count")
     }
 
     buttonsStatsEvents() {
@@ -261,8 +264,36 @@ export class UsersScreen {
                     location.reload();
                 }
             });
-
     }
 
+    deleteUserButton() {
+        this.delete_user_buttons.forEach(delete_user_button => {
+            delete_user_button.addEventListener('click', (e) => {
+                const button = e.target;
 
+                const name = button.dataset.name;
+                const id = button.dataset.id;
+
+                if (confirm(`Você realmente deseja deletar o(a) usuário(a) ${name}?`)) {
+                    fetch(`/usuarios/delete/${id}`, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                        }
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                location.reload();
+                            } else {
+                                alert("Erro ao deletar o usuário.");
+                            }
+                        })
+                        .catch(err => {
+                            console.error("Erro na requisição:", err);
+                        });
+                }
+            });
+        })
+    }
 }

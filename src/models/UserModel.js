@@ -200,6 +200,7 @@ class User {
                 cpf: dados.cpf,
                 telefone: dados.telefone,
                 role: dados.role,
+                update_date: Date.now()
             }
         );
     }
@@ -210,7 +211,7 @@ class User {
 
         const conta = await UserModule.findByIdAndUpdate(
             id,
-            { delete: true },
+            { delete: true, update_date: Date.now() },
             { new: true }
         );
         return conta;

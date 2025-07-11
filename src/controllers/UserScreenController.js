@@ -82,12 +82,29 @@ exports.editUser = async (req, res) => {
         // Aqui você faria a atualização no banco de dados, por exemplo:
         // await User.findByIdAndUpdate(id, { name, cpf, telefone: tel, role });
 
-        await User.editUser({id: id, name: name, cpf:  cpf, tel: tel, role: roleExistente._id})
-        
+        await User.editUser({ id: id, name: name, cpf: cpf, tel: tel, role: roleExistente._id })
+
         return res.status(200).json({ success: true });
 
     } catch (err) {
         console.error("Erro ao editar usuário:", err);
         return res.status(500).json({ error: "Erro ao editar usuário" });
+    }
+};
+
+exports.delete = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (!id) {
+            return res.status(400).json({ error: "ID do usuário não fornecido." });
+        }
+
+        await User.delete(id); // Certifique-se de que essa função existe no seu model
+
+        return res.status(200).json({ success: true });
+    } catch (err) {
+        console.error("Erro ao deletar usuário:", err);
+        return res.status(500).json({ error: "Erro ao deletar usuário" });
     }
 };

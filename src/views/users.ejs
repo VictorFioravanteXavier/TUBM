@@ -91,7 +91,12 @@
                       data-role="<%= user.role_name %>">
                         Editar
                       </button>
-                      <a class="dropdown-item delet-count" href="#">Deletar</a>
+                      <button class="dropdown-item delet-count"
+                      data-name="<%= user.name %>"
+                      data-id="<%= user._id %>"
+                      >
+                        Deletar
+                      </button>
                       <div class="dropdown-divider"></div>
                       <a class="dropdown-item activate-count" href="#">Ativar Conta</a>
                     </div>
