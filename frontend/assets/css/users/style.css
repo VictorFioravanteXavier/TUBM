@@ -20,7 +20,7 @@
 }
 
 .search-cotainer {
-    width: 25%;
+    width: fit-content;
     height: 100%;
     border: 1px solid #E5E7EB;
     border-radius: 8px;
@@ -56,7 +56,7 @@
 }
 
 #search-form button {
-    border-left: 1px solid #E5E7EB ;
+    border-left: 1px solid #E5E7EB;
     padding-left: 10px;
     height: 100%;
 }
@@ -72,72 +72,76 @@
 }
 
 .btn-active {
-  background-color: #D1FAE5; 
-  color: #065F46;            
+    background-color: #D1FAE5;
+    color: #065F46;
 }
 
 .btn-active.selected {
-  background-color: #6EE7B7; 
-  font-weight: bold;
+    background-color: #6EE7B7;
+    font-weight: bold;
 }
 
 .btn-no-count {
-  background-color: #F1F5F9; 
-  color: #374151;            
+    background-color: #F1F5F9;
+    color: #374151;
 }
 
 .btn-no-count.selected {
-  background-color: #CBD5E1; 
-  color: black;
+    background-color: #CBD5E1;
+    color: black;
 }
 
 .btn-all {
-  background-color: #E0F2FE; 
-  color: #1E3A8A;            
+    background-color: #E0F2FE;
+    color: #1E3A8A;
 }
 
 .btn-all.selected {
-  background-color: #60A5FA; 
-  color: white;
-  font-weight: bold;
+    background-color: #60A5FA;
+    color: white;
+    font-weight: bold;
 }
 
 /* Botões role */
 .btn-role-financeiro {
-  background-color: #F0FDF4;
-  color: #166534;
+    background-color: #F0FDF4;
+    color: #166534;
 }
+
 .btn-role-financeiro:hover {
-  background-color: #DCFCE7;
-  color: #14532D;
+    background-color: #DCFCE7;
+    color: #14532D;
 }
 
 .btn-role-venda {
-  background-color: #FFF7ED;
-  color: #C2410C;
+    background-color: #FFF7ED;
+    color: #C2410C;
 }
+
 .btn-role-venda:hover {
-  background-color: #FFEDD5;
-  color: #9A3412;
+    background-color: #FFEDD5;
+    color: #9A3412;
 }
 
 .btn-role-user {
-  background-color: #EFF6FF;
-  color: #1D4ED8;
+    background-color: #EFF6FF;
+    color: #1D4ED8;
 }
+
 .btn-role-user:hover {
-  background-color: #DBEAFE;
-  color: #1E40AF;
+    background-color: #DBEAFE;
+    color: #1E40AF;
 }
 
 /* TODOS */
 .btn-role-todos {
-  background-color: #F5F5F4;
-  color: #44403C;
+    background-color: #F5F5F4;
+    color: #44403C;
 }
+
 .btn-role-todos:hover {
-  background-color: #E7E5E4;
-  color: #292524;
+    background-color: #E7E5E4;
+    color: #292524;
 }
 
 
@@ -151,12 +155,15 @@ table thead tr {
 table thead tr th {
     padding: 16.5px 24px !important;
     border-bottom: none !important;
+
     &:last-child {
         text-align: right;
     }
 }
 
-tbody, thead, tr {
+tbody,
+thead,
+tr {
     border: none;
 }
 
@@ -173,16 +180,18 @@ tr td {
     height: 80px;
 }
 
-tr td > div {
+tr td>div {
     height: 100%;
     vertical-align: middle;
     display: flex;
     align-items: center;
 }
 
-tr td:last-child > div {
-    justify-content: center; /* horizontal */
-    align-items: center;     /* vertical */
+tr td:last-child>div {
+    justify-content: flex-end;
+    /* horizontal */
+    align-items: center;
+    /* vertical */
 }
 
 tr td .name {
@@ -225,9 +234,6 @@ tr td .name {
     cursor: pointer;
     color: #4B5563;
 
-    &::after{
-        display: none;
-    }
 }
 
 .dropdown-item.delet-count:hover {
@@ -246,8 +252,10 @@ tr td .name {
 }
 
 .dropdown-item.activate-count:hover {
-    background-color: #D1FAE5; /* verde claro agradável */
-    color: #065F46;             /* verde escuro confiável */
+    background-color: #D1FAE5;
+    /* verde claro agradável */
+    color: #065F46;
+    /* verde escuro confiável */
 }
 
 .pagination {
@@ -259,8 +267,8 @@ tr td .name {
 }
 
 .pagination .page-link:focus {
-  outline: none;
-  box-shadow: none;
+    outline: none;
+    box-shadow: none;
 }
 
 .pagination .page-item.active .page-link {

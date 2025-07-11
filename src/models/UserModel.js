@@ -188,6 +188,23 @@ class User {
         };
     }
 
+    static async editUser(dados) {
+        if (typeof dados.id !== 'string') return;
+
+        // Atualiza o usuário pelo id (objeto filtro: {_id: dados.id})
+        // Atualiza com os campos que vieram no dados, por exemplo:
+        await UserModule.findOneAndUpdate(
+            { _id: dados.id },
+            {
+                name: dados.name,
+                cpf: dados.cpf,
+                telefone: dados.telefone,
+                role: dados.role,
+            }
+        );
+    }
+
+
     static async delete(id) {
         if (typeof id !== 'string') return;
 

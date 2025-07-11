@@ -707,6 +707,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   UsersScreen: () => (/* binding */ UsersScreen)
 /* harmony export */ });
+/* harmony import */ var _src_utils_validaCpf__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../src/utils/validaCpf */ "./src/utils/validaCpf.js");
+/* harmony import */ var _src_utils_validaTelefone__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../src/utils/validaTelefone */ "./src/utils/validaTelefone.js");
+
+
 class UsersScreen {
   constructor() {}
   init() {
@@ -719,6 +723,17 @@ class UsersScreen {
     this.buttonsRoleEvents();
     this.buttonsRoleEventsActivated();
     this.searchUserName();
+    this.openEditUserModal();
+
+    // Salva a instância atual da classe
+    const self = this;
+    document.addEventListener("DOMContentLoaded", function () {
+      const form = document.getElementById("edit-user-form");
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        self.submtitEditForm(); // usa a instância correta
+      });
+    });
   }
   cacheSelectors() {
     this.btn_status_active = document.querySelector(".btn-active");
@@ -728,6 +743,7 @@ class UsersScreen {
     this.btn_role_venda = document.querySelector(".btn-role-venda");
     this.btn_role_user = document.querySelector(".btn-role-user");
     this.btn_role_todos = document.querySelector(".btn-role-todos");
+    this.form_modal = document.querySelector("#edit-user-form");
   }
   buttonsStatsEvents() {
     this.btn_status_active.addEventListener("click", e => {
@@ -825,6 +841,88 @@ class UsersScreen {
       // Se tem valor, seta o parâmetro search e redireciona
       params.set("search", value);
       window.location.href = `/usuarios/?${params.toString()}`;
+    });
+  }
+  openEditUserModal() {
+    document.addEventListener('DOMContentLoaded', function () {
+      $('#editUserModal').on('show.bs.modal', function (event) {
+        const button = $(event.relatedTarget); // Botão que acionou o modal
+        const modal = $(this);
+
+        // Pegando os dados do botão
+        const id = button.data('id');
+        const name = button.data('name');
+        const cpf = button.data('cpf');
+        const tel = button.data('tel');
+        const role = button.data('role');
+
+        // Preenchendo os campos do modal
+        modal.find('#edit-user-id').val(id);
+        modal.find('#edit-user-name').val(name);
+        modal.find('#edit-user-cpf').val(cpf);
+        modal.find('#edit-user-tel').val(tel);
+        modal.find("#edit-user-role").val(role);
+      });
+    });
+  }
+  validaFormEdit() {
+    const inp_name = this.form_modal.querySelector("#edit-user-name").value;
+    const inp_cpf = this.form_modal.querySelector("#edit-user-cpf").value;
+    const inp_tel = this.form_modal.querySelector("#edit-user-tel").value;
+    const sel_role = this.form_modal.querySelector("#edit-user-role").value;
+    if (typeof inp_name !== "string" || inp_name.trim() === "") {
+      alert("Coloque um nome válido!");
+      return false;
+    }
+    if (!(0,_src_utils_validaCpf__WEBPACK_IMPORTED_MODULE_0__.validarCPF)(inp_cpf)) {
+      alert("Coloque um CPF válido!");
+      return false;
+    }
+    if (!(0,_src_utils_validaTelefone__WEBPACK_IMPORTED_MODULE_1__.validarTelefone)(inp_tel)) {
+      alert("Coloque um telefone válido!");
+      return false;
+    }
+    if (!["financeiro", "venda", "user"].includes(sel_role)) {
+      alert("Selecione um cargo válido!");
+      return false;
+    }
+    return true;
+  }
+  submtitEditForm() {
+    if (!this.validaFormEdit()) {
+      return; // Se o formulário não for válido, não envia nada
+    }
+    const id = this.form_modal.querySelector("#edit-user-id").value;
+    const nome = this.form_modal.querySelector("#edit-user-name").value;
+    const cpf = this.form_modal.querySelector("#edit-user-cpf").value;
+    const tel = this.form_modal.querySelector("#edit-user-tel").value;
+    const role = this.form_modal.querySelector("#edit-user-role").value;
+    const dados = {
+      id,
+      nome,
+      cpf,
+      telefone: tel,
+      role
+    };
+    console.log(dados);
+    const token = document.querySelector('input[name="_csrf"]').value;
+    fetch(`/usuarios/${id}/editar`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "CSRF-Token": token // <- CSRF enviado no header
+      },
+      body: JSON.stringify({
+        id,
+        name: nome,
+        cpf: cpf,
+        tel: tel,
+        role: role
+      })
+    }).then(res => res.json()).then(data => {
+      if (data.success) {
+        location.reload();
+      }
     });
   }
 }
@@ -24742,6 +24840,67 @@ try {
   }
 }
 
+
+/***/ }),
+
+/***/ "./src/utils/validaCpf.js":
+/*!********************************!*\
+  !*** ./src/utils/validaCpf.js ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   validarCPF: () => (/* binding */ validarCPF)
+/* harmony export */ });
+function validarCPF(cpf) {
+  cpf = cpf.replace(/[^\d]+/g, ''); // Remove tudo que não for número
+
+  if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) {
+    return false; // CPF inválido se não tiver 11 dígitos ou todos forem iguais
+  }
+
+  // Validação do primeiro dígito verificador
+  let soma = 0;
+  for (let i = 0; i < 9; i++) {
+    soma += parseInt(cpf.charAt(i)) * (10 - i);
+  }
+  let resto = soma * 10 % 11;
+  if (resto === 10 || resto === 11) resto = 0;
+  if (resto !== parseInt(cpf.charAt(9))) return false;
+
+  // Validação do segundo dígito verificador
+  soma = 0;
+  for (let i = 0; i < 10; i++) {
+    soma += parseInt(cpf.charAt(i)) * (11 - i);
+  }
+  resto = soma * 10 % 11;
+  if (resto === 10 || resto === 11) resto = 0;
+  if (resto !== parseInt(cpf.charAt(10))) return false;
+  return true;
+}
+
+/***/ }),
+
+/***/ "./src/utils/validaTelefone.js":
+/*!*************************************!*\
+  !*** ./src/utils/validaTelefone.js ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   validarTelefone: () => (/* binding */ validarTelefone)
+/* harmony export */ });
+function validarTelefone(telefone) {
+  const telefoneLimpo = telefone.replace(/[^\d]+/g, ''); // Remove tudo que não for número
+
+  // Valida se tem 11 dígitos (DDD + 9 dígitos do celular)
+  const regex = /^\d{11}$/;
+  return regex.test(telefoneLimpo);
+}
 
 /***/ })
 

@@ -1,3 +1,6 @@
+import { validarCPF } from "../../src/utils/validaCpf"
+import { validarTelefone } from "../../src/utils/validaTelefone"
+
 export class UsersScreen {
     constructor() {
 
@@ -8,13 +11,27 @@ export class UsersScreen {
     }
 
     events() {
-        this.cacheSelectors()
-        this.buttonsStatsEvents()
-        this.buttonsStatsEventsActivated()
-        this.buttonsRoleEvents()
-        this.buttonsRoleEventsActivated()
+        this.cacheSelectors();
+        this.buttonsStatsEvents();
+        this.buttonsStatsEventsActivated();
+        this.buttonsRoleEvents();
+        this.buttonsRoleEventsActivated();
         this.searchUserName();
+        this.openEditUserModal();
+
+        // Salva a instância atual da classe
+        const self = this;
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("edit-user-form");
+
+            form.addEventListener("submit", function (e) {
+                e.preventDefault();
+                self.submtitEditForm(); // usa a instância correta
+            });
+        });
     }
+
 
     cacheSelectors() {
         this.btn_status_active = document.querySelector(".btn-active");
@@ -25,6 +42,8 @@ export class UsersScreen {
         this.btn_role_venda = document.querySelector(".btn-role-venda");
         this.btn_role_user = document.querySelector(".btn-role-user");
         this.btn_role_todos = document.querySelector(".btn-role-todos");
+
+        this.form_modal = document.querySelector("#edit-user-form");
     }
 
     buttonsStatsEvents() {
@@ -144,6 +163,106 @@ export class UsersScreen {
         });
     }
 
+    openEditUserModal() {
+        document.addEventListener('DOMContentLoaded', function () {
+            $('#editUserModal').on('show.bs.modal', function (event) {
+                const button = $(event.relatedTarget); // Botão que acionou o modal
+                const modal = $(this);
+
+                // Pegando os dados do botão
+                const id = button.data('id');
+                const name = button.data('name');
+                const cpf = button.data('cpf');
+                const tel = button.data('tel');
+                const role = button.data('role');
+
+                // Preenchendo os campos do modal
+                modal.find('#edit-user-id').val(id);
+                modal.find('#edit-user-name').val(name);
+                modal.find('#edit-user-cpf').val(cpf);
+                modal.find('#edit-user-tel').val(tel);
+                modal.find("#edit-user-role").val(role);
+            });
+        });
+    }
+
+
+    validaFormEdit() {
+        const inp_name = this.form_modal.querySelector("#edit-user-name").value;
+        const inp_cpf = this.form_modal.querySelector("#edit-user-cpf").value;
+        const inp_tel = this.form_modal.querySelector("#edit-user-tel").value;
+        const sel_role = this.form_modal.querySelector("#edit-user-role").value;
+
+        if (typeof inp_name !== "string" || inp_name.trim() === "") {
+            alert("Coloque um nome válido!");
+            return false;
+        }
+
+        if (!validarCPF(inp_cpf)) {
+            alert("Coloque um CPF válido!");
+            return false;
+        }
+
+        if (!validarTelefone(inp_tel)) {
+            alert("Coloque um telefone válido!");
+            return false;
+        }
+
+        if (!["financeiro", "venda", "user"].includes(sel_role)) {
+            alert("Selecione um cargo válido!");
+            return false;
+        }
+
+        return true;
+    }
+
+
+    submtitEditForm() {
+        if (!this.validaFormEdit()) {
+            return; // Se o formulário não for válido, não envia nada
+        }
+
+        const id = this.form_modal.querySelector("#edit-user-id").value;
+        const nome = this.form_modal.querySelector("#edit-user-name").value;
+        const cpf = this.form_modal.querySelector("#edit-user-cpf").value;
+        const tel = this.form_modal.querySelector("#edit-user-tel").value;
+        const role = this.form_modal.querySelector("#edit-user-role").value;
+
+        const dados = {
+            id,
+            nome,
+            cpf,
+            telefone: tel,
+            role
+        };
+
+        console.log(dados);
+
+
+        const token = document.querySelector('input[name="_csrf"]').value;
+
+        fetch(`/usuarios/${id}/editar`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "CSRF-Token": token // <- CSRF enviado no header
+            },
+            body: JSON.stringify({
+                id,
+                name: nome,
+                cpf: cpf,
+                tel: tel,
+                role: role
+            }),
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                }
+            });
+
+    }
 
 
 }
