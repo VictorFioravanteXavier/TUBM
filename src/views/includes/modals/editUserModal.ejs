@@ -1,0 +1,46 @@
+<link rel="stylesheet" href="/frontend/assets/css/users/editModal/style.css">
+
+<div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <form id="edit-user-form">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editUserModalLabel">Editar Usuário</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <input type="hidden" name="id" id="edit-user-id">
+                    <div class="form-group">
+                        <label for="edit-user-name">Nome</label>
+                        <input type="text" class="form-control" name="name" id="edit-user-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-user-cpf">CPF</label>
+                        <input type="text" class="form-control" name="cpf" id="edit-user-cpf">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-user-tel">Telefone</label>
+                        <input type="text" class="form-control" name="tel" id="edit-user-tel">
+                    </div>
+                    <div>
+                        <label for="edit-user-role">Cargo</label>
+                        <select id="edit-user-role" name="role" class="form-control">
+                            <option value="financeiro">Financeiro</option>
+                            <option value="venda">Venda</option>
+                            <option value="user">Usuário</option>
+                        </select>
+                    </div>
+                    <!-- Adicione mais campos conforme necessário -->
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Salvar alterações</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

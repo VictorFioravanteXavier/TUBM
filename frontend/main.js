@@ -6,6 +6,7 @@ import { Estoque } from './modules/estoque';
 import { Confugurações } from './modules/configuracoes';
 import { FazerVenda } from './modules/fazer-venda';
 import { Cadastro } from './modules/cadastro';
+import { UsersScreen } from './modules/usersScreen';
 
 // Classes
 if (window.location.pathname === '/') {
@@ -26,6 +27,11 @@ configuracoes.init()
 if (window.location.pathname === '/fazer-venda/') {
     const fazer_venda = new FazerVenda();
     fazer_venda.init();
+}
+
+if(window.location.pathname.includes("usuarios")) {
+    const users_screen = new UsersScreen;
+    users_screen.init();
 }
 
 // Funções fixas

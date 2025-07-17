@@ -1,0 +1,141 @@
+<%- include('includes/head')%>
+<%- include('includes/nav')%>
+<link rel="stylesheet" href="/frontend/assets/css/users/style.css">
+<div class="container">
+  <div class="row">
+
+    <div class="col-lg my-5 table-container">
+      <div class="actions">
+        <div class="search-cotainer">
+          <i class="fa fa-search"></i>
+          <form id="search-form" method="GET" action="/usuarios">
+            <input type="text" id="search-input" name="search" placeholder="Buscar por nome">
+            <button type="submit">Buscar</button>
+          </form>
+
+        </div>
+        <div class="filters">
+          <div class="btn-group">
+            <button type="button" class="btn btn-active">Ativos</button></a>
+            <button type="button" class="btn btn-no-count">Sem Conta</button>
+            <button type="button" class="btn btn-all">Todos</button>
+          </div>
+          <div class="btn-group">
+            <button type="button" class="btn btn-role-financeiro ">Financeiro</button>
+            <button type="button" class="btn btn-role-venda">Venda</button>
+            <button type="button" class="btn btn-role-user">Usuários</button>
+            <button type="button" class="btn btn-role-todos">Todos</button>
+          </div>
+        </div>
+      </div>
+
+      <%- include('includes/messages') %>
+
+      <div class="responsive-table">
+        <table class="table my-3">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>CPF</th>
+              <th>Número</th>
+              <th>Status</th>
+              <th>Conta</th>
+              <th>Cargo</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% users.forEach(user => { %>
+              <tr>
+                <td>
+                  <div class="name">
+                    <div class="user-img"><i class="fa fa-user"></i></div>
+                    <%= user.name %>
+                  </div>
+                </td>
+                <td>
+                  <div class="cpf"><%= user.cpf %></div>
+                </td>
+                <td>
+                  <div class="number"><%= user.tel %></div>
+                </td>
+                <td>
+                  <div class="count">
+                    <% if (user.verified) {%>
+                      <div class="status-conta active">Ativo</div>
+                    <% } else { %>
+                      <div class="status-conta no-count">Sem Conta</div>
+                    <% } %>
+                  </div>
+                </td>
+                <td>
+                  <!-- TODO: FAZER ADICIONAR CONTA -->
+                  <div class="count-number">XXXX-X</div>
+                </td>
+                <td>
+                  <div class="type-role"><%= user.role_name %></div>
+                </td>
+                <td>
+                  <div class="config">
+                    <button class="dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                      <i class="fa fa-cog"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                      <button class="dropdown-item edit-count" href="#"
+                      data-toggle="modal"
+                      data-target="#editUserModal"
+                      data-id="<%= user._id %>"
+                      data-name="<%= user.name %>"
+                      data-cpf="<%= user.cpf %>"
+                      data-tel="<%= user.tel %>"
+                      data-role="<%= user.role_name %>">
+                        Editar
+                      </button>
+                      <button class="dropdown-item delet-count"
+                      data-name="<%= user.name %>"
+                      data-id="<%= user._id %>"
+                      >
+                        Deletar
+                      </button>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item activate-count" href="#">Ativar Conta</a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+
+          <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+            <a class="page-link" href="/usuarios/<%= currentPage - 1 %>" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+
+          <% for (let i = 1; i <= totalPages; i++) { %>
+            <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+              <a class="page-link" href="/usuarios/<%= i %>"><%= i %></a>
+            </li>
+          <% } %>
+
+          <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+            <a class="page-link" href="/usuarios/<%= currentPage + 1 %>" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+
+        </ul>
+      </nav>
+
+    </div>
+  </div>
+</div>
+
+<%- include('includes/modals/editUserModal') %>
+
+
+<%- include('includes/footer')%>

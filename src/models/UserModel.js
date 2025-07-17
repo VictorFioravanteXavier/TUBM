@@ -93,12 +93,125 @@ class User {
         return user;
     }
 
+    static async findAll(page = 1) {
+        const limit = 10;
+        const skip = (page - 1) * limit;
+
+        const [users, total] = await Promise.all([
+            UserModule.find({ delete: false })
+                .sort({ name: -1 })
+                .skip(skip)
+                .limit(limit)
+                .populate({ path: 'role', select: 'name' }),
+
+            UserModule.countDocuments({ delete: false })
+        ]);
+
+        const mappedUsers = users.map(user => {
+            const obj = user.toObject();
+            obj.role_name = obj.role?.name || null;
+            delete obj.role;
+            return obj;
+        });
+
+        return {
+            users: mappedUsers,
+            totalPages: Math.ceil(total / limit),
+            currentPage: page
+        };
+    }
+
+    static async findAllFiltred(page = 1, verified, role, searchName) {
+        const limit = 10;
+        const skip = (page - 1) * limit;
+        const errors = [];
+
+        let verifiedBool;
+        if (typeof verified === 'boolean') {
+            verifiedBool = verified;
+        } else if (verified === 'true') {
+            verifiedBool = true;
+        } else if (verified === 'false') {
+            verifiedBool = false;
+        } else if (verified === undefined || verified === null) {
+            verifiedBool = undefined;
+        } else {
+            verifiedBool = null;
+        }
+
+        if (verified !== undefined && verifiedBool === null) {
+            errors.push("Erro ao filtrar o status");
+        }
+
+        if (role && !mongoose.Types.ObjectId.isValid(role)) {
+            errors.push("Role inválida");
+        }
+
+        if (errors.length > 0) {
+            throw new Error(errors.join(', '));
+        }
+
+        const filters = { delete: false };
+
+        if (verifiedBool !== undefined) {
+            filters.verified = verifiedBool;
+        }
+
+        if (role) {
+            filters.role = role;
+        }
+
+        if (searchName && typeof searchName === 'string' && searchName.trim() !== '') {
+            filters.name = { $regex: new RegExp(searchName, 'i') }; // busca parcial e case-insensitive
+        }
+
+        const [users, total] = await Promise.all([
+            UserModule.find(filters)
+                .sort({ name: -1 })
+                .skip(skip)
+                .limit(limit)
+                .populate({ path: 'role', select: 'name' }),
+            UserModule.countDocuments(filters)
+        ]);
+
+        const mappedUsers = users.map(user => {
+            const obj = user.toObject();
+            obj.role_name = obj.role?.name || null;
+            delete obj.role;
+            return obj;
+        });
+
+        return {
+            users: mappedUsers,
+            totalPages: Math.ceil(total / limit),
+            currentPage: page
+        };
+    }
+
+    static async editUser(dados) {
+        if (typeof dados.id !== 'string') return;
+
+        // Atualiza o usuário pelo id (objeto filtro: {_id: dados.id})
+        // Atualiza com os campos que vieram no dados, por exemplo:
+        await UserModule.findOneAndUpdate(
+            { _id: dados.id },
+            {
+                name: dados.name,
+                cpf: dados.cpf,
+                telefone: dados.telefone,
+                role: dados.role,
+                update_date: Date.now()
+            }
+        );
+    }
+
+
     static async delete(id) {
         if (typeof id !== 'string') return;
 
         const conta = await UserModule.findByIdAndUpdate(
             id,
-            { delete: true },
+            { delete: true, update_date: Date.now() },
             { new: true }
         );
         return conta;
