@@ -108,3 +108,13 @@ exports.delete = async (req, res) => {
         return res.status(500).json({ error: "Erro ao deletar usuário" });
     }
 };
+
+exports.getAll = async (req, res) => {
+    try {
+        const users = await User.findAll(); // ou User.find()
+        return res.json({ success: true, users }); // <-- ESSA LINHA É ESSENCIAL
+    } catch (e) {
+        console.error(e);
+        return res.status(500).json({ success: false, error: 'Erro ao buscar usuários' });
+    }
+};

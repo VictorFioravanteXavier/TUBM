@@ -1,0 +1,47 @@
+<link rel="stylesheet" href="/frontend/assets/css/users/editModal/style.css">
+
+<div class="modal fade" id="registerAccount" tabindex="-1" role="dialog" aria-labelledby="registerAccountLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="registerAccountLabel">Criar nova conta</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form id="create-new-account-form">
+                    <input type="text" name="data" id="data-modal-account" hidden>
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <div class="form-group">
+                        <label for="register-account-name">Nome da Conta</label>
+                        <input type="text" class="form-control" name="nameAccount" id="register-account-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-account-users">Usuários para adicionar na conta</label>
+                        <div class="input-btn-container">
+                            <input type="text" class="form-control" id="register-account-users" list="users-list"
+                                placeholder="Buscar usuário">
+                            <button id="add-user-account">Adicionar usuário</button>
+                        </div>
+                        <datalist id="users-list"></datalist>
+                        <input type="hidden" name="userId" id="selected-user-id">
+                    </div>
+
+                    <!-- Adicione mais campos conforme necessário -->
+                    <div class="users-selcted">
+                        <div class="user">
+                            Name
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Criar nova conta</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>

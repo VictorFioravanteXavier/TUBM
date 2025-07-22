@@ -249,6 +249,17 @@ class User {
             this.errors.push('Email é obrigatório e deve um email válido');
         }
     }
+
+    static async activeAccont(id) {
+        if (typeof id !== 'string') return;
+
+        const conta = await UserModule.findByIdAndUpdate(
+            id,
+            { verified: true },
+            { new: true }
+        );
+        return conta;
+    }
 }
 
 module.exports = User

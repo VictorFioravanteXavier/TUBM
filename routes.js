@@ -10,12 +10,13 @@ const configuracoesController = require('./src/controllers/configuracoesControll
 const fazerVendaController = require('./src/controllers/fazerVendaController');
 const choicesScreenController = require('./src/controllers/choicesScreenController');
 const UserScreenController = require('./src/controllers/UserScreenController');
+const accountsController = require('./src/controllers/accountsController');
 
 const { loginRequired, roleFind } = require('./src/middlewares/middleware')
 
 // Rotas da Login
 router.get('/', loginController.index);
-router.post('/login', loginController.login); // <- ESSENCIAL para autenticação
+router.post('/login', loginController.login);
 router.get('/logout', loginController.logout)
 router.get('/cadastro', loginController.cadastro)
 router.post('/register', loginController.register)
@@ -29,6 +30,12 @@ router.get("/usuarios/", loginRequired, roleFind, UserScreenController.index)
 router.get("/usuarios/:page", loginRequired, roleFind, UserScreenController.index)
 router.post("/usuarios/:id/editar", loginRequired, roleFind, UserScreenController.editUser)
 router.get("/usuarios/delete/:id", loginRequired, roleFind, UserScreenController.delete)
+
+router.get("/usuarios/api/getAll", loginRequired, roleFind, UserScreenController.getAll)
+
+/* Accounts */
+router.get("/contas/", loginRequired, roleFind, accountsController.index)
+router.post("/contas/register", loginRequired, roleFind, accountsController.register)
 
 /* Rotas Estoque */
 router.get('/estoque', loginRequired, roleFind, estoqueController.index);

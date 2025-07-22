@@ -189,9 +189,7 @@ tr td>div {
 
 tr td:last-child>div {
     justify-content: flex-end;
-    /* horizontal */
     align-items: center;
-    /* vertical */
 }
 
 tr td .name {
