@@ -456,7 +456,7 @@ export class UsersScreen {
         }
 
         const data = {
-            name: this.inp_register_account_name.value,
+            name: this.inp_register_account_name.value.trim(),
             users
         }
 
@@ -479,10 +479,10 @@ export class UsersScreen {
         if (!this.validaFormModalAccount()) return;
 
         let usersRaw = [];
-        let users = []; // ✅ Corrigido aqui
+        let users = []; 
         try {
             usersRaw = JSON.parse(this.inp_data_modal_account.value || "[]");
-            users = usersRaw.map(user => user.id); // ✅ Agora pode atribuir
+            users = usersRaw.map(user => user.id); 
         } catch (e) {
             console.error("Erro ao fazer parse dos usuários:", e);
             alert("Erro ao processar os usuários. Tente novamente.");
@@ -490,7 +490,7 @@ export class UsersScreen {
         }
 
         const data = {
-            name: this.inp_register_account_name.value,
+            name: this.inp_register_account_name.value.trim(),
             users
         };
 
@@ -508,9 +508,9 @@ export class UsersScreen {
             .then(data => {
                 if (data.success) {
                     location.reload();
+                } else {
+                    location.reload();
                 }
             });
     }
-
-
 }

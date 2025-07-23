@@ -6,41 +6,42 @@ const Account = require('../models/AccountModel');
 
 exports.index = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
-    let users, totalPages, currentPage;
+    let accounts, totalPages, currentPage;
+
 
     try {
-        if (req.query.status || req.query.cargo || req.query.search) {
+        if (req.query.status || req.query.searchName || req.query.searchNumber) {
             let status;
-            let role;
-            let search;
+            let search_name;
+            let search_number;
 
             if (req.query.status === "ativo") {
                 status = true;
-            } else if (req.query.status === "sem-conta") {
+            } else if (req.query.status === "inativo") {
                 status = false;
             }
 
-            if (["financeiro", "venda", "user"].includes(req.query.cargo)) {
-                role = await Role.findOne({ name: req.query.cargo });
+            if (req.query.searchName && typeof req.query.searchName === "string" && req.query.searchName.trim() !== "") {
+                search_name = req.query.searchName
             }
 
-            if (req.query.search && typeof req.query.search === "string" && req.query.search.trim() !== "") {
-                search = req.query.search
+            if (req.query.searchNumber && typeof req.query.searchNumber === "string" && req.query.searchNumber.trim() !== "") {
+                search_number = req.query.searchNumber;
             }
 
-            const result = await User.findAllFiltred(page, status, role?._id, search);
-            users = result.users;
+            const result = await Account.findAllFiltred(page, status, search_name, search_number);
+            accounts = result.accounts;
             totalPages = result.totalPages;
             currentPage = result.currentPage;
         } else {
-            const result = await User.findAll(page);
-            users = result.users;
+            const result = await Account.findAll(page);
+            accounts = result.accounts;
             totalPages = result.totalPages;
             currentPage = result.currentPage;
         }
 
         res.render('accounts', {
-            users,
+            accounts,
             totalPages,
             currentPage
         });

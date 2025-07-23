@@ -35,6 +35,7 @@ router.get("/usuarios/api/getAll", loginRequired, roleFind, UserScreenController
 
 /* Accounts */
 router.get("/contas/", loginRequired, roleFind, accountsController.index)
+router.get("/contas/:page", loginRequired, roleFind, accountsController.index)
 router.post("/contas/register", loginRequired, roleFind, accountsController.register)
 
 /* Rotas Estoque */

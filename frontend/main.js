@@ -7,6 +7,7 @@ import { Confugurações } from './modules/configuracoes';
 import { FazerVenda } from './modules/fazer-venda';
 import { Cadastro } from './modules/cadastro';
 import { UsersScreen } from './modules/usersScreen';
+import { Accounts } from './modules/accounts';
 
 // Classes
 if (window.location.pathname === '/') {
@@ -30,8 +31,13 @@ if (window.location.pathname === '/fazer-venda/') {
 }
 
 if(window.location.pathname.includes("usuarios")) {
-    const users_screen = new UsersScreen;
+    const users_screen = new UsersScreen();
     users_screen.init();
+}
+
+if(window.location.pathname.includes("contas")) {
+    const accounts = new Accounts();
+    accounts.init();
 }
 
 // Funções fixas

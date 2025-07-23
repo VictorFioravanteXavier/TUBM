@@ -1,0 +1,285 @@
+.container {
+    background-color: #FFF4E8;
+    width: 100%;
+    min-height: calc(100vh - 60px);
+    max-width: none;
+}
+
+.table-container {
+    margin: 24px 32px;
+    background-color: white;
+    padding: 24px;
+    border-radius: 8px;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    height: 42px;
+}
+
+.search-cotainer {
+    width: fit-content;
+    height: 100%;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    padding: 14.5px;
+    gap: 7.5px;
+    overflow: hidden;
+
+}
+
+.search-cotainer i {
+    color: #9CA3AF;
+}
+
+.search-cotainer input {
+    border: none;
+    outline: none;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background-color: transparent;
+
+    &::placeholder {
+        color: #9CA3AF;
+    }
+}
+
+
+#search-form-name, #search-form-number {
+    display: flex;
+}
+
+#search-form-name button, #search-form-number button {
+    border-left: 1px solid #E5E7EB;
+    padding-left: 10px;
+    height: 100%;
+}
+
+.filters {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.filters .btn {
+    height: 100%;
+}
+
+.btn-active {
+    background-color: #D1FAE5;
+    color: #065F46;
+}
+
+.btn-active.selected {
+    background-color: #6EE7B7;
+    font-weight: bold;
+}
+
+.btn-inactive {
+    background-color: #FEE2E2;
+    color: #991B1B;
+}
+
+.btn-inactive.selected {
+    background-color: #FCA5A5;
+    color: #7F1D1D;
+}
+
+
+.btn-all {
+    background-color: #E0F2FE;
+    color: #1E3A8A;
+}
+
+.btn-all.selected {
+    background-color: #60A5FA;
+    color: white;
+    font-weight: bold;
+}
+
+
+/* Table */
+
+table {
+    table-layout: auto;
+}
+
+table thead tr {
+    background-color: #F9FAFB;
+    color: #4B5563;
+}
+
+table thead tr th {
+    padding: 16.5px 24px !important;
+    border-bottom: none !important;
+
+    &:last-child {
+        text-align: right;
+    }
+}
+
+tbody,
+thead,
+tr {
+    border: none;
+}
+
+tr {
+    border: none;
+    border-top: 1px solid #E5E7EB;
+}
+
+
+tr td {
+    padding: 16.5px 24px !important;
+    font-size: 16px;
+    color: #4B5563;
+    height: 80px;
+}
+
+tr td>div {
+    height: 100%;
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+}
+
+tr td:last-child>div {
+    justify-content: flex-end;
+    align-items: center;
+}
+
+th:nth-child(3),
+td:nth-child(3),
+th:nth-child(2),
+td:nth-child(2) {
+    white-space: nowrap;
+    text-align: center;
+    width: 1%;
+}
+
+th:nth-child(1),
+td:nth-child(1) {
+    white-space: nowrap;
+    width: 10%;
+}
+
+td:nth-child(3)>.count-number {
+    display: inline-flex;
+    width: auto;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+tr td .name {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-weight: 600;
+}
+
+.name .user-img {
+    padding: 10px 15px;
+    background-color: #F3F4F6;
+    border-radius: 50%;
+    width: fit-content;
+}
+
+.status-conta {
+    display: flex;
+    padding: 2px 10px;
+    border-radius: 99px;
+    font-weight: 500;
+}
+
+.active {
+    background-color: #DCFCE7;
+    color: #166534;
+}
+
+.inactive {
+    background-color: #FEE2E2;
+    color: #991B1B;
+}
+
+.count-number {
+    font-weight: 600;
+}
+
+.config button {
+    color: initial;
+    cursor: pointer;
+    color: #4B5563;
+
+}
+
+.dropdown-item.delet-count:hover {
+    background-color: #FCA5A5 !important;
+    color: #991B1B;
+}
+
+.dropdown-item.edit-count:hover {
+    background-color: #DCFCE7;
+    color: #166534;
+}
+
+.dropdown-item.block-count:hover {
+    background-color: #E5E7EB;
+    color: #374151;
+}
+
+.dropdown-item.activate-count:hover {
+    background-color: #D1FAE5;
+    /* verde claro agradável */
+    color: #065F46;
+    /* verde escuro confiável */
+}
+
+.pagination {
+    justify-content: flex-end;
+}
+
+.pagination .page-item .page-link {
+    color: #4B5563;
+}
+
+.pagination .page-link:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #B82627 !important;
+    border: none;
+    color: white;
+    box-shadow: none;
+}
+
+.users {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.users a {
+    text-decoration: none;
+}
+
+.container-user {
+    padding: 10px;
+    background-color: #b82626;
+    color: white;
+    border-radius: 20px;
+
+    &:hover {
+        background-color: #a52222;
+    }
+}
