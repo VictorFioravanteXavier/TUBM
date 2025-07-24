@@ -14,6 +14,10 @@
             <div class="modal-body">
                 <form id="create-new-account-form">
                     <input type="text" name="data" id="data-modal-account" hidden>
+                    <input type="text" name="data" id="data-modal-account-deleted" hidden>
+
+                    <input type="text" name="id" id="account-id" hidden>
+
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <div class="form-group">
                         <label for="register-account-name">Nome da Conta</label>
@@ -38,7 +42,7 @@
                     </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Criar nova conta</button>
+                <button type="submit" class="btn btn-primary" id="btn-create">Criar nova conta</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
             </div>
             </form>

@@ -8,7 +8,7 @@ const AccountSchema = new mongoose.Schema({
     users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     active: { type: Boolean, default: true },
     delete: { type: Boolean, default: false },
-    create_date: { type: Date, default: Date.now },
+    create_date: { type: Date, default: Date.now() },
     update_date: { type: Date, default: Date.now() },
 });
 
@@ -41,7 +41,7 @@ class Account {
                     });
 
                     this.body.users.forEach(user => {
-                        User.activeAccont(user);
+                        User.activeAccount(user);
                     });
 
                     return;
@@ -140,6 +140,53 @@ class Account {
             totalPages: Math.ceil(total / limit),
             currentPage: page
         };
+    }
+
+    static async findById(id) {
+        const query = {};
+
+        if (obj.id) {
+            if (!mongoose.Types.ObjectId.isValid(obj.id)) return null;
+            query._id = obj.id;
+        }
+
+        if (Object.keys(query).length === 0) return null;
+
+
+        const account = await AccountModule.findOne(query);
+        return account;
+    }
+
+    async edit(id, data) {
+        try {
+            this.account = await AccountModule.findByIdAndUpdate(
+                {
+                    _id: id
+                },
+                {
+                    name: data.name,
+                    users: data.users,
+                    update_date: Date.now()  // <-- execute a função para passar o valor
+                });
+
+            data.users.forEach(user => {
+                User.activeAccount(user._id);
+            });
+
+            data.deletedUsers.forEach(user => {
+                User.desactiveAccount(user);
+            });
+
+            return;
+        } catch (e) {
+            if (e.code === 11000 && e.keyValue?.number) {
+            } else if (e.code === 11000 && e.keyValue?.name) {
+                this.errors.push("O nome de conta fornecido já está em uso.");
+                return;
+            } else {
+                throw e;
+            }
+        }
     }
 
 

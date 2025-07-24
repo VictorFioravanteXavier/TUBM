@@ -32,7 +32,6 @@
       </div>
 
       <%- include('includes/messages') %>
-      <!-- TODO: FAZER ADICIONAR CONTA -->
 
       <div class="responsive-table">
         <table class="table my-3">
@@ -81,16 +80,12 @@
                       <i class="fa fa-cog"></i>
                     </button>
                     <div class="dropdown-menu dropdown-menu-right">
-                      <!-- <button class="dropdown-item edit-count" href="#"
+                      <button class="dropdown-item edit-count" href="#"
                       data-toggle="modal"
-                      data-target="#editUserModal"
-                       data-id="<%= user._id %>"
-                      data-name="<%= user.name %>"
-                      data-cpf="<%= user.cpf %>"
-                      data-tel="<%= user.tel %>"
-                      data-role="<%= user.role_name %>"> 
+                      data-target="#registerAccount"
+                      data-account='<%= JSON.stringify(account) %>'> 
                         Editar
-                      </button>-->
+                      </button>
                       <button class="dropdown-item delet-count"
                       data-name="<%= user.name %>"
                       data-id="<%= user._id %>"
@@ -135,7 +130,7 @@
   </div>
 </div>
 
-<%- include('includes/modals/editUserModal') %>
+<%- include('includes/modals/registerAccountModal') %>
 
 
 <%- include('includes/footer')%>
