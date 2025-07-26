@@ -18,21 +18,25 @@
           <a class="nav-link <%= currentUrl === '/estoque/' ? 'selected' : '' %>" href="/estoque/">Estoque</a>
         </li>
         <% if (role == "financeiro") {%>
-        <li class="nav-item">
-          <a class="nav-link <%= currentUrl === '/vendas/' ? 'selected' : '' %>" href="/vendas/">Vendas</a>
-        </li>
+          <li class="nav-item">
+            <a class="nav-link <%= currentUrl === '/vendas/' ? 'selected' : '' %>" href="/vendas/">Vendas</a>
+          </li>
         <% } %>
 
         <li class="nav-item">
           <a class="nav-link <%= currentUrl === '/fazer-venda/' ? 'selected' : '' %>" href="/fazer-venda/">Fazer Venda</a>
         </li>
+
         <% if (role == "financeiro") {%>
-        <li class="nav-item">
-          <a class="nav-link <%= currentUrl === '/configuracoes/' ? 'selected' : '' %>" href="/configuracoes/">Configurações</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link <%= currentUrl.includes('/usuarios/') ? 'selected' : '' %>" href="/usuarios/">Usuários</a>
-        </li>
+          <li class="nav-item">
+            <a class="nav-link <%= currentUrl === '/configuracoes/' ? 'selected' : '' %>" href="/configuracoes/">Configurações</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link <%= currentUrl.includes('/usuarios/') ? 'selected' : '' %>" href="/usuarios/">Usuários</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link <%= currentUrl.includes('/contas/') ? 'selected' : '' %>" href="/contas/">Contas</a>
+          </li>
         <% } %>
 
         <li class="nav-item">

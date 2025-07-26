@@ -38,8 +38,7 @@
               <th>Nome</th>
               <th>CPF</th>
               <th>Número</th>
-              <th>Status</th>
-              <th>Conta</th>
+              <th>Status Conta</th>
               <th>Cargo</th>
               <th>Ações</th>
             </tr>
@@ -69,10 +68,6 @@
                   </div>
                 </td>
                 <td>
-                  <!-- TODO: FAZER ADICIONAR CONTA -->
-                  <div class="count-number">XXXX-X</div>
-                </td>
-                <td>
                   <div class="type-role"><%= user.role_name %></div>
                 </td>
                 <td>
@@ -81,7 +76,7 @@
                       <i class="fa fa-cog"></i>
                     </button>
                     <div class="dropdown-menu dropdown-menu-right">
-                      <button class="dropdown-item edit-count" href="#"
+                      <button class="dropdown-item edit-count"
                       data-toggle="modal"
                       data-target="#editUserModal"
                       data-id="<%= user._id %>"
@@ -98,7 +93,13 @@
                         Deletar
                       </button>
                       <div class="dropdown-divider"></div>
-                      <a class="dropdown-item activate-count" href="#">Ativar Conta</a>
+                      <button class="dropdown-item activate-count"
+                      data-toggle="modal"
+                      data-target="#registerAccount"
+                      data-id="<%= user._id %>"
+                      data-name="<%= user.name %>">
+                        Ativar Conta
+                      </button>
                     </div>
                   </div>
                 </td>
@@ -136,6 +137,7 @@
 </div>
 
 <%- include('includes/modals/editUserModal') %>
+<%- include('includes/modals/registerAccountModal') %>
 
 
 <%- include('includes/footer')%>

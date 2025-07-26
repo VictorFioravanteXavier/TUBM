@@ -1,0 +1,148 @@
+<%- include('includes/head')%>
+<%- include('includes/nav')%>
+<link rel="stylesheet" href="/frontend/assets/css/acconts/style.css">
+<div class="container">
+  <div class="row">
+
+    <div class="col-lg my-5 table-container">
+      <div class="actions">
+        <div class="search-cotainer">
+          <i class="fa fa-search"></i>
+            <form id="search-form-name" method="GET" action="/contas">
+              <input type="text" id="search-input-name" name="search-name" placeholder="Buscar por nome">
+              <button type="submit">Buscar</button>
+            </form>
+        </div>
+
+        <div class="search-cotainer">
+          <i class="fa fa-search"></i>
+            <form id="search-form-number" method="GET" action="/contas">
+              <input type="text" id="search-input-number" name="search-number" placeholder="Buscar pelo número">
+              <button type="submit">Buscar</button>
+            </form>
+        </div>
+        
+        <div class="filters">
+          <div class="btn-group">
+            <button type="button" class="btn btn-active">Ativas</button></a>
+            <button type="button" class="btn btn-inactive">Inativas</button>
+            <button type="button" class="btn btn-all">Todas</button>
+          </div>
+        </div>
+      </div>
+
+      <%- include('includes/messages') %>
+
+      <div class="responsive-table">
+        <table class="table my-3">
+          <thead>
+            <tr>
+              <th>Nome da conta</th>
+              <th>Status</th>
+              <th>Número Conta</th>
+              <th>Lista de Usuários</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% accounts.forEach(account => { %>
+              <tr>
+                <td>
+                  <div class="name">
+                    <div class="user-img"><i class="fa fa-credit-card"></i></div>
+                    <%= account.name %>
+                  </div>
+                </td>
+                <td>
+                  <div class="count">
+                    <% if (account.active) {%>
+                      <div class="status-conta active">Ativo</div>
+                    <% } else { %>
+                      <div class="status-conta inactive">Inativa</div>
+                    <% } %>
+                  </div>
+                </td>
+                <td class="td-number">
+                  <div class="count-number"><%= account.number %></div>
+                </td>
+                <td>
+                  <div class="users">
+                    <% account.users.forEach(user => { %>
+                      <a href="/usuarios/?search=<%= user.name %>">
+                        <div class="container-user"><%= user.name %></div>
+                      </a>
+                    <% }); %>
+                  </div>
+                </td>
+                <td>
+                  <div class="config">
+                    <button class="dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                      <i class="fa fa-cog"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                      <button class="dropdown-item edit-count" href="#"
+                      data-toggle="modal"
+                      data-target="#registerAccount"
+                      data-account='<%= JSON.stringify(account) %>'> 
+                        Editar
+                      </button>
+                      <button class="dropdown-item delete-acount"
+                      data-name="<%= account.name %>"
+                      data-id="<%= account._id %>"
+                      >
+                        Deletar
+                      </button>
+                      <div class="dropdown-divider"></div>
+                      <% if (account.active) {%>
+                        <button class="dropdown-item deactivate-count"
+                        data-name="<%= account.name %>"
+                        data-id="<%= account._id %>">
+                          Desativar Conta
+                        </button>
+                      <% } else { %> 
+                        <button class="dropdown-item activate-count"
+                        data-name="<%= account.name %>"
+                        data-id="<%= account._id %>">
+                          Ativar Conta
+                        </button>
+                      <% } %>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+
+          <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+            <a class="page-link" href="/contas/<%= currentPage - 1 %>" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+
+          <% for (let i = 1; i <= totalPages; i++) { %>
+            <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+              <a class="page-link" href="/contas/<%= i %>"><%= i %></a>
+            </li>
+          <% } %>
+
+          <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+            <a class="page-link" href="/contas/<%= currentPage + 1 %>" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+
+        </ul>
+      </nav>
+
+    </div>
+  </div>
+</div>
+
+<%- include('includes/modals/registerAccountModal') %>
+
+
+<%- include('includes/footer')%>

@@ -51,11 +51,11 @@
 }
 
 
-#search-form {
+#search-form-name, #search-form-number {
     display: flex;
 }
 
-#search-form button {
+#search-form-name button, #search-form-number button {
     border-left: 1px solid #E5E7EB;
     padding-left: 10px;
     height: 100%;
@@ -81,15 +81,16 @@
     font-weight: bold;
 }
 
-.btn-no-count {
-    background-color: #F1F5F9;
-    color: #374151;
+.btn-inactive {
+    background-color: #FEE2E2;
+    color: #991B1B;
 }
 
-.btn-no-count.selected {
-    background-color: #CBD5E1;
-    color: black;
+.btn-inactive.selected {
+    background-color: #FCA5A5;
+    color: #7F1D1D;
 }
+
 
 .btn-all {
     background-color: #E0F2FE;
@@ -102,50 +103,12 @@
     font-weight: bold;
 }
 
-/* Botões role */
-.btn-role-financeiro {
-    background-color: #F0FDF4;
-    color: #166534;
-}
-
-.btn-role-financeiro:hover {
-    background-color: #DCFCE7;
-    color: #14532D;
-}
-
-.btn-role-venda {
-    background-color: #FFF7ED;
-    color: #C2410C;
-}
-
-.btn-role-venda:hover {
-    background-color: #FFEDD5;
-    color: #9A3412;
-}
-
-.btn-role-user {
-    background-color: #EFF6FF;
-    color: #1D4ED8;
-}
-
-.btn-role-user:hover {
-    background-color: #DBEAFE;
-    color: #1E40AF;
-}
-
-/* TODOS */
-.btn-role-todos {
-    background-color: #F5F5F4;
-    color: #44403C;
-}
-
-.btn-role-todos:hover {
-    background-color: #E7E5E4;
-    color: #292524;
-}
-
 
 /* Table */
+
+table {
+    table-layout: auto;
+}
 
 table thead tr {
     background-color: #F9FAFB;
@@ -192,6 +155,30 @@ tr td:last-child>div {
     align-items: center;
 }
 
+th:nth-child(3),
+td:nth-child(3),
+th:nth-child(2),
+td:nth-child(2) {
+    white-space: nowrap;
+    text-align: center;
+    width: 1%;
+}
+
+th:nth-child(1),
+td:nth-child(1) {
+    white-space: nowrap;
+    width: 10%;
+}
+
+td:nth-child(3)>.count-number {
+    display: inline-flex;
+    width: auto;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
 tr td .name {
     display: flex;
     gap: 10px;
@@ -218,9 +205,9 @@ tr td .name {
     color: #166534;
 }
 
-.no-count {
-    background-color: #F3F4F6;
-    color: #1F2937;
+.inactive {
+    background-color: #FEE2E2;
+    color: #991B1B;
 }
 
 .count-number {
@@ -234,7 +221,7 @@ tr td .name {
 
 }
 
-.dropdown-item.delet-count:hover {
+.dropdown-item.delete-acount:hover, .deactivate-count:hover {
     background-color: #FCA5A5 !important;
     color: #991B1B;
 }
@@ -274,4 +261,26 @@ tr td .name {
     border: none;
     color: white;
     box-shadow: none;
+}
+
+.users {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.users a {
+    text-decoration: none;
+}
+
+.container-user {
+    padding: 10px;
+    background-color: #b82626;
+    color: white;
+    border-radius: 20px;
+
+    &:hover {
+        background-color: #a52222;
+    }
 }

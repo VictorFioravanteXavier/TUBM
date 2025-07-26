@@ -18,18 +18,27 @@ export class UsersScreen {
         this.buttonsRoleEventsActivated();
         this.searchUserName();
         this.openEditUserModal();
+        this.openRegisterAccountModal();
         this.deleteUserButton();
 
         // Salva a instância atual da classe
         const self = this;
 
         document.addEventListener("DOMContentLoaded", function () {
-            const form = document.getElementById("edit-user-form");
+            const formEditUser = document.getElementById("edit-user-form");
 
-            form.addEventListener("submit", function (e) {
+            formEditUser.addEventListener("submit", function (e) {
                 e.preventDefault();
                 self.submtitEditForm(); // usa a instância correta
             });
+
+            const formCreateAccount = document.getElementById("create-new-account-form");
+
+            formCreateAccount.addEventListener("submit", function (e) {
+                e.preventDefault();
+                self.submitFormModalAccount(); // usa a instância correta
+            });
+
         });
     }
 
@@ -47,6 +56,29 @@ export class UsersScreen {
         this.form_modal = document.querySelector("#edit-user-form");
 
         this.delete_user_buttons = document.querySelectorAll(".delet-count")
+
+        this.inp_data_modal_account = document.querySelector("#data-modal-account")
+        this.inp_selected_user_id = document.querySelector("#selected-user-id")
+        this.inp_register_account_users = document.querySelector("#register-account-users")
+        this.inp_register_account_name = document.querySelector("#register-account-name")
+
+        this.list_users = document.querySelector(".users-selcted")
+
+        this.btn_add_user_to_list = document.querySelector("#add-user-account")
+        this.btn_add_user_to_list.addEventListener("click", e => {
+            e.preventDefault();
+
+            const name = this.inp_register_account_users.value;
+            const id = this.inp_selected_user_id.value;
+
+            if (!name || !id) {
+                alert("Selecione um usuário válido da lista.");
+                return;
+            }
+
+            this.addUserToList(name, id);
+        });
+
     }
 
     buttonsStatsEvents() {
@@ -239,9 +271,6 @@ export class UsersScreen {
             role
         };
 
-        console.log(dados);
-
-
         const token = document.querySelector('input[name="_csrf"]').value;
 
         fetch(`/usuarios/${id}/editar`, {
@@ -295,5 +324,193 @@ export class UsersScreen {
                 }
             });
         })
+    }
+
+    openRegisterAccountModal() {
+        document.addEventListener('DOMContentLoaded', () => {
+            $('#registerAccount').on('show.bs.modal', (event) => {
+                const button = $(event.relatedTarget);
+
+                const userMap = new Map();
+
+                const id = button.data('id');
+                const name = button.data('name');
+
+                document.querySelector("#data-modal-account").value = ""
+
+                document.querySelector("#data-modal-account").value = JSON.stringify([{ id, name }]);
+                this.attListUser([{ id, name }])
+                fetch(`/usuarios/api/getAll`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success && Array.isArray(data.users.users)) {
+                            const datalist = document.getElementById('users-list');
+                            const input = document.getElementById('register-account-users');
+
+                            const hiddenInput = document.getElementById('selected-user-id');
+
+                            hiddenInput.value = ""
+                            input.value = ""
+
+                            datalist.innerHTML = "";
+                            userMap.clear();
+
+                            data.users.users.forEach(user => {
+                                const label = `${user.name}`
+                                const option = document.createElement("option");
+                                option.value = `${user.name}`;
+                                option.label = `${user.cpf}`
+                                datalist.appendChild(option);
+
+                                userMap.set(label, user._id);
+                            });
+
+                            input.addEventListener("input", () => {
+                                const selected = input.value;
+                                const id = userMap.get(selected);
+                                hiddenInput.value = id || "";
+                            });
+                        } else {
+                            alert("Erro ao buscar os usuários cadastrados.");
+                        }
+                    })
+                    .catch(err => {
+                        console.error("Erro na requisição:", err);
+                    });
+            });
+        });
+    }
+
+    addUserToList(name, id) {
+        let dados = this.inp_data_modal_account.value;
+
+        let dadosArray = [];
+
+        try {
+            dadosArray = dados ? JSON.parse(dados) : [];
+        } catch (e) {
+            console.error("Erro ao ler dados JSON:", e);
+            dadosArray = [];
+        }
+
+        this.inp_register_account_users.value = ""
+
+        if (dadosArray.some(u => u.id === id)) {
+            alert("Usuário já adicionado.");
+            return;
+        }
+
+        dadosArray.push({ id, name });
+        this.inp_data_modal_account.value = JSON.stringify(dadosArray);
+        this.attListUser(dadosArray);
+    }
+
+    attListUser(list) {
+        this.list_users.innerHTML = "";
+
+        list.forEach(e => {
+            const div = document.createElement("div");
+            div.classList.add("user");
+            div.textContent = e.name;
+            div.dataset.id = e.id;
+
+            div.addEventListener("click", () => {
+                const idToRemove = div.dataset.id;
+
+                let dados = this.inp_data_modal_account.value;
+                let dadosArray = [];
+
+                try {
+                    dadosArray = dados ? JSON.parse(dados) : [];
+                } catch (e) {
+                    console.error("Erro ao ler dados JSON:", e);
+                }
+
+                dadosArray = dadosArray.filter(user => user.id !== idToRemove);
+
+                this.inp_data_modal_account.value = JSON.stringify(dadosArray);
+
+                this.attListUser(dadosArray);
+            });
+
+            this.list_users.appendChild(div);
+        });
+    }
+
+
+    validaFormModalAccount() {
+
+        let users = [];
+
+        try {
+            users = JSON.parse(this.inp_data_modal_account.value || "[]");
+        } catch (e) {
+            console.error("Erro ao fazer parse dos usuários:", e);
+            alert("Erro ao processar os usuários. Tente novamente.");
+            return false;
+        }
+
+        const data = {
+            name: this.inp_register_account_name.value.trim(),
+            users
+        }
+
+        if (!data.name || typeof data.name !== "string") {
+            alert("É obrigatório a conta ter um nome.");
+            return false;
+        }
+
+        if (!Array.isArray(data.users) || data.users.length === 0) {
+            alert("Para adicionar uma conta, é necessário pelo menos um usuário.");
+            return false;
+        }
+
+        return true;
+    }
+
+
+
+    submitFormModalAccount() {
+        if (!this.validaFormModalAccount()) return;
+
+        let usersRaw = [];
+        let users = [];
+        try {
+            usersRaw = JSON.parse(this.inp_data_modal_account.value || "[]");
+            users = usersRaw.map(user => user.id);
+        } catch (e) {
+            console.error("Erro ao fazer parse dos usuários:", e);
+            alert("Erro ao processar os usuários. Tente novamente.");
+            return false;
+        }
+
+        const data = {
+            name: this.inp_register_account_name.value.trim(),
+            users
+        };
+
+        const token = document.querySelector('input[name="_csrf"]').value;
+
+        fetch(`/contas/register`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "CSRF-Token": token
+            },
+            body: JSON.stringify(data),
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    location.reload();
+                }
+            });
     }
 }
