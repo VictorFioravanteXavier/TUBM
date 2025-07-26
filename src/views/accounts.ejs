@@ -86,14 +86,26 @@
                       data-account='<%= JSON.stringify(account) %>'> 
                         Editar
                       </button>
-                      <button class="dropdown-item delet-count"
-                      data-name="<%= user.name %>"
-                      data-id="<%= user._id %>"
+                      <button class="dropdown-item delete-acount"
+                      data-name="<%= account.name %>"
+                      data-id="<%= account._id %>"
                       >
                         Deletar
                       </button>
                       <div class="dropdown-divider"></div>
-                      <a class="dropdown-item activate-count" href="#">Ativar Conta</a>
+                      <% if (account.active) {%>
+                        <button class="dropdown-item deactivate-count"
+                        data-name="<%= account.name %>"
+                        data-id="<%= account._id %>">
+                          Desativar Conta
+                        </button>
+                      <% } else { %> 
+                        <button class="dropdown-item activate-count"
+                        data-name="<%= account.name %>"
+                        data-id="<%= account._id %>">
+                          Ativar Conta
+                        </button>
+                      <% } %>
                     </div>
                   </div>
                 </td>

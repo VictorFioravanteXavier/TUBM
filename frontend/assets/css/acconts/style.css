@@ -221,7 +221,7 @@ tr td .name {
 
 }
 
-.dropdown-item.delet-count:hover {
+.dropdown-item.delete-acount:hover, .deactivate-count:hover {
     background-color: #FCA5A5 !important;
     color: #991B1B;
 }
@@ -265,6 +265,7 @@ tr td .name {
 
 .users {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 10px;
 }

@@ -189,8 +189,103 @@ class Account {
         }
     }
 
+    static async delete(id) {
+        if (!mongoose.isValidObjectId(id)) {
+            this.errors.push("Usuário inválido.")
+            return
+        }
 
-    async valida() {
+        try {
+            await AccountModule.findByIdAndUpdate(
+                { _id: id },
+                {
+                    delete: true,
+                    update_date: Date.now(),
+                },
+                { new: true }
+            )
+
+            return { success: true }
+        } catch (e) {
+            this.errors.push("Ocorreu um erro inesperado.")
+            console.log(e);
+            return { success: false }
+        }
+    }
+
+    static async restaurar(id) {
+        if (!mongoose.isValidObjectId(id)) {
+            this.errors.push("Usuário inválido.")
+            return
+        }
+
+        try {
+            await AccountModule.findByIdAndUpdate(
+                { _id: id },
+                {
+                    delete: false,
+                    update_date: Date.now(),
+                },
+                { new: true }
+            )
+
+            return { success: true }
+        } catch (e) {
+            this.errors.push("Ocorreu um erro inesperado.")
+            console.log(e);
+            return { success: false }
+        }
+    }
+
+    static async deactivate(id) {
+        if (!mongoose.isValidObjectId(id)) {
+            this.errors.push("Usuário inválido.")
+            return
+        }
+
+        try {
+            await AccountModule.findByIdAndUpdate(
+                { _id: id },
+                {
+                    active: false,
+                    update_date: Date.now(),
+                },
+                { new: true }
+            )
+
+            return { success: true }
+        } catch (e) {
+            this.errors.push("Ocorreu um erro inesperado.")
+            console.log(e);
+            return { success: false }
+        }
+    }
+
+    static async activate(id) {
+        if (!mongoose.isValidObjectId(id)) {
+            this.errors.push("Usuário inválido.")
+            return
+        }
+
+        try {
+            await AccountModule.findByIdAndUpdate(
+                { _id: id },
+                {
+                    active: true,
+                    update_date: Date.now(),
+                },
+                { new: true }
+            )
+
+            return { success: true }
+        } catch (e) {
+            this.errors.push("Ocorreu um erro inesperado.")
+            console.log(e);
+            return { success: false }
+        }
+    }
+
+    static async valida() {
         if (!this.body.number) {
             this.errors.push("Erro ao gerar o número da conta.");
         }

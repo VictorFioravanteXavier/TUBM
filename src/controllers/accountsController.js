@@ -85,8 +85,7 @@ exports.register = async (req, res) => {
 
 exports.edit = async (req, res) => {
     try {
-        console.log(req.body);
-        
+
         const { name, users, deletedUsers } = req.body;
 
         if (!name || typeof name !== 'string') {
@@ -146,3 +145,53 @@ exports.edit = async (req, res) => {
     }
 };
 
+exports.delete = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (!id) {
+            return res.status(400).json({ error: "ID da conta não fornecido." });
+        }
+
+        await Account.delete(id);
+
+        return res.status(200).json({ success: true });
+    } catch (err) {
+        console.error("Erro ao deletar conta:", err);
+        return res.status(500).json({ error: "Erro ao deletar conta" });
+    }
+}
+
+exports.deactivate = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (!id) {
+            return res.status(400).json({ error: "ID da conta não fornecido." });
+        }
+
+        await Account.deactivate(id);
+
+        return res.status(200).json({ success: true });
+    } catch (err) {
+        console.error("Erro ao desativar a conta:", err);
+        return res.status(500).json({ error: "Erro ao desativar a conta" });
+    }
+}
+
+exports.activate = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (!id) {
+            return res.status(400).json({ error: "ID da conta não fornecido." });
+        }
+
+        await Account.activate(id);
+
+        return res.status(200).json({ success: true });
+    } catch (err) {
+        console.error("Erro ao desativar a conta:", err);
+        return res.status(500).json({ error: "Erro ao desativar a conta" });
+    }
+}

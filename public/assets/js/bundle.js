@@ -59,6 +59,9 @@ class Accounts {
     this.buttonsStatsEvents();
     this.buttonsStatsEventsActivated();
     this.openEditModal();
+    this.deleteAccountButton();
+    this.deactivateAccountButton();
+    this.activateAccountButton();
     const self = this;
     document.addEventListener("DOMContentLoaded", function () {
       const formEditAccount = document.getElementById("create-new-account-form");
@@ -95,6 +98,9 @@ class Accounts {
       this.addUserToList(name, id);
     });
     this.account_id = document.querySelector("#account-id");
+    this.delete_accounts_buttons = document.querySelectorAll(".delete-acount");
+    this.deactivate_accounts_buttons = document.querySelectorAll(".deactivate-count");
+    this.activate_accounts_buttons = document.querySelectorAll(".activate-count");
   }
   searchAccountName() {
     this.form_search_name.addEventListener("submit", e => {
@@ -353,6 +359,81 @@ class Accounts {
         alert("Erro ao salvar as alterações.");
         location.reload();
       }
+    });
+  }
+  deleteAccountButton() {
+    this.delete_accounts_buttons.forEach(delete_account_button => {
+      delete_account_button.addEventListener('click', e => {
+        const button = e.target;
+        const name = button.dataset.name;
+        const id = button.dataset.id;
+        if (confirm(`Você realmente deseja deletar a conta "${name}"?`)) {
+          fetch(`/contas/delete/${id}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json"
+            }
+          }).then(res => res.json()).then(data => {
+            if (data.success) {
+              location.reload();
+            } else {
+              alert("Erro ao deletar o usuário.");
+            }
+          }).catch(err => {
+            console.error("Erro na requisição:", err);
+          });
+        }
+      });
+    });
+  }
+  deactivateAccountButton() {
+    this.deactivate_accounts_buttons.forEach(deactivate_account_button => {
+      deactivate_account_button.addEventListener('click', e => {
+        const button = e.target;
+        const name = button.dataset.name;
+        const id = button.dataset.id;
+        if (confirm(`Você realmente deseja desatiavar a conta "${name}"?`)) {
+          fetch(`/contas/deactivate/${id}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json"
+            }
+          }).then(res => res.json()).then(data => {
+            if (data.success) {
+              location.reload();
+            } else {
+              alert("Erro ao deletar o usuário.");
+            }
+          }).catch(err => {
+            console.error("Erro na requisição:", err);
+          });
+        }
+      });
+    });
+  }
+  activateAccountButton() {
+    this.activate_accounts_buttons.forEach(activate_accounts_buttons => {
+      activate_accounts_buttons.addEventListener('click', e => {
+        const button = e.target;
+        const name = button.dataset.name;
+        const id = button.dataset.id;
+        if (confirm(`Você realmente deseja ativar a conta "${name}"?`)) {
+          fetch(`/contas/activate/${id}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json"
+            }
+          }).then(res => res.json()).then(data => {
+            if (data.success) {
+              location.reload();
+            } else {
+              alert("Erro ao deletar o usuário.");
+            }
+          }).catch(err => {
+            console.error("Erro na requisição:", err);
+          });
+        }
+      });
     });
   }
 }
