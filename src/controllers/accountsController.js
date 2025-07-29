@@ -85,7 +85,6 @@ exports.register = async (req, res) => {
 
 exports.edit = async (req, res) => {
     try {
-
         const { name, users, deletedUsers } = req.body;
 
         if (!name || typeof name !== 'string') {
@@ -96,30 +95,55 @@ exports.edit = async (req, res) => {
             return res.status(400).json({ success: false, message: "Lista de usuários inválida." });
         }
 
-        // Validação dos usuários ativos
+        // Verificação dos usuários ativos
         for (let user of users) {
             if (!user._id || !mongoose.isValidObjectId(user._id)) {
-                return res.status(400).json({ success: false, message: "ID de usuário inválido (ativos)." });
+                return res.status(400).json({ success: false, message: "ID de usuário inválido." });
             }
 
             const userExists = await User.findOne({ id: user._id });
             if (!userExists) {
-                return res.status(404).json({ success: false, message: `Usuário com ID ${user._id} não encontrado.` });
+                const errorMsg = `Usuário não encontrado.`;
+                req.flash("errors", [errorMsg]);
+                return req.session.save(() => {
+                    res.status(400).json({ success: false, errors: [errorMsg] });
+                });
+            }
+
+            if (userExists.verified) {
+                const pertence = await Account.thisAccount(req.params.id, user._id);
+                
+                if (!pertence) {
+                    const errorMsg = `Usuário "${userExists.name}" pertence tem outra conta cadastrada.`;
+                    req.flash("errors", [errorMsg]);
+                    return req.session.save(() => {
+                        res.status(400).json({ success: false, errors: [errorMsg] });
+                    });
+                }
             }
         }
 
-        // Validação dos usuários deletados (supõe-se que deletedUsers é array de strings)
+        // Verificação dos usuários a serem removidos
         for (let userId of deletedUsers) {
             if (!mongoose.isValidObjectId(userId)) {
-                return res.status(400).json({ success: false, message: "ID de usuário inválido (deletados)." });
+                const errorMsg = `ID de usuário inválido (deletados).`;
+                req.flash("errors", [errorMsg]);
+                return req.session.save(() => {
+                    res.status(400).json({ success: false, errors: [errorMsg] });
+                });
             }
 
             const userExists = await User.findOne({ id: userId });
             if (!userExists) {
-                return res.status(404).json({ success: false, message: `Usuário deletado com ID ${userId} não encontrado.` });
+                const errorMsg = `Usuário deletado com ID ${userId} não encontrado.`;
+                req.flash("errors", [errorMsg]);
+                return req.session.save(() => {
+                    res.status(400).json({ success: false, errors: [errorMsg] });
+                });
             }
         }
 
+        // Edição da conta
         const account = new Account(req.body);
         await account.edit(req.params.id, {
             name,
@@ -129,21 +153,23 @@ exports.edit = async (req, res) => {
 
         if (account.errors.length > 0) {
             req.flash("errors", account.errors);
-            req.session.save(() => {
-                return res.status(400).json({ success: false });
+            return req.session.save(() => {
+                res.status(400).json({ success: false, errors: account.errors });
             });
-            return;
         }
 
         req.flash("success", "Conta editada com sucesso!");
-        req.session.save(() => { });
-        return res.status(200).json({ success: true });
+        return req.session.save(() => {
+            res.status(200).json({ success: true });
+        });
 
     } catch (e) {
         console.error(e);
         return res.status(500).json({ success: false, message: "Erro interno no servidor." });
     }
 };
+
+
 
 exports.delete = async (req, res) => {
     try {

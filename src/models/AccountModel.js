@@ -285,6 +285,23 @@ class Account {
         }
     }
 
+    static async thisAccount(id_account, id_user) {
+        try {
+            const conta = await AccountModule.findById(id_account);
+            if (!conta) return false;
+
+            // Verifica se algum usuário da conta tem o mesmo ID
+            const pertence = conta.users.some(user => user.toString() === id_user.toString());
+            return pertence;
+        } catch (e) {
+            console.error("Erro em thisAccount:", e);
+            return false;
+        }
+    }
+
+
+
+
     static async valida() {
         if (!this.body.number) {
             this.errors.push("Erro ao gerar o número da conta.");
