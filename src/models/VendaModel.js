@@ -80,6 +80,6 @@ class Venda {
             }
         }
     }
-
 }
+
 module.exports = Venda;

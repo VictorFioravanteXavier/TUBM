@@ -86,21 +86,26 @@ export class FazerVenda {
     renderTabela() {
         this.tabelaItens.innerHTML = '';
         this.listaItens.forEach((item, index) => {
-            const row = document.createElement('tr');
-            const colNome = `<td class="nome-item">${item.nome_produto}</td>`;
+            const row = document.createElement('div');
+            row.classList.add("row-lista-itens")
+
+            const colNome = `<div class="nome-item">${item.nome_produto}</div>`;
+
             const colQtd = `
-                <td>
+                <div class="quantidade">
                     Qtd:
                     <input type="number" min="1" value="${item.quantidade}" 
                            data-index="${index}" class="input-qtd">
-                </td>`;
+                </div>`;
+
             const colAcoes = `
-                <td>
+                <div class="excluir">
                     <button type="button" class="btn-remove circle-plus" data-index="${index}">
                         <i class="fas fa-x"></i>
                     </button>
-                </td>`;
-            const colPreco = `<td>R$ ${(item.subtotal).toFixed(2)}</td>`;
+                </div>`;
+
+            const colPreco = `<div>R$ ${(item.subtotal).toFixed(2)}</div>`;
 
             row.innerHTML = colNome + colQtd + colPreco + colAcoes;
             this.tabelaItens.appendChild(row);
