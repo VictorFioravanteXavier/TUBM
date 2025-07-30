@@ -1,12 +1,12 @@
-const Conta = require("../models/ContaModel");
+const Account = require("../models/AccountModel");
 const Produto = require("../models/ProdutoModel");
 const Venda = require("../models/VendaModel");
 
 exports.index = async (req, res) => {
-    const contas = await Conta.buscarContas()
-    const produtos = await Produto.buscarProdutosEstoque()
+    const accounts = await Account.findAllNoPage()
+    const produtos = await Produto.buscarProdutosEstoque()    
 
-    res.render('fazer-venda', { contas, produtos });
+    res.render('fazer-venda', { accounts, produtos });
 };
 
 exports.registrar = async (req, res) => {

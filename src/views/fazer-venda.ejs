@@ -13,8 +13,8 @@
                         <input list="lista-contas" name="cliente" id="cliente-fazer-venda" placeholder="Selecione ou digite o nome da conta do cliente">
                         <input type="hidden" name="cliente_id" id="cliente-id">
                         <datalist id="lista-contas">
-                            <% contas.forEach(conta => { %>
-                                <option value="<%= conta.nome %>" data-id="<%= conta._id %>">
+                            <% accounts.forEach(account => { %>
+                                <option value="<%= account.number %> - <%= account.name %>" data-id="<%= account._id %>">
                             <% }) %>
                         </datalist>
                     </div>

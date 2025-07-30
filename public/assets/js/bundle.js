@@ -980,7 +980,7 @@ class FazerVenda {
   }
   enviarBack() {
     const dados = {
-      cliente_id: this.inputClienteId.value,
+      account_id: this.inputClienteId.value,
       valor_total: this.valor_total,
       status: this.getStatusVenda(),
       observacoes: this.getObservacoesVenda(),

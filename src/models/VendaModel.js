@@ -1,24 +1,21 @@
 const mongoose = require('mongoose');
-const Conta = require('./ContaModel.js');
 const Produto = require('./ProdutoModel.js');
 
 const VendaSchema = new mongoose.Schema({
-    cliente_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Cliente', required: true },
+    account_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Account', required: true },
     data_venda: { type: Date, required: true, default: Date.now },
+    date_pay: { type: Date },
     valor_total: { type: Number, required: true },
     status: { type: Boolean, required: true, default: false },
     observacoes: { type: String, required: false },
 
     // Lista de itens da venda
-    itens: [
-        {
-            produto_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Produto', required: true },
-            nome_produto: { type: String, required: true },
-            quantidade: { type: Number, required: true },
-            preco_unitario: { type: Number, required: true },
-            subtotal: { type: Number, required: true }
-        }
-    ],
+    itens: [{
+        produto_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Produtos', required: true },
+        quantidade: { type: Number, required: true },
+        preco_unitario: { type: Number, required: true },
+        subtotal: { type: Number, required: true }
+    }],
 
     delete: { type: Boolean, default: false }
 });
@@ -47,11 +44,8 @@ class Venda {
     }
 
     async valida() {
-        const conta = await Conta.buscarConta(this.body.cliente_id);
-        if (!this.body.cliente_id) {
+        if (!mongoose.isValidObjectId(this.body.account_id)) {
             this.errors.push('Tem que ter uma conta para fazer a venda');
-        } else if (!conta) {
-            this.errors.push('Conta inválida');
         }
 
         if (!this.body.valor_total) {
