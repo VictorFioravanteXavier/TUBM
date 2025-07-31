@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Produto = require('./ProdutoModel.js');
+const centTrasform = require('../utils/centTrasform.js')
 
 const VendaSchema = new mongoose.Schema({
     account_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Account', required: true },
@@ -13,7 +14,6 @@ const VendaSchema = new mongoose.Schema({
     itens: [{
         produto_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Produtos', required: true },
         quantidade: { type: Number, required: true },
-        preco_unitario: { type: Number, required: true },
         subtotal: { type: Number, required: true }
     }],
 
@@ -30,17 +30,32 @@ class Venda {
     }
 
     async registrar() {
-        console.log('Chamou registrar', this.body);
-
         await this.valida();
 
         if (this.errors.length > 0) {
-            console.log('Erros na validação:', this.errors);
             return;
         }
 
-        this.venda = await VendaModule.create(this.body);
-        console.log('Venda registrada no banco:', this.venda);
+        const data = {
+            account_id: this.body.account_id,
+            date_pay: this.body.status ? Date.now() : null,
+            valor_total: centTrasform(this.body.valor_total),
+            status: this.body.status,
+            observacoes: this.body.observacoes,
+            itens: []
+        }
+
+        this.body.itens.forEach(item => {
+            data.itens.push({
+                produto_id: item.produto_id,
+                quantidade: item.quantidade,
+                subtotal: centTrasform(item.subtotal)
+            })
+        });
+
+        this.venda = await VendaModule.create(
+            data
+        );
     }
 
     async valida() {

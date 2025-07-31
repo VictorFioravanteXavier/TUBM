@@ -1,5 +1,9 @@
 module.exports = function (preco) {
-    preco = preco.replace(',', '.'); // Corrigido: agora retorna o valor com ponto
-    preco = parseFloat(preco) * 100; // Corrigido: substitui parseDecimal por parseFloat
+    if (typeof preco !== 'string' && typeof preco !== 'number') {
+        throw new TypeError(`Preço inválido: ${preco}`);
+    }
+
+    preco = preco.toString().replace(',', '.');
+    preco = parseFloat(preco) * 100;
     return preco;
 };
