@@ -48,7 +48,6 @@ form {
     /* Cor da borda */
     border-radius: 50%;
     background-color: transparent;
-    /* Círculo transparente */
     cursor: pointer;
     transition: background-color 0.3s;
 }
@@ -110,53 +109,49 @@ form {
     border-left-width: 0;
 }
 
-.container-left table {
+.container-left .table-itens {
     border-radius: 8px;
     overflow: hidden;
     width: 100%;
-    table-layout: auto; /* (padrão, mas reforçando) */
+    table-layout: auto;
+    /* (padrão, mas reforçando) */
 }
 
-.container-left table tbody tr {
+.container-left .table-itens #lista-itens-venda .row-lista-itens {
     background-color: #E5E7EB;
-    margin-bottom: 10px;
 }
 
-.container-left table tbody tr:not(:last-child) {
-    border-bottom: 1px solid #d1d5db;
-}
-
-.container-left table tbody tr td {
+.container-left .table-itens #lista-itens-venda .row-lista-itens>div {
     padding: 12px 0;
     padding-left: 8px;
     text-align: center;
     vertical-align: middle;
-    white-space: nowrap; 
+    white-space: nowrap;
 }
 
-.container-left table tbody tr td:last-child {
+.container-left .table-itens #lista-itens-venda .row-lista-itens>div:last-child {
     padding-right: 8px;
     align-items: center;
 }
 
-.container-left table tbody tr td.nome-item {
+.container-left .table-itens #lista-itens-venda .row-lista-itens>div.nome-item {
     text-align: left;
-    width: 100%;
+    flex: 1;
     font-weight: 600;
 }
 
-.container-left table tbody tr td input {
+.container-left .table-itens #lista-itens-venda .row-lista-itens>div input {
     width: 40px;
 }
 
-.container-left table tbody tr td .circle-plus {
+.container-left .table-itens #lista-itens-venda .row-lista-itens>div .circle-plus {
     color: #9CA3AF;
     border-color: #9CA3AF;
 
     &:hover {
         color: #B82627;
         border-color: #B82627;
-    }   
+    }
 }
 
 .container-left .inp-group p {
@@ -248,4 +243,76 @@ form {
     &:hover {
         background-color: #a12222;
     }
+}
+
+#lista-itens-venda {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#lista-itens-venda>.row-lista-itens {
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 8px;
+    border: 1px solid #4b55636b;
+    gap: 20px;
+}
+
+.container-left .table-itens #lista-itens-venda .row-lista-itens>div.nome-item {
+    white-space: normal;
+    /* permite a quebra de linha */
+    word-break: break-word;
+    /* quebra palavras longas se necessário */
+}
+
+@media (max-width: 425px) {
+    main {
+        padding: 20px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .container-rigth {
+        width: 100%;
+    }
+
+    .container-left {
+        width: 100%;
+    }
+
+    .row-lista-itens {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0px !important;
+    }
+
+    .row-lista-itens>div {
+        width: 50% !important;
+        /* 2 elementos por linha */
+        display: flex;
+        align-items: center;
+    }
+
+    .nome-item {
+        white-space: normal;
+        word-break: break-word;
+    }
+
+    .nome-item,
+    .quantidade,
+    .preco {
+        justify-content: flex-start;
+    }
+
+    .quantidade, .excluir {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
 }

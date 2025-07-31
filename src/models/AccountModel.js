@@ -86,6 +86,13 @@ class Account {
         };
     }
 
+    static async findAllNoPage() {
+        const accounts = await AccountModule.find({ delete: false, active: true })
+            .sort({ name: -1 })
+
+        return accounts;
+    }
+
     static async findAllFiltred(page = 1, active, searchName, searchNumber) {
         const limit = 10;
         const skip = (page - 1) * limit;
