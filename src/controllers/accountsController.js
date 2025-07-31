@@ -1,7 +1,4 @@
 const User = require('../models/UserModel');
-const Role = require('../models/RoleModel');
-const { validarCPF } = require('../utils/validaCpf');
-const { validarTelefone } = require('../utils/validaTelefone');
 const Account = require('../models/AccountModel');
 const { default: mongoose } = require('mongoose');
 

@@ -3,7 +3,6 @@ import 'regenerator-runtime/runtime';
 
 import Login from './modules/login';
 import { Estoque } from './modules/estoque';
-import { Confugurações } from './modules/configuracoes';
 import { FazerVenda } from './modules/fazer-venda';
 import { Cadastro } from './modules/cadastro';
 import { UsersScreen } from './modules/usersScreen';
@@ -21,9 +20,6 @@ if (window.location.pathname === "/cadastro") {
 }
 const estoque = new Estoque();
 estoque.init()
-
-const configuracoes = new Confugurações()
-configuracoes.init()
 
 if (window.location.pathname === '/fazer-venda/') {
     const fazer_venda = new FazerVenda();
