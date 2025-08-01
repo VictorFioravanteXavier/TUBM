@@ -1498,6 +1498,7 @@ class Vendas {
     this.buttonsStatsEvents();
     this.buttonsStatsEventsActivated();
     this.deleteVendasButton();
+    this.openDescriptionModal();
   }
   cacheSelectors() {
     this.form_search_name = document.querySelector("#search-form-name");
@@ -1593,6 +1594,51 @@ class Vendas {
             console.error("Erro na requisição:", err);
           });
         }
+      });
+    });
+  }
+  openDescriptionModal() {
+    $('#completDescripionVendaModal').on('show.bs.modal', function (event) {
+      const button = $(event.relatedTarget);
+      const modal = $(this);
+      const venda = button.data("venda");
+      modal.find("#description-account-name").text(venda.account_id.name);
+      modal.find("#description-account-number").text(venda.account_id.number);
+      modal.find("#description-data-venda").text(new Date(venda.data_venda).toLocaleDateString('pt-BR'));
+      modal.find("#description-valor-total").text(`R$${(venda.valor_total / 100).toFixed(2)}`);
+      modal.find("#description-status").text(`${venda.status ? "Pago" : "Pendente"}`);
+      modal.find("#description-data-pagamento").text(`${venda.status ? new Date(venda.date_pay).toLocaleDateString('pt-BR') : "----"}`);
+      venda.itens.forEach(item => {
+        const dadosTable = `
+                    <tr>
+                        <td>
+                            <div class="description-item-code">
+                                ${item.produto_id.code}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="description-item-name">
+                                ${item.produto_id.name}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="description-item-quantidade">
+                                ${item.quantidade}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="description-item-valor-unitario">
+                                R$${(item.produto_id.valor_venda / 100).toFixed(2)}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="description-item-subtotal">
+                                R$${(item.subtotal / 100).toFixed(2)}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+        modal.find("#description-item-tbody").append(dadosTable);
       });
     });
   }

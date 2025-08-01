@@ -81,7 +81,9 @@
                         Deletar
                       </button>
                       <div class="dropdown-divider"></div>
-                      <button class="dropdown-item deactivate-count"
+                      <button class="dropdown-item openModalDescription"
+                      data-toggle="modal"
+                      data-target="#completDescripionVendaModal"
                       data-venda="<%= JSON.stringify(venda) %>">
                         Descrição completa
                       </button>
@@ -122,7 +124,7 @@
   </div>
 </div>
 
-<%- include('includes/modals/registerAccountModal') %>
+<%- include('includes/modals/completDescripionVendaModal') %>
 
 
 <%- include('includes/footer')%>
