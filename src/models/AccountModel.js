@@ -164,6 +164,28 @@ class Account {
         return account;
     }
 
+    static async findIdsByNameAndNumber(searchName, searchNumber) {
+        const filter = {};
+
+        if (searchName && typeof searchName === 'string' && searchName.trim() !== '') {
+            filter.name = { $regex: new RegExp(searchName, 'i') };
+        }
+
+        if (searchNumber && typeof searchNumber === 'string' && searchNumber.trim() !== '') {
+            filter.number = { $regex: new RegExp(searchNumber, 'i') };
+        }
+
+        if (Object.keys(filter).length === 0) {
+            // Sem filtro, retorna array vazio (ou todos? dependendo da necessidade)
+            return [];
+        }
+
+        const accounts = await AccountModule.find(filter).select('_id').lean();
+
+        return accounts.map(acc => acc._id);
+    }
+
+
     async edit(id, data) {
         try {
             this.account = await AccountModule.findByIdAndUpdate(

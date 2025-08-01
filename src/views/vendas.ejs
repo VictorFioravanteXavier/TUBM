@@ -1,16 +1,32 @@
 <%- include('includes/head')%>
 <%- include('includes/nav')%>
-<link rel="stylesheet" href="/frontend/assets/css/vendas/style.css">
+<link rel="stylesheet" href="/frontend/assets/css/acconts/style.css">
 <div class="container">
   <div class="row">
 
-    <div class="col-lg my-5">
-      <div class="container-grid">
-        <h1>Vendas</h1>
-        <div class="top-right"><a href="/produto/"><button class="btn"><i class="fas fa-plus"></i>Adicionar Novo Item</button></a></div>
-        <div class="bottom-left">
-          <div class="form-group">
-            <input type="text" class="form-control" placeholder="Pesquisar por nome ou código" id="search-estoque">
+    <div class="col-lg my-5 table-container">
+      <div class="actions">
+        <div class="search-cotainer">
+          <i class="fa fa-search"></i>
+            <form id="search-form-name" method="GET" action="/contas">
+              <input type="text" id="search-input-name" name="search-name" placeholder="Buscar por nome da conta">
+              <button type="submit">Buscar</button>
+            </form>
+        </div>
+
+        <div class="search-cotainer">
+          <i class="fa fa-search"></i>
+            <form id="search-form-number" method="GET" action="/contas">
+              <input type="text" id="search-input-number" name="search-number" placeholder="Buscar pelo número da conta">
+              <button type="submit">Buscar</button>
+            </form>
+        </div>
+        
+        <div class="filters">
+          <div class="btn-group">
+            <button type="button" class="btn btn-active">Pagas</button></a>
+            <button type="button" class="btn btn-inactive">Pendentes</button>
+            <button type="button" class="btn btn-all">Todas</button>
           </div>
         </div>
       </div>
@@ -21,47 +37,91 @@
         <table class="table my-3">
           <thead>
             <tr>
-              <th>Nome do Produto</th>
-              <th>Código</th>
-              <th>Quantidade</th>
-              <th>Custo</th>
-              <th>Valor Venda</th>
-              <th>Ultima Atualização</th>
-              <th>Ações</th> 
+              <th>Nome da conta</th>
+              <th>Número Conta</th>
+              <th>Data Compra</th>
+              <th>Pagamento</th>
+              <th>Ações</th>
             </tr>
           </thead>
-          <% if (produtos.length > 0) { %>
-            <% produtos.forEach(produto => { %>
-              <tbody> 
-                <tr>
-                  <td><%= produto.name %></td>
-                  <td><%= produto.code %></td>
-                  <td><%= produto.quantidade %></td>
-                  <td>R$<%= (produto.custo / 100).toFixed(2) %></td>
-                  <td>R$<%= (produto.valor_venda / 100).toFixed(2) %></td>
-                  <td><%= new Date(produto.data_atualizacao).toLocaleDateString('pt-BR') %></td>
-                  <td>
-                    <div class="actions">
-                      <button class="btn-edit-estoque" data-id="<%= produto._id %>">
-                        <i class="fas fa-pencil-alt"></i>
+          <tbody>
+            <% vendas.forEach(venda => { %>
+              <tr>
+                <td>
+                  <div class="name">
+                    <div class="user-img"><i class="fa fa-shopping-cart"></i></div>
+                    <%= venda.account_id.name %>
+                  </div>
+                </td>
+                <td class="td-number">
+                  <div class="count-number"><%= venda.account_id.number %></div>
+                </td>
+                <td class="td-number">
+                  <div class="count-number"><%= new Date(venda.data_venda).toLocaleDateString('pt-BR') %></div>
+                </td>
+                <td>
+                  <div class="count">
+                    <% if (venda.status) {%>
+                      <div class="status-conta active">Paga</div>
+                    <% } else { %>
+                      <div class="status-conta inactive">Pendente</div>
+                    <% } %>
+                  </div>
+                </td>
+                <td>
+                  <div class="config">
+                    <button class="dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                      <i class="fa fa-cog"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                      <button class="dropdown-item delete-acount"
+                      data-id="<%= venda._id %>"
+                      >
+                        Deletar
                       </button>
-                      <a href="/produto/delete/<%= produto._id %>">
-                        <button class="btn-delete-estoque" data-id="<%= produto._id %>">
-                          <i class="fas fa-trash-alt"></i>
-                        </button>
-                      </a>
+                      <div class="dropdown-divider"></div>
+                      <button class="dropdown-item deactivate-count"
+                      data-venda="<%= JSON.stringify(venda) %>">
+                        Descrição completa
+                      </button>
+                        
                     </div>
-                  </td>
-                </tr>
-              </tbody>
-            <% }) %>
-          <% } %>
+                  </div>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
         </table>
       </div>
-    
-    </div>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
 
+          <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+            <a class="page-link" href="/vendas/<%= currentPage - 1 %>" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+
+          <% for (let i = 1; i <= totalPages; i++) { %>
+            <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+              <a class="page-link" href="/vendas/<%= i %>"><%= i %></a>
+            </li>
+          <% } %>
+
+          <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+            <a class="page-link" href="/vendas/<%= currentPage + 1 %>" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+
+        </ul>
+      </nav>
+
+    </div>
   </div>
 </div>
+
+<%- include('includes/modals/registerAccountModal') %>
+
 
 <%- include('includes/footer')%>

@@ -1475,6 +1475,104 @@ class UsersScreen {
 
 /***/ }),
 
+/***/ "./frontend/modules/vendas.js":
+/*!************************************!*\
+  !*** ./frontend/modules/vendas.js ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Vendas: () => (/* binding */ Vendas)
+/* harmony export */ });
+class Vendas {
+  constructor() {}
+  init() {
+    this.events();
+  }
+  events() {
+    this.cacheSelectors();
+    this.searchAccountName();
+    this.searchAccountNumber();
+    this.buttonsStatsEvents();
+    this.buttonsStatsEventsActivated();
+  }
+  cacheSelectors() {
+    this.form_search_name = document.querySelector("#search-form-name");
+    this.inp_search_name = document.querySelector("#search-input-name");
+    this.form_search_number = document.querySelector("#search-form-number");
+    this.inp_search_number = document.querySelector("#search-input-number");
+    this.btn_status_pago = document.querySelector(".btn-active");
+    this.btn_status_pendente = document.querySelector(".btn-inactive");
+    this.btn_status_all = document.querySelector(".btn-all");
+  }
+  searchAccountName() {
+    this.form_search_name.addEventListener("submit", e => {
+      e.preventDefault();
+      const value = this.inp_search_name.value.trim();
+      const params = new URLSearchParams(window.location.search);
+      if (!value) {
+        params.delete("searchName");
+        window.location.href = `/vendas/?${params.toString()}`;
+        return;
+      }
+      params.set("searchName", value);
+      window.location.href = `/vendas/?${params.toString()}`;
+    });
+  }
+  searchAccountNumber() {
+    this.form_search_number.addEventListener("submit", e => {
+      e.preventDefault();
+      const value = this.inp_search_number.value.trim();
+      const params = new URLSearchParams(window.location.search);
+      if (!value) {
+        params.delete("searchNumber");
+        window.location.href = `/vendas/?${params.toString()}`;
+        return;
+      }
+      params.set("searchNumber", value);
+      window.location.href = `/vendas/?${params.toString()}`;
+    });
+  }
+  buttonsStatsEvents() {
+    this.btn_status_pago.addEventListener("click", e => {
+      e.preventDefault();
+      const params = new URLSearchParams(window.location.search);
+      params.set("status", "pago");
+      window.location.href = `/vendas/?${params.toString()}`;
+    });
+    this.btn_status_pendente.addEventListener("click", e => {
+      e.preventDefault();
+      const params = new URLSearchParams(window.location.search);
+      params.set("status", "pendente");
+      window.location.href = `/vendas/?${params.toString()}`;
+    });
+    this.btn_status_all.addEventListener("click", e => {
+      e.preventDefault();
+      const params = new URLSearchParams(window.location.search);
+      params.delete("status");
+      window.location.href = `/vendas/?${params.toString()}`;
+    });
+  }
+  buttonsStatsEventsActivated() {
+    const params = new URLSearchParams(window.location.search);
+    switch (params.get("status")) {
+      case "pago":
+        this.btn_status_pago.classList.add("selected");
+        break;
+      case "pendente":
+        this.btn_status_pendente.classList.add("selected");
+        break;
+      default:
+        this.btn_status_all.classList.add("selected");
+        break;
+    }
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/core-js/internals/a-callable.js":
 /*!******************************************************!*\
   !*** ./node_modules/core-js/internals/a-callable.js ***!
@@ -25548,6 +25646,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_cadastro__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/cadastro */ "./frontend/modules/cadastro.js");
 /* harmony import */ var _modules_usersScreen__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/usersScreen */ "./frontend/modules/usersScreen.js");
 /* harmony import */ var _modules_accounts__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/accounts */ "./frontend/modules/accounts.js");
+/* harmony import */ var _modules_vendas__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/vendas */ "./frontend/modules/vendas.js");
+
 
 
 
@@ -25579,6 +25679,10 @@ if (window.location.pathname.includes("usuarios")) {
 if (window.location.pathname.includes("contas")) {
   const accounts = new _modules_accounts__WEBPACK_IMPORTED_MODULE_7__.Accounts();
   accounts.init();
+}
+if (window.location.pathname.includes("vendas")) {
+  const vendas = new _modules_vendas__WEBPACK_IMPORTED_MODULE_8__.Vendas();
+  vendas.init();
 }
 
 // Funções fixas

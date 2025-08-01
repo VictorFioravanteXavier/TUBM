@@ -7,6 +7,7 @@ import { FazerVenda } from './modules/fazer-venda';
 import { Cadastro } from './modules/cadastro';
 import { UsersScreen } from './modules/usersScreen';
 import { Accounts } from './modules/accounts';
+import { Vendas } from './modules/vendas';
 
 // Classes
 if (window.location.pathname === '/') {
@@ -34,6 +35,11 @@ if(window.location.pathname.includes("usuarios")) {
 if(window.location.pathname.includes("contas")) {
     const accounts = new Accounts();
     accounts.init();
+}
+
+if(window.location.pathname.includes("vendas")) {
+    const vendas = new Vendas();
+    vendas.init();
 }
 
 // Funções fixas

@@ -4,7 +4,7 @@ const { validarCPF } = require('../utils/validaCpf');
 const { validarTelefone } = require('../utils/validaTelefone');
 
 exports.index = async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
+    const page = parseInt(req.params.page) || 1;
     let users, totalPages, currentPage;
 
     try {

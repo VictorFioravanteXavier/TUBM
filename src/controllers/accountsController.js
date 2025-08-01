@@ -3,7 +3,7 @@ const Account = require('../models/AccountModel');
 const { default: mongoose } = require('mongoose');
 
 exports.index = async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
+    const page = parseInt(req.params.page) || 1;
     let accounts, totalPages, currentPage;
 
 
