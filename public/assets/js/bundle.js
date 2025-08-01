@@ -1497,6 +1497,7 @@ class Vendas {
     this.searchAccountNumber();
     this.buttonsStatsEvents();
     this.buttonsStatsEventsActivated();
+    this.deleteVendasButton();
   }
   cacheSelectors() {
     this.form_search_name = document.querySelector("#search-form-name");
@@ -1506,6 +1507,7 @@ class Vendas {
     this.btn_status_pago = document.querySelector(".btn-active");
     this.btn_status_pendente = document.querySelector(".btn-inactive");
     this.btn_status_all = document.querySelector(".btn-all");
+    this.delete_accounts_buttons = document.querySelectorAll(".delete-venda");
   }
   searchAccountName() {
     this.form_search_name.addEventListener("submit", e => {
@@ -1568,6 +1570,31 @@ class Vendas {
         this.btn_status_all.classList.add("selected");
         break;
     }
+  }
+  deleteVendasButton() {
+    this.delete_accounts_buttons.forEach(delete_account_button => {
+      delete_account_button.addEventListener('click', e => {
+        const button = e.target;
+        const name = button.dataset.name;
+        const id = button.dataset.id;
+        if (confirm(`Você realmente deseja deletar a compra de "${name}"?`)) {
+          fetch(`/vendas/delete/${id}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json"
+            }
+          }).then(res => res.json()).then(data => {
+            if (data.success) {
+              location.reload();
+            } else {
+              alert("Erro ao deletar o usuário.");
+            }
+          }).catch(err => {
+            console.error("Erro na requisição:", err);
+          });
+        }
+      });
+    });
   }
 }
 

@@ -53,6 +53,7 @@ router.get('/produto/delete/:id', loginRequired, produtoController.delete);
 /* Rotas Vendas */
 router.get('/vendas/', loginRequired, roleFind, vendasController.index);
 router.get("/vendas/:page", loginRequired, roleFind, vendasController.index)
+router.get('/vendas/delete/:id', loginRequired, vendasController.delete);
 
 /* Rotas Fazer Venda */
 router.get('/fazer-venda/', loginRequired, fazerVendaController.index);

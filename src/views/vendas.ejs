@@ -1,6 +1,6 @@
 <%- include('includes/head')%>
 <%- include('includes/nav')%>
-<link rel="stylesheet" href="/frontend/assets/css/acconts/style.css">
+<link rel="stylesheet" href="/frontend/assets/css/vendas/style.css">
 <div class="container">
   <div class="row">
 
@@ -57,14 +57,14 @@
                   <div class="count-number"><%= venda.account_id.number %></div>
                 </td>
                 <td class="td-number">
-                  <div class="count-number"><%= new Date(venda.data_venda).toLocaleDateString('pt-BR') %></div>
+                  <div><%= new Date(venda.data_venda).toLocaleDateString('pt-BR') %></div>
                 </td>
                 <td>
-                  <div class="count">
+                  <div class="payment">
                     <% if (venda.status) {%>
-                      <div class="status-conta active">Paga</div>
+                      <div class="status-payment pay">Paga</div>
                     <% } else { %>
-                      <div class="status-conta inactive">Pendente</div>
+                      <div class="status-payment pending">Pendente</div>
                     <% } %>
                   </div>
                 </td>
@@ -74,7 +74,8 @@
                       <i class="fa fa-cog"></i>
                     </button>
                     <div class="dropdown-menu dropdown-menu-right">
-                      <button class="dropdown-item delete-acount"
+                      <button class="dropdown-item delete-venda"
+                      data-name="<%= venda.account_id.name %>"
                       data-id="<%= venda._id %>"
                       >
                         Deletar

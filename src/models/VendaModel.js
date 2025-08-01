@@ -151,57 +151,53 @@ class Venda {
         };
     }
 
+    static async delete(id) {
+        if (!mongoose.isValidObjectId(id)) {
+            this.errors.push("Usuário inválido.")
+            return
+        }
 
-    static async getResumoContasComComprasPaginado(page = 1) {
-        const limit = 10;
-        const skip = (page - 1) * limit;
+        try {
+            await VendaModule.findByIdAndUpdate(
+                { _id: id },
+                {
+                    delete: true,
+                    update_date: Date.now(),
+                },
+                { new: true }
+            )
 
-        // Busca todas as vendas não deletadas com os dados da conta
-        const vendas = await VendaModule.find({ delete: false })
-            .populate('account_id')
-            .populate('itens.produto_id'); // se quiser também incluir os produtos da venda
-
-        const resumoPorConta = {};
-
-        vendas.forEach(venda => {
-            const conta = venda.account_id;
-            if (!conta) return;
-
-            const contaId = conta._id.toString();
-
-            if (!resumoPorConta[contaId]) {
-                resumoPorConta[contaId] = {
-                    nomeConta: conta.nome || conta.name || 'Sem nome',
-                    numeroConta: conta.number || conta.number || '---',
-                    contasPendentes: 0,
-                    dividaTotalCentavos: 0
-                };
-            }
-
-            if (!venda.status) {
-                resumoPorConta[contaId].contasPendentes += 1;
-                resumoPorConta[contaId].dividaTotalCentavos += venda.valor_total;
-            }
-        });
-
-        const contasArray = Object.values(resumoPorConta);
-
-        const total = contasArray.length;
-        const totalPages = Math.ceil(total / limit);
-        const paginated = contasArray.slice(skip, skip + limit);
-
-        return {
-            vendas: paginated.map(conta => ({
-                ...conta,
-                dividaTotal: (conta.dividaTotalCentavos / 100).toFixed(2)
-            })),
-            totalPages,
-            currentPage: page
-        };
+            return { success: true }
+        } catch (e) {
+            this.errors.push("Ocorreu um erro inesperado.")
+            console.log(e);
+            return { success: false }
+        }
     }
 
+    static async restaurar(id) {
+        if (!mongoose.isValidObjectId(id)) {
+            this.errors.push("Usuário inválido.")
+            return
+        }
 
+        try {
+            await VendaModule.findByIdAndUpdate(
+                { _id: id },
+                {
+                    delete: false,
+                    update_date: Date.now(),
+                },
+                { new: true }
+            )
 
+            return { success: true }
+        } catch (e) {
+            this.errors.push("Ocorreu um erro inesperado.")
+            console.log(e);
+            return { success: false }
+        }
+    }
 
     async valida() {
         if (!mongoose.isValidObjectId(this.body.account_id)) {
