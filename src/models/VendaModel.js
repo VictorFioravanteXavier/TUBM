@@ -44,20 +44,28 @@ class Venda {
             status: this.body.status,
             observacoes: this.body.observacoes,
             itens: []
+        };
+
+        for (const item of this.body.itens) {
+            const validaProduto = await Produto.VendaFeita(item.produto_id, item.quantidade);
+            if (validaProduto.success) {
+                data.itens.push({
+                    produto_id: item.produto_id,
+                    quantidade: item.quantidade,
+                    subtotal: centTrasform(item.subtotal)
+                });
+            } else {
+                this.errors.push(validaProduto.error);
+            }
         }
 
-        this.body.itens.forEach(item => {
-            data.itens.push({
-                produto_id: item.produto_id,
-                quantidade: item.quantidade,
-                subtotal: centTrasform(item.subtotal)
-            })
-        });
+        if (this.errors.length > 0) {
+            return;
+        }
 
-        this.venda = await VendaModule.create(
-            data
-        );
+        this.venda = await VendaModule.create(data);
     }
+
 
     static async findAll(page = 1) {
         const limit = 10;

@@ -100,11 +100,11 @@ class Produto {
         const produto = await ProdutoModule.findById(id);
 
         if (!produto) {
-            throw new Error('Produto não encontrado');
+            return {error: "Produto não encontrado", success: false}
         }
 
         if (produto.quantidade < quantidadeVendida) {
-            throw new Error('Quantidade em estoque insuficiente');
+            return {error: `Quantidade do produto "${produto.name}" em estoque é menor do que a pedida`, success: false}
         }
 
         produto.quantidade -= quantidadeVendida;
@@ -112,7 +112,7 @@ class Produto {
 
         await produto.save();
 
-        return produto;
+        return {produto, success: true};
     }
 
 

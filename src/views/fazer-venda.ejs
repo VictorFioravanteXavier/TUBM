@@ -4,6 +4,7 @@
 
 <main class="center">
   <div class="container">
+        <%- include('includes/messages') %>
         <form action="/fazer-venda/register" method="POST" id="form-fazer-venda">
             <input type="hidden" name="_csrf" value="<%= csrfToken %>"> 
             <div class="container-left">
