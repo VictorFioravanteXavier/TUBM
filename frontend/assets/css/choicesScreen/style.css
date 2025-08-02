@@ -96,7 +96,7 @@ p {
     color: #ffffff;
 }
 
-@media (max-width: 425px) {
+@media (max-width: 768px) {
     .container {
         width: 100%;
     }
