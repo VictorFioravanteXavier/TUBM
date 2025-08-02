@@ -1,4 +1,72 @@
-exports.index = (req, res) => {
-    const produtos = {}
-    res.render('vendas', {produtos});
+const Account = require('../models/AccountModel');
+const Venda = require('../models/VendaModel');
+
+exports.index = async (req, res) => {
+    const page = parseInt(req.params.page) || 1;
+    let vendas, totalPages, currentPage;
+
+    try {
+        if (req.query.status || req.query.searchName || req.query.searchNumber) {
+            let status;
+            let search_name;
+            let search_number;
+
+            if (req.query.status === "pago") {
+                status = true;
+            } else if (req.query.status === "pendente") {
+                status = false;
+            }
+
+            if (req.query.searchName && typeof req.query.searchName === "string" && req.query.searchName.trim() !== "") {
+                search_name = req.query.searchName
+            }
+
+            if (req.query.searchNumber && typeof req.query.searchNumber === "string" && req.query.searchNumber.trim() !== "") {
+                search_number = req.query.searchNumber;
+            }
+
+            const result = await Venda.findAllFiltred(page, status, search_name, search_number);
+
+            vendas = result.vendas;
+            totalPages = result.totalPages;
+            currentPage = result.currentPage;
+        } else {
+            const result = await Venda.findAll(page);
+
+            vendas = result.vendas;
+            totalPages = result.totalPages;
+            currentPage = result.currentPage;
+        }
+
+        res.render('vendas', {
+            vendas,
+            totalPages,
+            currentPage
+        });
+    } catch (error) {
+        console.error(error);
+        res.render('vendas', {
+            users: [],
+            totalPages: 1,
+            currentPage: 1,
+            error: error.message
+        });
+    }
+};
+
+exports.delete = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (!id) {
+            return res.status(400).json({ error: "ID do usuário não fornecido." });
+        }
+
+        await Venda.delete(id); // Certifique-se de que essa função existe no seu model
+
+        return res.status(200).json({ success: true });
+    } catch (err) {
+        console.error("Erro ao deletar usuário:", err);
+        return res.status(500).json({ error: "Erro ao deletar usuário" });
+    }
 };

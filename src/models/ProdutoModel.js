@@ -94,6 +94,28 @@ class Produto {
         return produto;
     }
 
+    static async VendaFeita(id, quantidadeVendida) {
+        if (typeof id !== 'string' || isNaN(Number(quantidadeVendida))) return;
+
+        const produto = await ProdutoModule.findById(id);
+
+        if (!produto) {
+            return {error: "Produto não encontrado", success: false}
+        }
+
+        if (produto.quantidade < quantidadeVendida) {
+            return {error: `Quantidade do produto "${produto.name}" em estoque é menor do que a pedida`, success: false}
+        }
+
+        produto.quantidade -= quantidadeVendida;
+        produto.data_atualizacao = new Date();
+
+        await produto.save();
+
+        return {produto, success: true};
+    }
+
+
     valida() {
         if (!this.body.name) {
             this.errors.push('Nome é obrigatório');

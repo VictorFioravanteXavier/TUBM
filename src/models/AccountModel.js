@@ -86,6 +86,13 @@ class Account {
         };
     }
 
+    static async findAllNoPage() {
+        const accounts = await AccountModule.find({ delete: false, active: true })
+            .sort({ name: -1 })
+
+        return accounts;
+    }
+
     static async findAllFiltred(page = 1, active, searchName, searchNumber) {
         const limit = 10;
         const skip = (page - 1) * limit;
@@ -156,6 +163,28 @@ class Account {
         const account = await AccountModule.findOne(query);
         return account;
     }
+
+    static async findIdsByNameAndNumber(searchName, searchNumber) {
+        const filter = {};
+
+        if (searchName && typeof searchName === 'string' && searchName.trim() !== '') {
+            filter.name = { $regex: new RegExp(searchName, 'i') };
+        }
+
+        if (searchNumber && typeof searchNumber === 'string' && searchNumber.trim() !== '') {
+            filter.number = { $regex: new RegExp(searchNumber, 'i') };
+        }
+
+        if (Object.keys(filter).length === 0) {
+            // Sem filtro, retorna array vazio (ou todos? dependendo da necessidade)
+            return [];
+        }
+
+        const accounts = await AccountModule.find(filter).select('_id').lean();
+
+        return accounts.map(acc => acc._id);
+    }
+
 
     async edit(id, data) {
         try {
@@ -285,7 +314,22 @@ class Account {
         }
     }
 
-    static async valida() {
+    static async thisAccount(id_account, id_user) {
+        try {
+            const conta = await AccountModule.findById(id_account);
+            if (!conta) return false;
+
+            // Verifica se algum usuário da conta tem o mesmo ID
+            const pertence = conta.users.some(user => user.toString() === id_user.toString());
+            return pertence;
+        } catch (e) {
+            console.error("Erro em thisAccount:", e);
+            return false;
+        }
+    }
+
+
+    async valida() {
         if (!this.body.number) {
             this.errors.push("Erro ao gerar o número da conta.");
         }

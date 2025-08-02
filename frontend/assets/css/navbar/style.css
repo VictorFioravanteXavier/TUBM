@@ -27,3 +27,11 @@
     text-decoration: underline;
     font-weight: bold;
 }
+
+.navbar-toggler {
+    padding: .25rem .25rem !important;
+}
+
+.navbar-brand {
+    font-size: initial !important;
+}

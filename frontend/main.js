@@ -3,11 +3,11 @@ import 'regenerator-runtime/runtime';
 
 import Login from './modules/login';
 import { Estoque } from './modules/estoque';
-import { Confugurações } from './modules/configuracoes';
 import { FazerVenda } from './modules/fazer-venda';
 import { Cadastro } from './modules/cadastro';
 import { UsersScreen } from './modules/usersScreen';
 import { Accounts } from './modules/accounts';
+import { Vendas } from './modules/vendas';
 
 // Classes
 if (window.location.pathname === '/') {
@@ -22,9 +22,6 @@ if (window.location.pathname === "/cadastro") {
 const estoque = new Estoque();
 estoque.init()
 
-const configuracoes = new Confugurações()
-configuracoes.init()
-
 if (window.location.pathname === '/fazer-venda/') {
     const fazer_venda = new FazerVenda();
     fazer_venda.init();
@@ -38,6 +35,11 @@ if(window.location.pathname.includes("usuarios")) {
 if(window.location.pathname.includes("contas")) {
     const accounts = new Accounts();
     accounts.init();
+}
+
+if(window.location.pathname.includes("vendas")) {
+    const vendas = new Vendas();
+    vendas.init();
 }
 
 // Funções fixas

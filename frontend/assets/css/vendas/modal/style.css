@@ -1,0 +1,39 @@
+
+.informations {
+    width: 100%;
+}
+
+.description-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.informations-user {
+    margin-bottom: 20px;
+}
+
+.description-data {
+    font-weight: bold;
+}
+
+.container-description-itens {
+    margin-top: 20px;
+}
+
+.description-item th, .description-item td {
+    padding: 5px !important;
+    text-align: center !important;
+}
+
+.description-item td>div {
+    justify-content: center !important;
+}
+
+.description-item-valor-unitario, .description-item td {
+    height: fit-content !important;
+}
+
+.description-item-name {
+    white-space: normal;
+}
