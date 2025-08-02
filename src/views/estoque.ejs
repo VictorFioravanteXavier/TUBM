@@ -5,7 +5,7 @@
   <div class="row">
 
     <div class="col-lg my-5">
-      <div class="container-grid">
+      <div class="<%role == "financeiro" ? "container-grid" : ""%>">
         <h1>Itens em Estoque</h1>
         <% if (role == "financeiro") {%>
         <div class="top-right"><a href="/produto/"><button class="btn"><i class="fas fa-plus"></i>Adicionar Novo Item</button></a></div>
@@ -41,28 +41,30 @@
             <% produtos.forEach(produto => { %>
               <tbody> 
                 <tr>
-                  <td><%= produto.name %></td>
-                  <td><%= produto.code %></td>
-                  <td><%= produto.quantidade %></td>
+                  <td><div class="data-item"><%= produto.name %></div></td>
+                  <td><div class="data-item"><%= produto.code %></div></td>
+                  <td><div class="data-item"><%= produto.quantidade %></div></td>
                   <% if (role == "financeiro") {%>
-                  <td>R$<%= (produto.custo / 100).toFixed(2) %></td>
+                  <td><div class="data-item">R$<%= (produto.custo / 100).toFixed(2) %></div></td>
                   <% } %>
 
-                  <td>R$<%= (produto.valor_venda / 100).toFixed(2) %></td>
+                  <td><div class="data-item">R$<%= (produto.valor_venda / 100).toFixed(2) %></div></td>
 
                   <% if (role == "financeiro") {%>
-                  <td><%= new Date(produto.data_atualizacao).toLocaleDateString('pt-BR') %></td>
+                  <td><div class="data-item"><%= new Date(produto.data_atualizacao).toLocaleDateString('pt-BR') %></div></td>
                   
                   <td>
-                    <div class="actions">
-                      <button class="btn-edit-estoque" data-id="<%= produto._id %>">
-                        <i class="fas fa-pencil-alt"></i>
-                      </button>
-                      <a href="/produto/delete/<%= produto._id %>">
-                        <button class="btn-delete-estoque" data-id="<%= produto._id %>">
-                          <i class="fas fa-trash-alt"></i>
+                      <div class="data-item">
+                        <div class="actions">
+                        <button class="btn-edit-estoque" data-id="<%= produto._id %>">
+                          <i class="fas fa-pencil-alt"></i>
                         </button>
-                      </a>
+                        <a href="/produto/delete/<%= produto._id %>">
+                          <button class="btn-delete-estoque" data-id="<%= produto._id %>">
+                            <i class="fas fa-trash-alt"></i>
+                          </button>
+                        </a>
+                      </div>
                     </div>
                   </td>
                   <% } %>
