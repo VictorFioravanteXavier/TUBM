@@ -329,9 +329,7 @@ class Account {
     }
 
 
-
-
-    static async valida() {
+    async valida() {
         if (!this.body.number) {
             this.errors.push("Erro ao gerar o número da conta.");
         }
