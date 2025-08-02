@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Produto = require('./ProdutoModel.js');
-const centTrasform = require('../utils/centTrasform.js')
+const centTrasform = require('../utils/centTrasform.js');
+const Account = require('./AccountModel.js');
 
 const VendaSchema = new mongoose.Schema({
     account_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Account', required: true },
@@ -12,7 +13,7 @@ const VendaSchema = new mongoose.Schema({
 
     // Lista de itens da venda
     itens: [{
-        produto_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Produtos', required: true },
+        produto_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Produto', required: true },
         quantidade: { type: Number, required: true },
         subtotal: { type: Number, required: true }
     }],
@@ -56,6 +57,146 @@ class Venda {
         this.venda = await VendaModule.create(
             data
         );
+    }
+
+    static async findAll(page = 1) {
+        const limit = 10;
+        const skip = (page - 1) * limit;
+
+        const [vendas, total] = await Promise.all([
+            VendaModule.find({ delete: false })
+                .sort({ data_venda: -1 })
+                .skip(skip)
+                .limit(limit)
+                .populate('account_id')
+                .populate('itens.produto_id'),
+
+            VendaModule.countDocuments({ delete: false })
+        ]);
+
+        return {
+            vendas,
+            totalPages: Math.ceil(total / limit),
+            currentPage: page
+        };
+    }
+
+    static async findAllFiltred(page = 1, status, searchName, searchNumber) {
+        const limit = 10;
+        const skip = (page - 1) * limit;
+        const errors = [];
+
+        // Convertendo status para boolean (ou undefined)
+        let statusBool;
+        if (typeof status === 'boolean') {
+            statusBool = status;
+        } else if (status === 'true') {
+            statusBool = true;
+        } else if (status === 'false') {
+            statusBool = false;
+        } else if (status === undefined || status === null) {
+            statusBool = undefined;
+        } else {
+            statusBool = null;
+        }
+
+        if (status !== undefined && statusBool === null) {
+            errors.push("Erro ao filtrar o status da venda");
+        }
+
+        if (errors.length > 0) {
+            throw new Error(errors.join(', '));
+        }
+
+        // Busca IDs das contas que batem com nome e número
+        let accountIds = [];
+        if (searchName || searchNumber) {
+            accountIds = await Account.findIdsByNameAndNumber(searchName, searchNumber);
+            if (accountIds.length === 0) {
+                // Nenhuma conta bateu com filtro: retorna vazio imediatamente
+                return {
+                    vendas: [],
+                    totalPages: 1,
+                    currentPage: page
+                };
+            }
+        }
+
+        // Monta filtro para vendas
+        const filters = { delete: false };
+
+        if (statusBool !== undefined) {
+            filters.status = statusBool;
+        }
+
+        if (accountIds.length > 0) {
+            filters.account_id = { $in: accountIds };
+        }
+
+        // Busca as vendas com paginação e popula account_id e itens.produto_id
+        const vendas = await VendaModule.find(filters)
+            .populate('account_id')
+            .populate('itens.produto_id')
+            .sort({ data_venda: -1 })
+            .skip(skip)
+            .limit(limit)
+            .lean();
+
+        const total = await VendaModule.countDocuments(filters);
+
+        return {
+            vendas,
+            totalPages: Math.ceil(total / limit) || 1,
+            currentPage: page
+        };
+    }
+
+    static async delete(id) {
+        if (!mongoose.isValidObjectId(id)) {
+            this.errors.push("Usuário inválido.")
+            return
+        }
+
+        try {
+            await VendaModule.findByIdAndUpdate(
+                { _id: id },
+                {
+                    delete: true,
+                    update_date: Date.now(),
+                },
+                { new: true }
+            )
+
+            return { success: true }
+        } catch (e) {
+            this.errors.push("Ocorreu um erro inesperado.")
+            console.log(e);
+            return { success: false }
+        }
+    }
+
+    static async restaurar(id) {
+        if (!mongoose.isValidObjectId(id)) {
+            this.errors.push("Usuário inválido.")
+            return
+        }
+
+        try {
+            await VendaModule.findByIdAndUpdate(
+                { _id: id },
+                {
+                    delete: false,
+                    update_date: Date.now(),
+                },
+                { new: true }
+            )
+
+            return { success: true }
+        } catch (e) {
+            this.errors.push("Ocorreu um erro inesperado.")
+            console.log(e);
+            return { success: false }
+        }
     }
 
     async valida() {
