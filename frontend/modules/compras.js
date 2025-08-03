@@ -1,4 +1,4 @@
-export class Vendas {
+export class Compras {
     constructor() {
 
     }
@@ -9,64 +9,41 @@ export class Vendas {
 
     events() {
         this.cacheSelectors();
-        this.searchAccountName()
-        this.searchAccountNumber()
-        this.buttonsStatsEvents()
-        this.buttonsStatsEventsActivated()
-        this.deleteVendasButton()
+        this.searchBuyCode();
+        this.buttonsStatsEvents();
+        this.buttonsStatsEventsActivated();
         this.openDescriptionModal()
     }
 
 
     cacheSelectors() {
-        this.form_search_name = document.querySelector("#search-form-name")
-        this.inp_search_name = document.querySelector("#search-input-name")
+        this.form_search_code = document.querySelector("#search-form-compra")
+        this.inp_search_code = document.querySelector("#search-input-compra")
 
-        this.form_search_number = document.querySelector("#search-form-number")
-        this.inp_search_number = document.querySelector("#search-input-number")
-
-        this.btn_status_pago = document.querySelector(".btn-active")
-        this.btn_status_pendente = document.querySelector(".btn-inactive")
-        this.btn_status_all = document.querySelector(".btn-all")
-
-        this.delete_accounts_buttons = document.querySelectorAll(".delete-venda")
+        this.btn_status_pago = document.querySelector(".compras-pagas")
+        this.btn_status_pendente = document.querySelector(".compras-pendentes")
+        this.btn_status_all = document.querySelector(".compras-todas")
     }
 
-    searchAccountName() {
-        this.form_search_name.addEventListener("submit", (e) => {
+    searchBuyCode() {
+        const params = new URLSearchParams(window.location.search);
+        this.inp_search_code.value = params.get("searchCode")
+
+        this.form_search_code.addEventListener("submit", (e) => {
             e.preventDefault();
 
-            const value = this.inp_search_name.value.trim();
+            const value = this.inp_search_code.value.trim();
 
             const params = new URLSearchParams(window.location.search);
 
             if (!value) {
-                params.delete("searchName");
-                window.location.href = `/vendas/?${params.toString()}`;
+                params.delete("searchCode");
+                window.location.href = `/minhas-compras/?${params.toString()}`;
                 return;
             }
 
-            params.set("searchName", value);
-            window.location.href = `/vendas/?${params.toString()}`;
-        });
-    }
-
-    searchAccountNumber() {
-        this.form_search_number.addEventListener("submit", (e) => {
-            e.preventDefault();
-
-            const value = this.inp_search_number.value.trim();
-
-            const params = new URLSearchParams(window.location.search);
-
-            if (!value) {
-                params.delete("searchNumber");
-                window.location.href = `/vendas/?${params.toString()}`;
-                return;
-            }
-
-            params.set("searchNumber", value);
-            window.location.href = `/vendas/?${params.toString()}`;
+            params.set("searchCode", value);
+            window.location.href = `/minhas-compras/?${params.toString()}`;
         });
     }
 
@@ -75,21 +52,21 @@ export class Vendas {
             e.preventDefault();
             const params = new URLSearchParams(window.location.search);
             params.set("status", "pago");
-            window.location.href = `/vendas/?${params.toString()}`;
+            window.location.href = `/minhas-compras/?${params.toString()}`;
         });
 
         this.btn_status_pendente.addEventListener("click", (e) => {
             e.preventDefault();
             const params = new URLSearchParams(window.location.search);
             params.set("status", "pendente");
-            window.location.href = `/vendas/?${params.toString()}`;
+            window.location.href = `/minhas-compras/?${params.toString()}`;
         });
 
         this.btn_status_all.addEventListener("click", (e) => {
             e.preventDefault();
             const params = new URLSearchParams(window.location.search);
             params.delete("status");
-            window.location.href = `/vendas/?${params.toString()}`;
+            window.location.href = `/minhas-compras/?${params.toString()}`;
         });
     }
 
@@ -110,45 +87,13 @@ export class Vendas {
         }
     }
 
-    deleteVendasButton() {
-        this.delete_accounts_buttons.forEach(delete_account_button => {
-            delete_account_button.addEventListener('click', (e) => {
-                const button = e.target;
-
-                const name = button.dataset.name;
-                const id = button.dataset.id;
-
-
-                if (confirm(`Você realmente deseja deletar a compra de "${name}"?`)) {
-                    fetch(`/vendas/delete/${id}`, {
-                        method: "GET",
-                        headers: {
-                            "Content-Type": "application/json",
-                        }
-                    })
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.success) {
-                                location.reload();
-                            } else {
-                                alert("Erro ao deletar o usuário.");
-                            }
-                        })
-                        .catch(err => {
-                            console.error("Erro na requisição:", err);
-                        });
-                }
-            });
-        })
-    }
-
     openDescriptionModal() {
         $('#completDescripionVendaModal').on('show.bs.modal', function (event) {
             const button = $(event.relatedTarget);
             const modal = $(this);
             modal.find("#description-item-tbody").empty();
 
-            const venda = button.data("venda");
+            const venda = button.data("compra");
 
             modal.find("#description-account-name").text(venda.account_id.name)
             modal.find("#description-account-number").text(venda.account_id.number)
@@ -156,15 +101,11 @@ export class Vendas {
             modal.find("#description-valor-total").text(`R$${(venda.valor_total / 100).toFixed(2)}`)
             modal.find("#description-status").text(`${venda.status ? "Pago" : "Pendente"}`)
             modal.find("#description-data-pagamento").text(`${venda.status ? new Date(venda.date_pay).toLocaleDateString('pt-BR') : "----"}`)
+            modal.find("#codigo-produto").remove();
 
             venda.itens.forEach(item => {
                 const dadosTable = `
                     <tr>
-                        <td>
-                            <div class="description-item-code">
-                                ${item.produto_id.code}
-                            </div>
-                        </td>
                         <td>
                             <div class="description-item-name">
                                 ${item.produto_id.name}
@@ -193,5 +134,4 @@ export class Vendas {
 
         });
     }
-
 }

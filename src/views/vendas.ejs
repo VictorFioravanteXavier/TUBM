@@ -39,6 +39,7 @@
             <tr>
               <th>Nome da conta</th>
               <th>Número Conta</th>
+              <th>Código da Venda</th>
               <th>Data Compra</th>
               <th>Pagamento</th>
               <th>Ações</th>
@@ -55,6 +56,9 @@
                 </td>
                 <td class="td-number">
                   <div class="count-number"><%= venda.account_id.number %></div>
+                </td>
+                <td class="td-number">
+                  <div class="count-number"><%= venda.cod_venda %></div>
                 </td>
                 <td class="td-number">
                   <div><%= new Date(venda.data_venda).toLocaleDateString('pt-BR') %></div>

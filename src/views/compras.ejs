@@ -1,0 +1,144 @@
+<%- include('includes/head')%>
+<%- include('includes/nav')%>
+<link rel="stylesheet" href="/frontend/assets/css/compras/style.css">
+
+<main>
+  <div class="container">
+        <%- include('includes/messages') %>
+        <div class="title-header">
+            <h1>
+                Minhas Compras
+            </h1>
+
+            <div class="filters">
+                <div class="search-cotainer">
+                    <i class="fa fa-search"></i>
+                    <form id="search-form-compra" method="GET">
+                        <input type="text" id="search-input-compra" name="search-compra" placeholder="Buscar por código">
+                    <button type="submit">Buscar</button>
+                    </form>
+                </div>
+
+                <div class="dropdown-filters">
+                    <div class="dropdown-container status-container">
+                        <button class="dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                            Status da compra
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <button class="dropdown-item compras-pagas">
+                                Pagas
+                            </button>
+                            <button class="dropdown-item compras-pendentes">
+                                Pendentes
+                            </button>
+                            <button class="dropdown-item compras-todas">
+                                Todas
+                            </button>
+                        </div>
+                    </div>
+                    <div class="dropdown-container data-container">
+                        <button class="dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                            Data que foi feita 
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                        <div class="dropdown-item compras-pagas">
+                            Em desenvolvimento :)
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="compras">
+                <% compras.forEach(compra => { %>
+                    <div class="compra">
+                        <div class="compra-header">
+                            <div class="informations-compra">
+                                <div class="compra-cod-container">
+                                    <%= compra.cod_venda %>
+                                </div>
+                                <div class="compra-status-container">
+                                    <% if (compra.status) {%>
+                                        <div class="status paga">
+                                            Paga
+                                        </div>
+                                    <% } else { %>
+                                        <div class="status pendente">
+                                            Pendente
+                                        </div>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <div class="compra-detalhes" 
+                            data-compra="<%= JSON.stringify(compra) %>"
+                            data-toggle="modal"
+                            data-target="#completDescripionVendaModal"
+                                >
+                                Ver Detalhes >
+                            </div>
+                        </div>
+                        <div class="compra-body">
+                            <div class="compra-body-information">
+                                <div class="compra-data-container">
+                                    <div class="compra-title">
+                                        Data da Compra
+                                    </div>
+                                    <div id="compra-data">
+                                        <%= new Date(compra.data_venda).toLocaleDateString("pt-BR") %>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="compra-body-information">
+                                <div class="compra-qtd-container">
+                                    <div class="compra-title">
+                                        Quantidade de Itens
+                                    </div>
+                                    <div id="compra-qtd">
+                                        <%= compra.total_itens %> <%= compra.total_itens > 1 ? "itens" : "item" %>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="compra-body-information">
+                                <div class="compra-valor-total-container">
+                                    <div class="compra-title">
+                                        Valor Total
+                                    </div>
+                                    <div id="compra-valor-total">
+                                        R$ <%= (compra.valor_total/100).toFixed(2) %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+
+                <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                    <a class="page-link" href="/minhas-compras/<%= currentPage - 1 %>" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+
+                <% for (let i = 1; i <= totalPages; i++) { %>
+                    <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                    <a class="page-link" href="/minhas-compras/<%= i %>"><%= i %></a>
+                    </li>
+                <% } %>
+
+                <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                    <a class="page-link" href="/minhas-compras/<%= currentPage + 1 %>" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+
+                </ul>
+            </nav>
+        </div>
+    </div>
+</main>
+
+<%- include('includes/modals/completDescripionVendaModal') %>
+<%- include('includes/footer')%>

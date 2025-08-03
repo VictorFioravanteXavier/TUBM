@@ -37,3 +37,67 @@
 .description-item-name {
     white-space: normal;
 }
+
+table {
+    table-layout: auto;
+}
+
+table thead tr {
+    background-color: #F9FAFB;
+    color: #4B5563;
+}
+
+table thead tr th {
+    padding: 16.5px 24px !important;
+    border-bottom: none !important;
+
+    &:last-child {
+        text-align: right;
+    }
+}
+
+tbody,
+thead,
+tr {
+    border: none;
+}
+
+tr {
+    border: none;
+    border-top: 1px solid #E5E7EB;
+}
+
+
+tr td {
+    padding: 16.5px 24px !important;
+    font-size: 16px;
+    color: #4B5563;
+    height: 80px;
+}
+
+tr td>div {
+    height: 100%;
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+}
+
+tr td:last-child>div {
+    justify-content: flex-end;
+    align-items: center;
+}
+
+th:nth-child(3),
+td:nth-child(3),
+th:nth-child(2),
+td:nth-child(2) {
+    white-space: nowrap;
+    text-align: center;
+    width: 1%;
+}
+
+th:nth-child(1),
+td:nth-child(1) {
+    white-space: nowrap;
+    width: 10%;
+}
