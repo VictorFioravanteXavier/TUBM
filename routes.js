@@ -9,6 +9,7 @@ const fazerVendaController = require('./src/controllers/fazerVendaController');
 const choicesScreenController = require('./src/controllers/choicesScreenController');
 const UserScreenController = require('./src/controllers/UserScreenController');
 const accountsController = require('./src/controllers/accountsController');
+const comprasController = require('./src/controllers/comprasController');
 
 const { loginRequired, roleFind } = require('./src/middlewares/middleware')
 
@@ -23,6 +24,7 @@ router.post('/register', loginController.register)
 router.get('/escolha', loginRequired, roleFind, choicesScreenController.index)
 router.get('/financeiroValid', loginRequired, roleFind, choicesScreenController.financeiro)
 router.get('/vendaValid', loginRequired, roleFind, choicesScreenController.venda)
+router.get('/userValid', loginRequired, roleFind, choicesScreenController.user)
 
 /* Users */
 router.get("/usuarios/", loginRequired, roleFind, UserScreenController.index)
@@ -59,5 +61,9 @@ router.get('/vendas/delete/:id', loginRequired, vendasController.delete);
 /* Rotas Fazer Venda */
 router.get('/fazer-venda/', loginRequired, fazerVendaController.index);
 router.post('/fazer-venda/register', loginRequired, fazerVendaController.registrar);
+
+/* Rotas Minhas Compras  */
+router.get('/minhas-compras/', loginRequired, comprasController.index)
+router.get('/minhas-compras/:page', loginRequired, comprasController.index)
 
 module.exports = router;

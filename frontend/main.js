@@ -8,6 +8,7 @@ import { Cadastro } from './modules/cadastro';
 import { UsersScreen } from './modules/usersScreen';
 import { Accounts } from './modules/accounts';
 import { Vendas } from './modules/vendas';
+import { Compras } from './modules/compras';
 
 // Classes
 if (window.location.pathname === '/') {
@@ -41,6 +42,12 @@ if(window.location.pathname.includes("vendas")) {
     const vendas = new Vendas();
     vendas.init();
 }
+
+if(window.location.pathname.includes("minhas-compras")) {
+    const compras = new Compras();
+    compras.init();
+}
+
 
 // Funções fixas
 const cpfStyle = () => {

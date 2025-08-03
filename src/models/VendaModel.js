@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Produto = require('./ProdutoModel.js');
 const centTrasform = require('../utils/centTrasform.js');
 const Account = require('./AccountModel.js');
+const gerarNumeroVenda = require('../utils/vendaNumber.js');
 
 const VendaSchema = new mongoose.Schema({
     account_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Account', required: true },
@@ -10,7 +11,7 @@ const VendaSchema = new mongoose.Schema({
     valor_total: { type: Number, required: true },
     status: { type: Boolean, required: true, default: false },
     observacoes: { type: String, required: false },
-
+    cod_venda: { type: String, required: true },
     // Lista de itens da venda
     itens: [{
         produto_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Produto', required: true },
@@ -43,7 +44,8 @@ class Venda {
             valor_total: centTrasform(this.body.valor_total),
             status: this.body.status,
             observacoes: this.body.observacoes,
-            itens: []
+            cod_venda: gerarNumeroVenda(),
+            itens: [],
         };
 
         for (const item of this.body.itens) {
@@ -158,6 +160,62 @@ class Venda {
             currentPage: page
         };
     }
+
+    static async findComprasAllFiltred(page = 1, status, searchCode) {
+        const limit = 10;
+        const skip = (page - 1) * limit;
+        const errors = [];
+
+        // Convertendo status para boolean (ou undefined)
+        let statusBool;
+        if (typeof status === 'boolean') {
+            statusBool = status;
+        } else if (status === 'true') {
+            statusBool = true;
+        } else if (status === 'false') {
+            statusBool = false;
+        } else if (status === undefined || status === null) {
+            statusBool = undefined;
+        } else {
+            statusBool = null;
+        }
+
+        if (status !== undefined && statusBool === null) {
+            errors.push("Erro ao filtrar o status da venda");
+        }
+
+        if (errors.length > 0) {
+            throw new Error(errors.join(', '));
+        }
+
+        // Monta filtro para vendas
+        const filters = { delete: false };
+
+        if (statusBool !== undefined) {
+            filters.status = statusBool;
+        }
+
+        if (searchCode) {
+            filters.cod_venda = { $regex: new RegExp(searchCode, 'i') }; // case-insensitive
+        }
+
+        const vendas = await VendaModule.find(filters)
+            .populate('account_id')
+            .populate('itens.produto_id')
+            .sort({ data_venda: -1 })
+            .skip(skip)
+            .limit(limit)
+            .lean();
+
+        const total = await VendaModule.countDocuments(filters);
+
+        return {
+            vendas,
+            totalPages: Math.ceil(total / limit) || 1,
+            currentPage: page
+        };
+    }
+
 
     static async delete(id) {
         if (!mongoose.isValidObjectId(id)) {
