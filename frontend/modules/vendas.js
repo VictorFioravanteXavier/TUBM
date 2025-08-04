@@ -150,6 +150,7 @@ export class Vendas {
 
             const venda = button.data("venda");
 
+            modal.find("#description-cod-venda").text(venda.cod_venda)
             modal.find("#description-account-name").text(venda.account_id.name)
             modal.find("#description-account-number").text(venda.account_id.number)
             modal.find("#description-data-venda").text(new Date(venda.data_venda).toLocaleDateString('pt-BR'))
