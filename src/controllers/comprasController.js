@@ -1,9 +1,11 @@
+const Account = require("../models/AccountModel");
 const Venda = require("../models/VendaModel");
 
 exports.index = async (req, res) => {
     const page = parseInt(req.params.page) || 1;
     let compras, totalPages, currentPage;
-
+    const account = await Account.findAccountsByUserId(req.session.user._id)
+    
     try {
         if (req.query.status || req.query.searchCode ) {
             let status;
@@ -19,7 +21,7 @@ exports.index = async (req, res) => {
                 search_code = req.query.searchCode
             }
 
-            const result = await Venda.findComprasAllFiltred(page, status, search_code);
+            const result = await Venda.findComprasAllFiltred(account._id, page, status, search_code);
 
             result.vendas.forEach(venda => {
                 venda.total_itens = 0;
@@ -32,7 +34,7 @@ exports.index = async (req, res) => {
             totalPages = result.totalPages;
             currentPage = result.currentPage;
         } else {
-            const result = await Venda.findAll(page);
+            const result = await Venda.findAllCompras(account._id, page);
 
             result.vendas.forEach(venda => {
                 venda.total_itens = 0;

@@ -161,7 +161,44 @@ class Venda {
         };
     }
 
-    static async findComprasAllFiltred(page = 1, status, searchCode) {
+    static async findAllCompras(account_id, page = 1) {
+        const limit = 10;
+        const skip = (page - 1) * limit;
+
+        // Garante que o account_id é um ObjectId válido
+        if (!mongoose.isValidObjectId(account_id)) {
+            throw new Error("ID de conta inválido");
+        }
+
+        const objectId = new mongoose.Types.ObjectId(account_id);
+        let [vendas, total] = [0, 0]
+        try {
+            [vendas, total] = await Promise.all([
+                VendaModule.find({ delete: false, account_id: objectId })
+                    .sort({ data_venda: -1 })
+                    .skip(skip)
+                    .limit(limit)
+                    .populate('account_id')
+                    .populate('itens.produto_id'),
+
+                VendaModule.countDocuments({ delete: false, account_id: objectId })
+            ]);
+        } catch (error) {
+            console.log(error);
+            
+        }
+
+
+        return {
+            vendas,
+            totalPages: Math.ceil(total / limit),
+            currentPage: page
+        };
+    }
+
+
+
+    static async findComprasAllFiltred(account_id, page = 1, status, searchCode) {
         const limit = 10;
         const skip = (page - 1) * limit;
         const errors = [];
@@ -178,6 +215,10 @@ class Venda {
             statusBool = undefined;
         } else {
             statusBool = null;
+        }
+
+        if (!mongoose.isObjectIdOrHexString(account_id)) {
+            errors.push("Usuário não encontrado");
         }
 
         if (status !== undefined && statusBool === null) {
@@ -197,6 +238,10 @@ class Venda {
 
         if (searchCode) {
             filters.cod_venda = { $regex: new RegExp(searchCode, 'i') }; // case-insensitive
+        }
+
+        if (account_id) {
+            filters.account_id = account_id
         }
 
         const vendas = await VendaModule.find(filters)
