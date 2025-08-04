@@ -16,6 +16,10 @@
 
       <% if(user) { %>
 
+        <li class="nav-item">
+          <a class="nav-link <%= currentUrl.includes('/minhas-compras/') ? 'selected' : '' %>" href="/minhas-compras/">Minhas Compras</a>
+        </li>
+
         <% if (role == "venda" || role == "financeiro") {%>
           <li class="nav-item">
             <a class="nav-link <%= currentUrl === '/estoque/' ? 'selected' : '' %>" href="/estoque/">Estoque</a>

@@ -164,6 +164,18 @@ class Account {
         return account;
     }
 
+    static async findAccountsByUserId(userId) {
+        if (!mongoose.Types.ObjectId.isValid(userId)) return [];
+
+        const account = await AccountModule.find({
+            users: new mongoose.Types.ObjectId(userId),
+            delete: false
+        });
+
+        return account[0];
+    }
+
+
     static async findIdsByNameAndNumber(searchName, searchNumber) {
         const filter = {};
 
