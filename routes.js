@@ -44,7 +44,8 @@ router.get("/contas/deactivate/:id", loginRequired, roleFind, accountsController
 router.get("/contas/activate/:id", loginRequired, roleFind, accountsController.activate)
 
 /* Rotas Estoque */
-router.get('/estoque', loginRequired, roleFind, estoqueController.index);
+router.get('/estoque/', loginRequired, roleFind, estoqueController.index);
+router.get('/estoque/:page', loginRequired, roleFind, estoqueController.index);
 
 /* Rotas Produto */
 router.get('/produto/', loginRequired, produtoController.index);

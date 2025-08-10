@@ -89,6 +89,58 @@ class Produto {
         return produtos;
     }
 
+    static async findAll(page = 1) {
+        const limit = 10;
+        const skip = (page - 1) * limit;
+
+        const [produtos, total] = await Promise.all([
+            ProdutoModule.find({ delete: false })
+                .sort({ name: 1 })
+                .skip(skip)
+                .limit(limit),
+
+            ProdutoModule.countDocuments({ delete: false })
+        ]);
+
+        return {
+            produtos,
+            totalPages: Math.ceil(total / limit),
+            currentPage: page
+        };
+    }
+
+    static async findAllFiltred(page = 1, searchName, searchNumber) {
+        const limit = 10;
+        const skip = (page - 1) * limit;
+
+        // Monta filtro para vendas
+        const filters = { delete: false };
+
+        if (searchName && typeof searchName === "string") {
+            filters.name = { $regex: searchName, $options: "i" }; // contém no nome
+        }
+
+        if (searchNumber && typeof searchNumber === "string") {
+            filters.code = { $regex: searchNumber, $options: "i" }; // contém no código
+        }
+
+        // Busca os produtos com paginação
+        const produtos = await ProdutoModule.find(filters)
+            .sort({ name: 1 })
+            .skip(skip)
+            .limit(limit)
+            .lean();
+
+        const total = await ProdutoModule.countDocuments(filters);
+
+        return {
+            produtos,
+            totalPages: Math.ceil(total / limit) || 1,
+            currentPage: page
+        };
+    }
+
+
     static async buscaPorId(id) {
         const produto = await ProdutoModule.findById(id).lean();
         return produto;
@@ -100,11 +152,11 @@ class Produto {
         const produto = await ProdutoModule.findById(id);
 
         if (!produto) {
-            return {error: "Produto não encontrado", success: false}
+            return { error: "Produto não encontrado", success: false }
         }
 
         if (produto.quantidade < quantidadeVendida) {
-            return {error: `Quantidade do produto "${produto.name}" em estoque é menor do que a pedida`, success: false}
+            return { error: `Quantidade do produto "${produto.name}" em estoque é menor do que a pedida`, success: false }
         }
 
         produto.quantidade -= quantidadeVendida;
@@ -112,7 +164,7 @@ class Produto {
 
         await produto.save();
 
-        return {produto, success: true};
+        return { produto, success: true };
     }
 
 

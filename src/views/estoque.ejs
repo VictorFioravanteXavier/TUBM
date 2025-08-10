@@ -4,18 +4,30 @@
 <div class="container">
   <div class="row">
 
-    <div class="col-lg my-5">
-      <div class="<%role == "financeiro" ? "container-grid" : ""%>">
-        <h1>Itens em Estoque</h1>
-        <% if (role == "financeiro") {%>
-        <div class="top-right"><a href="/produto/"><button class="btn"><i class="fas fa-plus"></i>Adicionar Novo Item</button></a></div>
-        <% } %>
+    <div class="col-lg my-5 table-container">
+      <div class="actions">
+        <div class="searchs-cotainers">
+          <div class="search-cotainer">
+            <i class="fa fa-search"></i>
+              <form id="search-form-name">
+                <input type="text" id="search-input-name" name="search-name" placeholder="Buscar por nome">
+                <button type="submit">Buscar</button>
+              </form>
+          </div>
 
-        <div class="bottom-left">
-          <div class="form-group">
-            <input type="text" class="form-control" placeholder="Pesquisar por nome ou código" id="search-estoque">
+          <div class="search-cotainer">
+            <i class="fa fa-search"></i>
+              <form id="search-form-number">
+                <input type="text" id="search-input-number" name="search-number" placeholder="Buscar pelo código">
+                <button type="submit">Buscar</button>
+              </form>
           </div>
         </div>
+        
+
+        <% if (role == "financeiro") {%>
+        <div class="btn-right"><a href="/produto/" class="add-product"><button class="btn button-primary"><i class="fas fa-plus"></i>Adicionar Novo Item</button></a></div>
+        <% } %>
       </div>
 
       <%- include('includes/messages') %>
@@ -24,59 +36,94 @@
         <table class="table my-3">
           <thead>
             <tr>
-              <th>Nome do Produto</th>
-              <th>Código</th>
-              <th>Quantidade</th>
+              <th>Nome</th>
+              <th>Cod.</th>
+              <th class="quantidade">Qtd.</th>
               <% if (role == "financeiro") {%>
               <th>Custo</th>
               <% } %>
               <th>Valor Venda</th>
               <% if (role == "financeiro") {%>
               <th>Ultima Atualização</th>
-              <th>Ações</th> 
+              <th class="right">Ações</th>
               <% } %>
             </tr>
           </thead>
-          <% if (produtos.length > 0) { %>
+          <tbody>
             <% produtos.forEach(produto => { %>
-              <tbody> 
-                <tr>
-                  <td><div class="data-item"><%= produto.name %></div></td>
-                  <td><div class="data-item"><%= produto.code %></div></td>
-                  <td><div class="data-item"><%= produto.quantidade %></div></td>
-                  <% if (role == "financeiro") {%>
-                  <td><div class="data-item">R$<%= (produto.custo / 100).toFixed(2) %></div></td>
-                  <% } %>
+              <tr>
+                <td>
+                  <div class="name">
+                    <div class="user-img"><i class="fa fa-cube"></i></div>
+                    <%= produto.name %>
+                  </div>
+                </td>
+                <td class="td-number">
+                  <div><%= produto.code %></div>
+                </td>
+                <td class="td-number">
+                  <div class="count-number"><%= produto.quantidade %></div>
+                </td>
+                <% if (role == "financeiro") {%>
+                <td>
+                  <div>R$<%= (produto.custo/100).toFixed(2) %></div>
+                </td>
+                <% } %>
+                <td>
+                  <div>R$<%= (produto.valor_venda/100).toFixed(2) %></div>
+                </td>
+                <% if (role == "financeiro") {%>
+                <td>
+                  <div><%= new Date(produto.data_atualizacao).toLocaleDateString('pt-BR') %></div>
+                </td>
+                
+                <td class="right">
+                  <div class="config">
+                    <button class="dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                      <i class="fa fa-cog"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                      <a class="dropdown-item delete-venda" href="/produto/delete/<%= produto._id %>">
+                        Deletar
+                      </a>
 
-                  <td><div class="data-item">R$<%= (produto.valor_venda / 100).toFixed(2) %></div></td>
-
-                  <% if (role == "financeiro") {%>
-                  <td><div class="data-item"><%= new Date(produto.data_atualizacao).toLocaleDateString('pt-BR') %></div></td>
-                  
-                  <td>
-                      <div class="data-item">
-                        <div class="actions">
-                        <button class="btn-edit-estoque" data-id="<%= produto._id %>">
-                          <i class="fas fa-pencil-alt"></i>
-                        </button>
-                        <a href="/produto/delete/<%= produto._id %>">
-                          <button class="btn-delete-estoque" data-id="<%= produto._id %>">
-                            <i class="fas fa-trash-alt"></i>
-                          </button>
-                        </a>
-                      </div>
+                      <a class="dropdown-item edit-count btn-edit-estoque" data-id="<%= produto._id %>">
+                        Editar
+                      </a>                        
                     </div>
-                  </td>
-                  <% } %>
-                </tr>
-              </tbody>
+                  </div>
+                </td>
+                <% } %>
+              </tr>
             <% }) %>
-          <% } %>
+          </tbody>
         </table>
       </div>
-    
-    </div>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
 
+          <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+            <a class="page-link" href="/vendas/<%= currentPage - 1 %>" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+
+          <% for (let i = 1; i <= totalPages; i++) { %>
+            <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+              <a class="page-link" href="/vendas/<%= i %>"><%= i %></a>
+            </li>
+          <% } %>
+
+          <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+            <a class="page-link" href="/vendas/<%= currentPage + 1 %>" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+
+        </ul>
+      </nav>
+
+    </div>
   </div>
 </div>
 

@@ -20,30 +20,33 @@ if (window.location.pathname === "/cadastro") {
     const cadastro = new Cadastro();
     cadastro.init()
 }
-const estoque = new Estoque();
-estoque.init()
+
+if (window.location.pathname.includes("estoque")) {
+    const estoque = new Estoque();
+    estoque.init()
+}
 
 if (window.location.pathname === '/fazer-venda/') {
     const fazer_venda = new FazerVenda();
     fazer_venda.init();
 }
 
-if(window.location.pathname.includes("usuarios")) {
+if (window.location.pathname.includes("usuarios")) {
     const users_screen = new UsersScreen();
     users_screen.init();
 }
 
-if(window.location.pathname.includes("contas")) {
+if (window.location.pathname.includes("contas")) {
     const accounts = new Accounts();
     accounts.init();
 }
 
-if(window.location.pathname.includes("vendas")) {
+if (window.location.pathname.includes("vendas")) {
     const vendas = new Vendas();
     vendas.init();
 }
 
-if(window.location.pathname.includes("minhas-compras")) {
+if (window.location.pathname.includes("minhas-compras")) {
     const compras = new Compras();
     compras.init();
 }

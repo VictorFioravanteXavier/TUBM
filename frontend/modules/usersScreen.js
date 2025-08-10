@@ -176,6 +176,12 @@ export class UsersScreen {
     }
 
     searchUserName() {
+        const params = new URLSearchParams(window.location.search);
+
+        if (params.get("search")) {
+            document.getElementById("search-input").value = params.get("search");
+        }
+
         document.getElementById("search-form").addEventListener("submit", function (e) {
             e.preventDefault(); // sempre previne o envio padrão
 

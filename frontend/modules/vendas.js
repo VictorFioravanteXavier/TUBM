@@ -19,11 +19,21 @@ export class Vendas {
 
 
     cacheSelectors() {
+        const params = new URLSearchParams(window.location.search);
+
         this.form_search_name = document.querySelector("#search-form-name")
         this.inp_search_name = document.querySelector("#search-input-name")
 
+        if (params.get("searchName")) {
+            this.inp_search_name.value = params.get("searchName");
+        }
+
         this.form_search_number = document.querySelector("#search-form-number")
         this.inp_search_number = document.querySelector("#search-input-number")
+
+        if (params.get("searchNumber")) {
+            this.inp_search_number.value = params.get("searchNumber");
+        }
 
         this.btn_status_pago = document.querySelector(".btn-active")
         this.btn_status_pendente = document.querySelector(".btn-inactive")
