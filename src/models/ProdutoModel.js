@@ -83,7 +83,7 @@ class Produto {
     }
 
     static async buscarProdutosEstoque() {
-        const produtos = await ProdutoModule.find({ quantidade: { $gt: 0 } })
+        const produtos = await ProdutoModule.find({ quantidade: { $gt: 0 }, delete: false })
             .sort({ name: 1 })
             .lean();
         return produtos;
