@@ -10,6 +10,7 @@ const choicesScreenController = require('./src/controllers/choicesScreenControll
 const UserScreenController = require('./src/controllers/UserScreenController');
 const accountsController = require('./src/controllers/accountsController');
 const comprasController = require('./src/controllers/comprasController');
+const minhaContaController = require('./src/controllers/minhaContaController');
 
 const { loginRequired, roleFind } = require('./src/middlewares/middleware')
 
@@ -31,7 +32,6 @@ router.get("/usuarios/", loginRequired, roleFind, UserScreenController.index)
 router.get("/usuarios/:page", loginRequired, roleFind, UserScreenController.index)
 router.post("/usuarios/:id/editar", loginRequired, roleFind, UserScreenController.editUser)
 router.get("/usuarios/delete/:id", loginRequired, roleFind, UserScreenController.delete)
-
 router.get("/usuarios/api/getAll", loginRequired, roleFind, UserScreenController.getAll)
 
 /* Accounts */
@@ -66,5 +66,8 @@ router.post('/fazer-venda/register', loginRequired, fazerVendaController.registr
 /* Rotas Minhas Compras  */
 router.get('/minhas-compras/', loginRequired, comprasController.index)
 router.get('/minhas-compras/:page', loginRequired, comprasController.index)
+
+/* Rotas Minha Conta */
+router.get('/minha-conta/', loginRequired, minhaContaController.index)
 
 module.exports = router;

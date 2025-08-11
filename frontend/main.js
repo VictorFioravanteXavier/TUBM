@@ -9,6 +9,7 @@ import { UsersScreen } from './modules/usersScreen';
 import { Accounts } from './modules/accounts';
 import { Vendas } from './modules/vendas';
 import { Compras } from './modules/compras';
+import { MinhaConta } from './modules/minhaConta';
 
 // Classes
 if (window.location.pathname === '/') {
@@ -49,6 +50,12 @@ if (window.location.pathname.includes("vendas")) {
 if (window.location.pathname.includes("minhas-compras")) {
     const compras = new Compras();
     compras.init();
+}
+
+
+if (window.location.pathname.includes("minha-conta")) {
+    const minhaConta = new MinhaConta();
+    minhaConta.init();
 }
 
 

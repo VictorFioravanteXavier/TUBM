@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const gerarNumeroConta = require("../utils/accountNumber")
-const User = require("./UserModel")
+const User = require("./UserModel");
+const { user } = require('../controllers/choicesScreenController');
 
 const AccountSchema = new mongoose.Schema({
     number: { type: String, required: true, unique: true },
@@ -170,7 +171,8 @@ class Account {
         const account = await AccountModule.find({
             users: new mongoose.Types.ObjectId(userId),
             delete: false
-        });
+        })
+            .populate('users'); // agora populando o campo "users" corretamente
 
         return account[0];
     }

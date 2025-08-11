@@ -48,7 +48,7 @@ exports.loginRequired = (req, res, next) => {
 exports.roleFind = async (req, res, next) => {
     if (req.session.user.role_name == "user") {
         // TODO: Fazer as telas dos usuários
-        res.redirect("/minhas-compras")
+        res.redirect("/minha-conta/")
     } else if (req.session.user.role_name === "financeiro" || req.session.user.role_name === "venda") {
         next()
     }

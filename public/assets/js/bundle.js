@@ -1204,6 +1204,34 @@ class Login {
 
 /***/ }),
 
+/***/ "./frontend/modules/minhaConta.js":
+/*!****************************************!*\
+  !*** ./frontend/modules/minhaConta.js ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   MinhaConta: () => (/* binding */ MinhaConta)
+/* harmony export */ });
+class MinhaConta {
+  constructor() {
+    this.listaItens = [];
+    this.valor_total = 0;
+    this.total_itens = 0;
+  }
+  init() {
+    this.events();
+  }
+  events() {
+    this.cacheSelectors();
+  }
+  cacheSelectors() {}
+}
+
+/***/ }),
+
 /***/ "./frontend/modules/usersScreen.js":
 /*!*****************************************!*\
   !*** ./frontend/modules/usersScreen.js ***!
@@ -25895,6 +25923,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_accounts__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/accounts */ "./frontend/modules/accounts.js");
 /* harmony import */ var _modules_vendas__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/vendas */ "./frontend/modules/vendas.js");
 /* harmony import */ var _modules_compras__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./modules/compras */ "./frontend/modules/compras.js");
+/* harmony import */ var _modules_minhaConta__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./modules/minhaConta */ "./frontend/modules/minhaConta.js");
+
 
 
 
@@ -25938,6 +25968,10 @@ if (window.location.pathname.includes("vendas")) {
 if (window.location.pathname.includes("minhas-compras")) {
   const compras = new _modules_compras__WEBPACK_IMPORTED_MODULE_9__.Compras();
   compras.init();
+}
+if (window.location.pathname.includes("minha-conta")) {
+  const minhaConta = new _modules_minhaConta__WEBPACK_IMPORTED_MODULE_10__.MinhaConta();
+  minhaConta.init();
 }
 
 // Funções fixas
