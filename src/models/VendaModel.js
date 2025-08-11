@@ -14,9 +14,12 @@ const VendaSchema = new mongoose.Schema({
     cod_venda: { type: String, required: true },
     // Lista de itens da venda
     itens: [{
+        _id: false,
         produto_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Produto', required: true },
         quantidade: { type: Number, required: true },
-        subtotal: { type: Number, required: true }
+        subtotal: { type: Number, required: true },
+        custo_produto: { type: Number, required: true },
+        custo_venda: { type: Number, required: true },
     }],
 
     delete: { type: Boolean, default: false }
@@ -54,7 +57,9 @@ class Venda {
                 data.itens.push({
                     produto_id: item.produto_id,
                     quantidade: item.quantidade,
-                    subtotal: centTrasform(item.subtotal)
+                    subtotal: centTrasform(item.subtotal),
+                    custo_produto: validaProduto.produto.custo,
+                    custo_venda: validaProduto.produto.valor_venda
                 });
             } else {
                 this.errors.push(validaProduto.error);
@@ -185,7 +190,7 @@ class Venda {
             ]);
         } catch (error) {
             console.log(error);
-            
+
         }
 
 
