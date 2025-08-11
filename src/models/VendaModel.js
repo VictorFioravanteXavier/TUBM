@@ -19,7 +19,7 @@ const VendaSchema = new mongoose.Schema({
         quantidade: { type: Number, required: true },
         subtotal: { type: Number, required: true },
         custo_produto: { type: Number, required: true },
-        custo_venda: { type: Number, required: true },
+        valor_venda: { type: Number, required: true },
     }],
 
     delete: { type: Boolean, default: false }
@@ -59,7 +59,7 @@ class Venda {
                     quantidade: item.quantidade,
                     subtotal: centTrasform(item.subtotal),
                     custo_produto: validaProduto.produto.custo,
-                    custo_venda: validaProduto.produto.valor_venda
+                    valor_venda: validaProduto.produto.valor_venda
                 });
             } else {
                 this.errors.push(validaProduto.error);

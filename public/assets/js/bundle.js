@@ -827,7 +827,7 @@ class Compras {
                         </td>
                         <td>
                             <div class="description-item-valor-unitario">
-                                R$${(item.produto_id.valor_venda / 100).toFixed(2)}
+                                R$${(item.valor_venda / 100).toFixed(2)}
                             </div>
                         </td>
                         <td>
@@ -1802,7 +1802,7 @@ class Vendas {
                         </td>
                         <td>
                             <div class="description-item-valor-unitario">
-                                R$${(item.produto_id.valor_venda / 100).toFixed(2)}
+                                R$${(item.valor_venda / 100).toFixed(2)}
                             </div>
                         </td>
                         <td>
