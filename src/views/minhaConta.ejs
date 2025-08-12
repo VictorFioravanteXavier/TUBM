@@ -1,0 +1,153 @@
+<%- include('includes/head')%>
+<%- include('includes/nav')%>
+<link rel="stylesheet" href="/frontend/assets/css/minhaConta/style.css">
+
+<main>
+    <div class="container">
+        <%- include('includes/messages') %>
+        <div class="dados-pessoais">
+            <div class="title-header">
+                <h1>
+                    Dados Pessoais
+                </h1>
+            </div>
+            <div class="body-dados">
+                <div class="dado">
+                    <div class="dado-title">
+                        Nome Completo
+                    </div>
+                    <div class="dado-value">
+                        <%= userData.name %>
+                    </div>
+                </div>
+                <div class="dado">
+                    <div class="dado-title">
+                        CPF
+                    </div>
+                    <div class="dado-value">
+                        <%= userData.cpf %>
+                    </div>
+                </div>
+                <div class="dado">
+                    <div class="dado-title">
+                        Telefone
+                    </div>
+                    <div class="dado-value">
+                        <%= userData.tel %>
+                    </div>
+                </div>
+                <div class="dado">
+                    <div class="dado-title">
+                        E-mail
+                    </div>
+                    <div class="dado-value">
+                        <%= userData.email %>
+                    </div>
+                </div>
+                <div class="dado">
+                    <div class="dado-title">
+                        Status de Verificação
+                    </div>
+                    <div class="dado-value">
+                        <% if(userData.verified) {%>
+                        <div class="check status">
+                            <i class="fas fa-check"></i>Verificado
+                        </div>
+                        <% } else {%>
+                        <div class="false status">
+                            <i class="fas fa-x"></i>Sem Conta
+                        </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% if(userData.verified) {%>
+            <div class="dados-conta">
+                <div class="title-header">
+                    <h1>
+                        Dados Da Conta
+                    </h1>
+                </div>
+                <div class="body-dados">
+                    <div class="dado">
+                        <div class="dado-title">
+                            Número da Conta
+                        </div>
+                        <div class="dado-value">
+                            <%= account.number %>
+                        </div>
+                    </div>
+                    <div class="dado">
+                        <div class="dado-title">
+                            Nome da Conta
+                        </div>
+                        <div class="dado-value">
+                            <%= account.name %>
+                        </div>
+                    </div>
+                    <div class="dado">
+                        <div class="dado-title">
+                            Status Conta
+                        </div>
+                        <div class="dado-value">
+                            <% if(account.active) {%>
+                            <div class="check status">
+                                <i class="fas fa-check"></i>Ativa
+                            </div>
+                            <% } else {%>
+                            <div class="false status">
+                                <i class="fas fa-x"></i>Inativa
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+
+                <% if (account.users.length > 1 ) {%>
+                    <div class="same-account-users">
+                        <div class="title-header">
+                            <h2>Usuários que compartilham a mesma conta</h2>
+                        </div>
+                        <div class="users">
+                            <% account.users.forEach(user => { %>
+                                <% if (user._id.toString() !== userData._id.toString()) {%>
+                                    <div class="user">
+                                        <div class="body-dados">
+                                            <div class="dado">
+                                                <div class="dado-title">
+                                                    Nome
+                                                </div>
+                                                <div class="dado-value">
+                                                    <%= user.name %>
+                                                </div>
+                                            </div>
+                                            <div class="dado">
+                                                <div class="dado-title">
+                                                    Telefone
+                                                </div>
+                                                <div class="dado-value">
+                                                    <%= user.tel %>
+                                                </div>
+                                            </div>
+                                            <div class="dado">
+                                                <div class="dado-title">
+                                                    Email
+                                                </div>
+                                                <div class="dado-value">
+                                                    <%= user.email %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %>
+                            <% }); %>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        <% } %>
+    </div>
+</main>
+
+<%- include('includes/footer')%>

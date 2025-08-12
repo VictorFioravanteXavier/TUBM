@@ -33,11 +33,21 @@ export class Accounts {
     }
 
     cacheSelectors() {
+        const params = new URLSearchParams(window.location.search);
+            
         this.form_search_name = document.getElementById("search-form-name")
         this.inp_search_name = document.getElementById("search-input-name")
 
+        if (params.get("searchName")) {
+            this.inp_search_name.value = params.get("searchName");
+        }
+
         this.form_search_number = document.getElementById("search-form-number")
         this.inp_search_number = document.getElementById("search-input-number")
+
+        if (params.get("searchNumber")) {
+            this.inp_search_number.value = params.get("searchNumber");
+        }
 
         this.btn_status_active = document.querySelector(".btn-active")
         this.btn_status_inactive = document.querySelector(".btn-inactive")
@@ -401,7 +411,7 @@ export class Accounts {
 
                 const name = button.dataset.name;
                 const id = button.dataset.id;
-                
+
 
                 if (confirm(`Você realmente deseja deletar a conta "${name}"?`)) {
                     fetch(`/contas/delete/${id}`, {
@@ -433,7 +443,7 @@ export class Accounts {
 
                 const name = button.dataset.name;
                 const id = button.dataset.id;
-                
+
 
                 if (confirm(`Você realmente deseja desatiavar a conta "${name}"?`)) {
                     fetch(`/contas/deactivate/${id}`, {
@@ -465,7 +475,7 @@ export class Accounts {
 
                 const name = button.dataset.name;
                 const id = button.dataset.id;
-                
+
 
                 if (confirm(`Você realmente deseja ativar a conta "${name}"?`)) {
                     fetch(`/contas/activate/${id}`, {

@@ -20,6 +20,10 @@
           <a class="nav-link <%= currentUrl.includes('/minhas-compras/') ? 'selected' : '' %>" href="/minhas-compras/">Minhas Compras</a>
         </li>
 
+        <li class="nav-item">
+          <a class="nav-link <%= currentUrl.includes('/minha-conta/') ? 'selected' : '' %>" href="/minha-conta/">Minha Conta</a>
+        </li>
+
         <% if (role == "venda" || role == "financeiro") {%>
           <li class="nav-item">
             <a class="nav-link <%= currentUrl === '/estoque/' ? 'selected' : '' %>" href="/estoque/">Estoque</a>

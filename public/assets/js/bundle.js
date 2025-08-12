@@ -72,10 +72,17 @@ class Accounts {
     });
   }
   cacheSelectors() {
+    const params = new URLSearchParams(window.location.search);
     this.form_search_name = document.getElementById("search-form-name");
     this.inp_search_name = document.getElementById("search-input-name");
+    if (params.get("searchName")) {
+      this.inp_search_name.value = params.get("searchName");
+    }
     this.form_search_number = document.getElementById("search-form-number");
     this.inp_search_number = document.getElementById("search-input-number");
+    if (params.get("searchNumber")) {
+      this.inp_search_number.value = params.get("searchNumber");
+    }
     this.btn_status_active = document.querySelector(".btn-active");
     this.btn_status_inactive = document.querySelector(".btn-inactive");
     this.btn_status_all = document.querySelector(".btn-all");
@@ -820,7 +827,7 @@ class Compras {
                         </td>
                         <td>
                             <div class="description-item-valor-unitario">
-                                R$${(item.produto_id.valor_venda / 100).toFixed(2)}
+                                R$${(item.valor_venda / 100).toFixed(2)}
                             </div>
                         </td>
                         <td>
@@ -855,17 +862,34 @@ class Estoque {
     this.events();
   }
   events() {
+    this.cacheSelectors();
     this.buttonsActionsConfigure();
-    this.searchConfigure();
+    this.searchProductName();
+    this.searchProductNumber();
+  }
+  cacheSelectors() {
+    const params = new URLSearchParams(window.location.search);
+    this.buttons_edit = document.querySelectorAll('.btn-edit-estoque');
+    this.buttons_delete = document.querySelectorAll('.btn-delete-estoque');
+    this.form_search_name = document.querySelector("#search-form-name");
+    this.inp_search_name = document.querySelector("#search-input-name");
+    if (params.get("searchName")) {
+      this.inp_search_name.value = params.get("searchName");
+    }
+    this.form_search_number = document.querySelector("#search-form-number");
+    this.inp_search_number = document.querySelector("#search-input-number");
+    if (params.get("searchNumber")) {
+      this.inp_search_number.value = params.get("searchNumber");
+    }
   }
   buttonsActionsConfigure() {
-    document.querySelectorAll('.btn-edit-estoque').forEach(btn => {
+    this.buttons_edit.forEach(btn => {
       btn.addEventListener('click', () => {
         const id = btn.getAttribute('data-id');
         window.location.href = `/produto/${id}`;
       });
     });
-    document.querySelectorAll('.btn-delete-estoque').forEach(btn => {
+    this.buttons_delete.forEach(btn => {
       btn.addEventListener('click', () => {
         const id = btn.getAttribute('data-id');
         if (confirm("Deseja realmente excluir esse produto?")) {
@@ -874,23 +898,33 @@ class Estoque {
       });
     });
   }
-  searchConfigure() {
-    const searchInput = document.getElementById('search-estoque');
-    if (searchInput) {
-      searchInput.addEventListener('input', function () {
-        const searchTerm = this.value.toLowerCase();
-        const rows = document.querySelectorAll('table tbody tr');
-        rows.forEach(row => {
-          const cols = row.querySelectorAll('td');
-          if (cols.length >= 2) {
-            const nome = cols[0].innerText.toLowerCase();
-            const codigo = cols[1].innerText.toLowerCase();
-            const match = nome.includes(searchTerm) || codigo.includes(searchTerm);
-            row.style.display = match ? '' : 'none';
-          }
-        });
-      });
-    }
+  searchProductName() {
+    this.form_search_name.addEventListener("submit", e => {
+      e.preventDefault();
+      const value = this.inp_search_name.value.trim();
+      const params = new URLSearchParams(window.location.search);
+      if (!value) {
+        params.delete("searchName");
+        window.location.href = `/estoque/?${params.toString()}`;
+        return;
+      }
+      params.set("searchName", value);
+      window.location.href = `/estoque/?${params.toString()}`;
+    });
+  }
+  searchProductNumber() {
+    this.form_search_number.addEventListener("submit", e => {
+      e.preventDefault();
+      const value = this.inp_search_number.value.trim();
+      const params = new URLSearchParams(window.location.search);
+      if (!value) {
+        params.delete("searchNumber");
+        window.location.href = `/estoque/?${params.toString()}`;
+        return;
+      }
+      params.set("searchNumber", value);
+      window.location.href = `/estoque/?${params.toString()}`;
+    });
   }
 }
 
@@ -1170,6 +1204,34 @@ class Login {
 
 /***/ }),
 
+/***/ "./frontend/modules/minhaConta.js":
+/*!****************************************!*\
+  !*** ./frontend/modules/minhaConta.js ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   MinhaConta: () => (/* binding */ MinhaConta)
+/* harmony export */ });
+class MinhaConta {
+  constructor() {
+    this.listaItens = [];
+    this.valor_total = 0;
+    this.total_itens = 0;
+  }
+  init() {
+    this.events();
+  }
+  events() {
+    this.cacheSelectors();
+  }
+  cacheSelectors() {}
+}
+
+/***/ }),
+
 /***/ "./frontend/modules/usersScreen.js":
 /*!*****************************************!*\
   !*** ./frontend/modules/usersScreen.js ***!
@@ -1321,6 +1383,10 @@ class UsersScreen {
     }
   }
   searchUserName() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("search")) {
+      document.getElementById("search-input").value = params.get("search");
+    }
     document.getElementById("search-form").addEventListener("submit", function (e) {
       e.preventDefault(); // sempre previne o envio padrão
 
@@ -1628,10 +1694,17 @@ class Vendas {
     this.openDescriptionModal();
   }
   cacheSelectors() {
+    const params = new URLSearchParams(window.location.search);
     this.form_search_name = document.querySelector("#search-form-name");
     this.inp_search_name = document.querySelector("#search-input-name");
+    if (params.get("searchName")) {
+      this.inp_search_name.value = params.get("searchName");
+    }
     this.form_search_number = document.querySelector("#search-form-number");
     this.inp_search_number = document.querySelector("#search-input-number");
+    if (params.get("searchNumber")) {
+      this.inp_search_number.value = params.get("searchNumber");
+    }
     this.btn_status_pago = document.querySelector(".btn-active");
     this.btn_status_pendente = document.querySelector(".btn-inactive");
     this.btn_status_all = document.querySelector(".btn-all");
@@ -1757,7 +1830,7 @@ class Vendas {
                         </td>
                         <td>
                             <div class="description-item-valor-unitario">
-                                R$${(item.produto_id.valor_venda / 100).toFixed(2)}
+                                R$${(item.valor_venda / 100).toFixed(2)}
                             </div>
                         </td>
                         <td>
@@ -25850,6 +25923,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_accounts__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/accounts */ "./frontend/modules/accounts.js");
 /* harmony import */ var _modules_vendas__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/vendas */ "./frontend/modules/vendas.js");
 /* harmony import */ var _modules_compras__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./modules/compras */ "./frontend/modules/compras.js");
+/* harmony import */ var _modules_minhaConta__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./modules/minhaConta */ "./frontend/modules/minhaConta.js");
+
 
 
 
@@ -25870,8 +25945,10 @@ if (window.location.pathname === "/cadastro") {
   const cadastro = new _modules_cadastro__WEBPACK_IMPORTED_MODULE_5__.Cadastro();
   cadastro.init();
 }
-const estoque = new _modules_estoque__WEBPACK_IMPORTED_MODULE_3__.Estoque();
-estoque.init();
+if (window.location.pathname.includes("estoque")) {
+  const estoque = new _modules_estoque__WEBPACK_IMPORTED_MODULE_3__.Estoque();
+  estoque.init();
+}
 if (window.location.pathname === '/fazer-venda/') {
   const fazer_venda = new _modules_fazer_venda__WEBPACK_IMPORTED_MODULE_4__.FazerVenda();
   fazer_venda.init();
@@ -25891,6 +25968,10 @@ if (window.location.pathname.includes("vendas")) {
 if (window.location.pathname.includes("minhas-compras")) {
   const compras = new _modules_compras__WEBPACK_IMPORTED_MODULE_9__.Compras();
   compras.init();
+}
+if (window.location.pathname.includes("minha-conta")) {
+  const minhaConta = new _modules_minhaConta__WEBPACK_IMPORTED_MODULE_10__.MinhaConta();
+  minhaConta.init();
 }
 
 // Funções fixas

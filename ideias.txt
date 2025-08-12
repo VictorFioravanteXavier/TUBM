@@ -1,1 +1,12 @@
-1. Em vez de mostrar para as vendas pendentes para financeiro mostrar as contas que tem vendas pendentes
+1. Poder procurar por só um input
+2. Arrumar o compras para pegar todas as contas de usuários
+3. Se a conta do usuário estiver deletada ele poder ter outra conta 
+4. Fazer um select nos filtros em vez de ser um buttom
+5. Se a conta estiver ativa não aparecer o "Ativar Conta" 
+5.1. Ver oque que acotece se o usuário não tiver uma conta 
+6. Poder fazer relatórios excel e pdf 
+7. Enviar por email e wtts o valor a pagar
+8. Fazer um recuperar senha na página de login
+9. Deixar as mensagens mais bonitas
+10. Arrumar para o admin poder editar o email do usuário também 
+11. tentar fazer com que o usuário possa editar algumas coisas da sua conta

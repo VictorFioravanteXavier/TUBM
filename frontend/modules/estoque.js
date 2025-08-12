@@ -7,19 +7,42 @@ export class Estoque {
     }
 
     events() {
+        this.cacheSelectors()
         this.buttonsActionsConfigure()
-        this.searchConfigure()
+        this.searchProductName()
+        this.searchProductNumber()
+    }
+
+    cacheSelectors() {
+        const params = new URLSearchParams(window.location.search);
+
+        this.buttons_edit = document.querySelectorAll('.btn-edit-estoque')
+        this.buttons_delete = document.querySelectorAll('.btn-delete-estoque')
+
+        this.form_search_name = document.querySelector("#search-form-name")
+        this.inp_search_name = document.querySelector("#search-input-name")
+
+        if (params.get("searchName")) {
+            this.inp_search_name.value = params.get("searchName");
+        }
+
+        this.form_search_number = document.querySelector("#search-form-number")
+        this.inp_search_number = document.querySelector("#search-input-number")
+
+        if (params.get("searchNumber")) {
+            this.inp_search_number.value = params.get("searchNumber");
+        }
     }
 
     buttonsActionsConfigure() {
-        document.querySelectorAll('.btn-edit-estoque').forEach(btn => {
+        this.buttons_edit.forEach(btn => {
             btn.addEventListener('click', () => {
                 const id = btn.getAttribute('data-id');
                 window.location.href = `/produto/${id}`
             });
         });
 
-        document.querySelectorAll('.btn-delete-estoque').forEach(btn => {
+        this.buttons_delete.forEach(btn => {
             btn.addEventListener('click', () => {
                 const id = btn.getAttribute('data-id');
                 if (confirm("Deseja realmente excluir esse produto?")) {
@@ -29,28 +52,42 @@ export class Estoque {
         });
     }
 
-    searchConfigure() {
-        const searchInput = document.getElementById('search-estoque');
+    searchProductName() {
+        this.form_search_name.addEventListener("submit", (e) => {
+            e.preventDefault();
 
-        if (searchInput) {
-            searchInput.addEventListener('input', function () {
-                const searchTerm = this.value.toLowerCase();
-                const rows = document.querySelectorAll('table tbody tr');
+            const value = this.inp_search_name.value.trim();
 
-                rows.forEach(row => {
-                    const cols = row.querySelectorAll('td');
-                    if (cols.length >= 2) {
-                        const nome = cols[0].innerText.toLowerCase();
-                        const codigo = cols[1].innerText.toLowerCase();
+            const params = new URLSearchParams(window.location.search);
 
-                        const match = nome.includes(searchTerm) || codigo.includes(searchTerm);
+            if (!value) {
+                params.delete("searchName");
+                window.location.href = `/estoque/?${params.toString()}`;
+                return;
+            }
 
-                        row.style.display = match ? '' : 'none';
-                    }
-                });
-            });
-        }
+            params.set("searchName", value);
+            window.location.href = `/estoque/?${params.toString()}`;
+        });
     }
 
+    searchProductNumber() {
+        this.form_search_number.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const value = this.inp_search_number.value.trim();
+
+            const params = new URLSearchParams(window.location.search);
+
+            if (!value) {
+                params.delete("searchNumber");
+                window.location.href = `/estoque/?${params.toString()}`;
+                return;
+            }
+
+            params.set("searchNumber", value);
+            window.location.href = `/estoque/?${params.toString()}`;
+        });
+    }
 }
 
