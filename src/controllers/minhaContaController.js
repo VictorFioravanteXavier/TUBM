@@ -1,6 +1,4 @@
 const Account = require("../models/AccountModel");
-const User = require("../models/UserModel");
-const { validarTelefone } = require("../utils/validaTelefone");
 
 exports.index = async (req, res) => {
     const userData = req.session.user
@@ -11,5 +9,5 @@ exports.index = async (req, res) => {
         account = {}
     }
 
-    res.render('minhaConta', { userData, account })
+    res.render('shippingReporting', { userData, account })
 }

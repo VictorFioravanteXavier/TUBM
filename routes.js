@@ -11,6 +11,7 @@ const UserScreenController = require('./src/controllers/UserScreenController');
 const accountsController = require('./src/controllers/accountsController');
 const comprasController = require('./src/controllers/comprasController');
 const minhaContaController = require('./src/controllers/minhaContaController');
+const shippingReportingController = require('./src/controllers/shippingReportingController');
 
 const { loginRequired, roleFind } = require('./src/middlewares/middleware')
 
@@ -69,5 +70,11 @@ router.get('/minhas-compras/:page', loginRequired, comprasController.index)
 
 /* Rotas Minha Conta */
 router.get('/minha-conta/', loginRequired, minhaContaController.index)
+
+/* Rotas Envio & Relatórios */
+router.get('/envio-relatorios/', loginRequired, shippingReportingController.index)
+router.get('/envio-relatorios/getFiltred/', loginRequired, shippingReportingController.getDataFiltred)
+router.post('/envio-relatorios/getFiltred/:page', loginRequired, shippingReportingController.getDataFiltred)
+
 
 module.exports = router;

@@ -15,7 +15,7 @@
     <ul class="navbar-nav ml-auto">
 
       <% if(user) { %>
-
+        <% if (!role == "venda" || !role == "financeiro") {%>
         <li class="nav-item">
           <a class="nav-link <%= currentUrl.includes('/minhas-compras/') ? 'selected' : '' %>" href="/minhas-compras/">Minhas Compras</a>
         </li>
@@ -23,6 +23,7 @@
         <li class="nav-item">
           <a class="nav-link <%= currentUrl.includes('/minha-conta/') ? 'selected' : '' %>" href="/minha-conta/">Minha Conta</a>
         </li>
+        <% } %>
 
         <% if (role == "venda" || role == "financeiro") {%>
           <li class="nav-item">
@@ -43,6 +44,9 @@
           </li>
           <li class="nav-item">
               <a class="nav-link <%= currentUrl.includes('/contas/') ? 'selected' : '' %>" href="/contas/">Contas</a>
+          </li>
+           <li class="nav-item">
+              <a class="nav-link <%= currentUrl.includes('/envio-relatorios/') ? 'selected' : '' %>" href="/envio-relatorios/">Envio & Relatórios</a>
           </li>
         <% } %>
 
