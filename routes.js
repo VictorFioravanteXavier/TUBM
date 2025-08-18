@@ -75,6 +75,7 @@ router.get('/minha-conta/', loginRequired, minhaContaController.index)
 router.get('/envio-relatorios/', loginRequired, shippingReportingController.index)
 router.get('/envio-relatorios/getFiltred/', loginRequired, shippingReportingController.getDataFiltred)
 router.post('/envio-relatorios/getFiltred/:page', loginRequired, shippingReportingController.getDataFiltred)
+router.post('/envio-relatorios/sendEmail/', loginRequired, shippingReportingController.sendEmail)
 
 
 module.exports = router;

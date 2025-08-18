@@ -4,6 +4,7 @@ const centTrasform = require('../utils/centTrasform.js');
 const Account = require('./AccountModel.js');
 const gerarNumeroVenda = require('../utils/vendaNumber.js');
 const isValidDate = require('../utils/isValidDate.js');
+const agruparVendasPorConta = require('../utils/agruparVendasPorConta.js');
 
 const VendaSchema = new mongoose.Schema({
     account_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Account', required: true },
@@ -334,6 +335,60 @@ class Venda {
         };
     }
 
+    static async findAllFiltredShippingReportingNoPage(obj) {
+        // Converte para Date
+        const initialDate = new Date(obj.initial_date);
+        const finalDate = new Date(obj.final_date);
+
+        // Monta filtro para vendas
+        const filters = { delete: false };
+
+        if (isValidDate(initialDate) || isValidDate(finalDate)) {
+            filters.data_venda = {};
+            if (isValidDate(initialDate)) {
+                filters.data_venda.$gte = new Date(initialDate);
+            }
+            if (isValidDate(finalDate)) {
+                const end = new Date(finalDate);
+                end.setDate(end.getDate() + 2); // garante o último ms do dia
+                filters.data_venda.$lte = end; // inclui o dia final inteiro
+            }
+        }
+
+
+
+        if (obj.min_val || obj.max_val) {
+            filters.valor_total = {};
+            if (obj.min_val && !isNaN(obj.min_val)) {
+                filters.valor_total.$gte = Number(obj.min_val);
+            }
+            if (obj.max_val && !isNaN(obj.max_val)) {
+                filters.valor_total.$lte = Number(obj.max_val);
+            }
+        }
+
+
+        if (obj.status === "false" || obj.status === "true") {
+            filters.status = obj.status;
+        }
+
+        if (mongoose.isValidObjectId(obj.account)) {
+            filters.account_id = obj.account
+        }
+
+        const vendas = await VendaModule.find(filters)
+            .populate({
+                path: 'account_id',
+                populate: {
+                    path: 'users', // popula o campo users dentro de account_id
+                    model: 'User'  // nome do model do usuário
+                }
+            })
+            .sort({ data_venda: -1 })
+            .lean();
+
+        return vendas
+    }
 
 
     static async delete(id) {

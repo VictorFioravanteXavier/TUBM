@@ -1246,6 +1246,7 @@ __webpack_require__.r(__webpack_exports__);
 class ShippingReporting {
   constructor() {
     this.filtros = {};
+    this.valid = false;
     this.errors = [];
   }
   init() {
@@ -1275,6 +1276,11 @@ class ShippingReporting {
       e.preventDefault();
       this.limparFiltros();
     });
+    this.sendEmailButton = document.querySelector(".sendEmail");
+    this.sendEmailButton.addEventListener("click", async e => {
+      e.preventDefault();
+      await this.sendEmail();
+    });
   }
   async saveFiltros(page = 1) {
     this.valida();
@@ -1294,7 +1300,9 @@ class ShippingReporting {
       if (data.vendas.length !== 0) {
         this.attTable(data.vendas);
         this.attPagination(data.currentPage, data.totalPages);
+        this.valid = true;
       } else {
+        this.valid = false;
         this.table.innerHTML = "";
         this.manesage_table.style.display = "flex";
         this.manesage_table.style.color = "#B82627";
@@ -1422,6 +1430,28 @@ class ShippingReporting {
     }
     if (status === 'true' || status === "false") {
       this.filtros.status = status;
+    }
+  }
+  async sendEmail() {
+    if (!this.valid) {
+      alert("Tem que ter dados validos para poder ser enviado!");
+      return;
+    }
+    this.valida();
+    try {
+      const response = await fetch(`/envio-relatorios/sendEmail/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'CSRF-Token': this.token
+        },
+        body: JSON.stringify(this.filtros)
+      });
+      if (!response.ok) {
+        throw new Error("Erro ao buscar relatórios filtrados");
+      }
+    } catch (error) {
+      console.error(error);
     }
   }
 }
