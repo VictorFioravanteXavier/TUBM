@@ -61,7 +61,6 @@ export class ShippingReporting {
             }
 
             const data = await response.json();
-            console.log("Resultados:", data);
 
             if (data.vendas.length !== 0) {
                 this.attTable(data.vendas)
@@ -109,36 +108,52 @@ export class ShippingReporting {
         this.pagination.style.display = "flex"
 
         const left_index = `
-            <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-                <div class="page-link" data-page="${currentPage - 1}" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </div>
-            </li>
-        `
+        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+            <a href="#" class="page-link" data-page="${currentPage - 1}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+    `
 
         const right_index = `
-            <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-                <div class="page-link" data-page="${currentPage + 1}" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </div>
-            </li>
-        `
+        <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+            <a href="#" class="page-link" data-page="${currentPage + 1}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    `
 
         let indexes = ""
 
         for (let i = 1; i <= totalPages; i++) {
             const index = ` 
-                <li class="page-item ${i === currentPage ? 'active' : ''}">
-                    <div class="page-link" data-page="${i} %>">${i}</div>
-                </li>
-            `
-
+            <li class="page-item ${i === currentPage ? 'active' : ''}">
+                <a href="#" class="page-link" data-page="${i}">${i}</a>
+            </li>
+        `
             indexes += index
         }
 
         this.pagination.innerHTML += left_index
         this.pagination.innerHTML += indexes
         this.pagination.innerHTML += right_index
+
+        this.funcionalidadesPagination()
+    }
+
+    funcionalidadesPagination() {
+        const buttons = this.pagination.querySelectorAll(".page-link")
+        const self = this
+
+        buttons.forEach(element => {
+            element.addEventListener("click", function (event) {
+                event.preventDefault()
+                const page = this.dataset.page
+                if (page) {
+                    self.saveFiltros(parseInt(page, 10))
+                }
+            })
+        })
     }
 
     limparFiltros() {

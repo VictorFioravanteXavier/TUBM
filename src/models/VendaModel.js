@@ -281,12 +281,15 @@ class Venda {
         if (isValidDate(initialDate) || isValidDate(finalDate)) {
             filters.data_venda = {};
             if (isValidDate(initialDate)) {
-                filters.data_venda.$gte = initialDate;
+                filters.data_venda.$gte = new Date(initialDate);
             }
             if (isValidDate(finalDate)) {
-                filters.data_venda.$lte = finalDate;
+                const end = new Date(finalDate);
+                end.setDate(end.getDate() + 2); // garante o último ms do dia
+                filters.data_venda.$lte = end; // inclui o dia final inteiro
             }
         }
+
 
 
         if (obj.min_val || obj.max_val) {
@@ -309,11 +312,18 @@ class Venda {
         }
 
         const vendas = await VendaModule.find(filters)
-            .populate('account_id')
+            .populate({
+                path: 'account_id',
+                populate: {
+                    path: 'users', // popula o campo users dentro de account_id
+                    model: 'User'  // nome do model do usuário
+                }
+            })
             .sort({ data_venda: -1 })
             .skip(skip)
             .limit(limit)
             .lean();
+
 
         const total = await VendaModule.countDocuments(filters);
 
