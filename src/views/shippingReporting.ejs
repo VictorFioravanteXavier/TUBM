@@ -90,7 +90,10 @@
                 </h1>
             </div>
             <div class="buttons">
-                <button class="button-primary sendEmail">
+                <button class="button-primary sendEmail"
+                    data-toggle="modal"
+                    data-target="#confirmSend"
+                >
                     <i class="fa fa-envelope"></i>
                     Enviar Conta por Email
                 </button>
@@ -142,5 +145,7 @@
         </div>
     </div>
 </main>
+
+<%- include('includes/modals/confirmSendModal') %>
 
 <%- include('includes/footer')%>

@@ -30,7 +30,7 @@ export default async (to, subject, text, html = null) => {
         });
 
         const mailOptions = {
-            from: `"Sistema de Relatórios" <${process.env.EMAIL_USER}>`,
+            from: `"Cantina do Zé" <${process.env.EMAIL_USER}>`,
             to,
             subject,
             text,
@@ -38,7 +38,6 @@ export default async (to, subject, text, html = null) => {
         };
 
         const info = await transporter.sendMail(mailOptions);
-        console.log("Email enviado:", info.messageId);
         return true;
     } catch (error) {
         console.error("Erro ao enviar email:", error);

@@ -11,6 +11,7 @@ export class ShippingReporting {
 
     events() {
         this.cacheSelectors();
+        this.confirmSend();
     }
 
     cacheSelectors() {
@@ -43,11 +44,14 @@ export class ShippingReporting {
             this.limparFiltros()
         })
 
+        this.confirmSendButton = document.querySelector("#btn-confirm")
         this.sendEmailButton = document.querySelector(".sendEmail")
-        this.sendEmailButton.addEventListener("click", async (e) => {
-            e.preventDefault()
-            await this.sendEmail()
-        })
+        const self = this
+        this.sendEmailButton.addEventListener("click", (e) => {
+            e.preventDefault();
+            this.confirmSend(async () => await self.sendEmail());
+        });
+
     }
 
     async saveFiltros(page = 1) {
@@ -198,6 +202,7 @@ export class ShippingReporting {
         if (!isNaN(initialDate.getTime()) && !isNaN(finalDate.getTime())) {
             if (initialDate > finalDate) {
                 alert("A data inicial não pode ser maior que a final");
+                return false
             } else {
                 this.filtros.initial_date = initialDate.toISOString();
                 this.filtros.final_date = finalDate.toISOString();
@@ -211,6 +216,7 @@ export class ShippingReporting {
         if (!isNaN(minVal) && !isNaN(maxVal)) {
             if (minVal > maxVal) {
                 alert("O valor mínimo não pode ser maior que o máximo");
+                return false
             } else {
                 this.filtros.min_val = minVal
                 this.filtros.max_val = maxVal
@@ -224,6 +230,8 @@ export class ShippingReporting {
         if (status === 'true' || status === "false") {
             this.filtros.status = status
         }
+
+        return true
     }
 
     async sendEmail() {
@@ -231,7 +239,6 @@ export class ShippingReporting {
             alert("Tem que ter dados validos para poder ser enviado!")
             return
         }
-        this.valida();
 
         try {
             const response = await fetch(`/envio-relatorios/sendEmail/`, {
@@ -245,6 +252,8 @@ export class ShippingReporting {
 
             if (!response.ok) {
                 throw new Error("Erro ao buscar relatórios filtrados");
+            } else {
+                alert("Email(s) enviado(s) com sucesso!")
             }
 
 
@@ -252,4 +261,86 @@ export class ShippingReporting {
             console.error(error);
         }
     }
+
+    confirmSend(callback) {
+        const self = this;
+        $('#confirmSend').off('show.bs.modal').on('show.bs.modal', (event) => {
+            const modal = $(event.target);
+            modal.find(".variables-vals").html("")
+
+            let account_menssage = "";
+            if (!this.filtros.account) {
+                account_menssage = "Todas as contas de usuários";
+            } else {
+                account_menssage = `a conta ${this.inp_account.value}`;
+            }
+
+            let status_menssage = "";
+            if (this.filtros.status === "true") {
+                status_menssage = "Pagas";
+            } else if (this.filtros.status === "false") {
+                status_menssage = "Pendentes";
+            } else {
+                status_menssage = "Pagas e Pendentes";
+            }
+
+            let date_initial_menssage = "";
+            if (this.filtros.initial_date) {
+                date_initial_menssage = `
+                <div class="menssage-date-initial">
+                    Compras feitas a partir de <span style="font-weight: bold;">${new Date(this.filtros.initial_date).toLocaleDateString("pt-BR")}</span>
+                </div>
+            `;
+            }
+
+            let date_final_menssage = "";
+            if (this.filtros.final_date) {
+                date_final_menssage = `
+                <div class="menssage-date-final">
+                    Compras feitas até <span style="font-weight: bold;">${new Date(this.filtros.final_date).toLocaleDateString("pt-BR")}</span>
+                </div>
+            `;
+            }
+
+            let min_val_menssage = "";
+            if (this.filtros.min_val) {
+                min_val_menssage = `
+                <div class="menssage-min-val">
+                    Compras com valor mínimo de <span style="font-weight: bold;">${parseFloat(this.filtros.min_val).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                </div>
+            `;
+            }
+
+            let max_val_menssage = "";
+            if (this.filtros.max_val) {
+                max_val_menssage = `
+                <div class="menssage-max-val">
+                    Compras com valor máximo de <span style="font-weight: bold;">${parseFloat(this.filtros.max_val).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                </div>
+            `;
+            }
+
+            modal.find(".menssage-account").html(`
+            Você irá enviar para <span style="font-weight: bold;">${account_menssage}</span>
+        `);
+
+            modal.find(".menssage-status").html(`
+            Você irá enviar as contas <span style="font-weight: bold;">${status_menssage}</span>
+        `);
+
+            modal.find(".variables-vals").html(`
+            ${date_initial_menssage}
+            ${date_final_menssage}
+            ${min_val_menssage}
+            ${max_val_menssage}
+        `);
+
+            // Usando jQuery para tratar o clique
+            modal.find("#btn-confirm").off("click").on("click", async () => {
+                await callback(); // só aqui realmente chama o sendEmail
+                modal.modal("hide"); // fecha depois se quiser
+            });
+        });
+    }
+
 }
