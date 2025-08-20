@@ -296,10 +296,10 @@ class Venda {
         if (obj.min_val || obj.max_val) {
             filters.valor_total = {};
             if (obj.min_val && !isNaN(obj.min_val)) {
-                filters.valor_total.$gte = Number(obj.min_val);
+                filters.valor_total.$gte = Number(obj.min_val)*100;
             }
             if (obj.max_val && !isNaN(obj.max_val)) {
-                filters.valor_total.$lte = Number(obj.max_val);
+                filters.valor_total.$lte = Number(obj.max_val)*100;
             }
         }
 
@@ -360,10 +360,10 @@ class Venda {
         if (obj.min_val || obj.max_val) {
             filters.valor_total = {};
             if (obj.min_val && !isNaN(obj.min_val)) {
-                filters.valor_total.$gte = Number(obj.min_val);
+                filters.valor_total.$gte = Number(obj.min_val)*100;
             }
             if (obj.max_val && !isNaN(obj.max_val)) {
-                filters.valor_total.$lte = Number(obj.max_val);
+                filters.valor_total.$lte = Number(obj.max_val)*100;
             }
         }
 
