@@ -15,6 +15,8 @@ export class ShippingReporting {
     }
 
     cacheSelectors() {
+        const self = this
+
         this.token = document.querySelector("input[name='_csrf']").value;
 
         this.inp_inital_date = document.querySelector("#initial-date")
@@ -46,12 +48,22 @@ export class ShippingReporting {
 
         this.confirmSendButton = document.querySelector("#btn-confirm")
         this.sendEmailButton = document.querySelector(".sendEmail")
-        const self = this
         this.sendEmailButton.addEventListener("click", (e) => {
             e.preventDefault();
             this.confirmSend(async () => await self.sendEmail());
         });
 
+        this.sendWhatsapplButton = document.querySelector(".sendWhatsapp")
+        this.sendWhatsapplButton.addEventListener("click", (e) => {
+            e.preventDefault();
+            this.confirmSend(async () => await self.sendWhatsapp());
+        });
+
+        this.removeButtonNumberWhatsapp = document.querySelector(".removeNumber")
+        this.removeButtonNumberWhatsapp.addEventListener("click", async (e) => {
+            e.preventDefault()
+            await this.removeNumberWhatsapp()
+        })
     }
 
     async saveFiltros(page = 1) {
@@ -343,4 +355,63 @@ export class ShippingReporting {
         });
     }
 
+    openQrCodeModal(qrDataUrl) {
+        // Atualiza a imagem do QR Code com o mais recente
+        const qrImg = document.getElementById('qrCodeImage');
+        qrImg.src = qrDataUrl;
+
+        // Abre o modal
+        $('#qrCodeModal').modal('show');
+    }
+
+    async sendWhatsapp() {
+        if (!this.valid) {
+            alert("Tem que ter dados validos para poder ser enviado!")
+            return
+        }
+
+        try {
+            const res = await fetch('/envio-relatorios/sendWhats/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'CSRF-Token': this.token
+                },
+                body: JSON.stringify(this.filtros)
+            });
+            const data = await res.json();
+
+            if (data.qr) {
+                this.openQrCodeModal(data.qr); // envia o QR base64 para o modal
+            } else if (data.error) {
+                alert("⚠️ Cliente ainda não está pronto. Tente enviar novamente em alguns segundos.")
+            } else {
+                alert(data.message);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    async removeNumberWhatsapp() {
+        if (confirm("Você realmete deseja deletar o número salvo para enviar as contas por Whatsapp?")) {
+            try {
+                const res = await fetch('/envio-relatorios/removeNumber/', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                const data = await res.json();
+
+                if (data.error) {
+                    console.error(data.error);
+                } else {
+                    alert(data.message);
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        }
+    }
 }
