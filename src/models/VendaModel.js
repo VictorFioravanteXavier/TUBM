@@ -3,6 +3,8 @@ const Produto = require('./ProdutoModel.js');
 const centTrasform = require('../utils/centTrasform.js');
 const Account = require('./AccountModel.js');
 const gerarNumeroVenda = require('../utils/vendaNumber.js');
+const isValidDate = require('../utils/isValidDate.js');
+const agruparVendasPorConta = require('../utils/agruparVendasPorConta.js');
 
 const VendaSchema = new mongoose.Schema({
     account_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Account', required: true },
@@ -203,7 +205,7 @@ class Venda {
 
 
 
-    static async findComprasAllFiltred(account_id, page = 1, status, searchCode) {
+    static async findComprasAllFiltred(account_id, page = 1, status, searchCode, date) {
         const limit = 10;
         const skip = (page - 1) * limit;
         const errors = [];
@@ -249,6 +251,11 @@ class Venda {
             filters.account_id = account_id
         }
 
+        if (date && (date.$gte || date.$lte)) {
+            filters.data_venda = date; // Confirma se o campo é data_venda ou data_compra
+        }
+
+
         const vendas = await VendaModule.find(filters)
             .populate('account_id')
             .populate('itens.produto_id')
@@ -264,6 +271,128 @@ class Venda {
             totalPages: Math.ceil(total / limit) || 1,
             currentPage: page
         };
+    }
+
+    static async findAllFiltredShippingReporting(obj, page = 1) {
+        const limit = 10;
+        const skip = (page - 1) * limit;
+
+        // Converte para Date
+        const initialDate = new Date(obj.initial_date);
+        const finalDate = new Date(obj.final_date);
+
+        // Monta filtro para vendas
+        const filters = { delete: false };
+
+        if (isValidDate(initialDate) || isValidDate(finalDate)) {
+            filters.data_venda = {};
+            if (isValidDate(initialDate)) {
+                filters.data_venda.$gte = new Date(initialDate);
+            }
+            if (isValidDate(finalDate)) {
+                const end = new Date(finalDate);
+                end.setDate(end.getDate() + 2); // garante o último ms do dia
+                filters.data_venda.$lte = end; // inclui o dia final inteiro
+            }
+        }
+
+
+
+        if (obj.min_val || obj.max_val) {
+            filters.valor_total = {};
+            if (obj.min_val && !isNaN(obj.min_val)) {
+                filters.valor_total.$gte = Number(obj.min_val) * 100;
+            }
+            if (obj.max_val && !isNaN(obj.max_val)) {
+                filters.valor_total.$lte = Number(obj.max_val) * 100;
+            }
+        }
+
+
+        if (obj.status === "false" || obj.status === "true") {
+            filters.status = obj.status;
+        }
+
+        if (mongoose.isValidObjectId(obj.account)) {
+            filters.account_id = obj.account
+        }
+
+        const vendas = await VendaModule.find(filters)
+            .populate({
+                path: 'account_id',
+                populate: {
+                    path: 'users', // popula o campo users dentro de account_id
+                    model: 'User'  // nome do model do usuário
+                }
+            })
+            .sort({ data_venda: -1 })
+            .skip(skip)
+            .limit(limit)
+            .lean();
+
+
+        const total = await VendaModule.countDocuments(filters);
+
+        return {
+            vendas,
+            totalPages: Math.ceil(total / limit) || 1,
+            currentPage: page
+        };
+    }
+
+    static async findAllFiltredShippingReportingNoPage(obj) {
+        // Converte para Date
+        const initialDate = new Date(obj.initial_date);
+        const finalDate = new Date(obj.final_date);
+
+        // Monta filtro para vendas
+        const filters = { delete: false };
+
+        if (isValidDate(initialDate) || isValidDate(finalDate)) {
+            filters.data_venda = {};
+            if (isValidDate(initialDate)) {
+                filters.data_venda.$gte = new Date(initialDate);
+            }
+            if (isValidDate(finalDate)) {
+                const end = new Date(finalDate);
+                end.setDate(end.getDate() + 2); // garante o último ms do dia
+                filters.data_venda.$lte = end; // inclui o dia final inteiro
+            }
+        }
+
+
+
+        if (obj.min_val || obj.max_val) {
+            filters.valor_total = {};
+            if (obj.min_val && !isNaN(obj.min_val)) {
+                filters.valor_total.$gte = Number(obj.min_val) * 100;
+            }
+            if (obj.max_val && !isNaN(obj.max_val)) {
+                filters.valor_total.$lte = Number(obj.max_val) * 100;
+            }
+        }
+
+
+        if (obj.status === "false" || obj.status === "true") {
+            filters.status = obj.status;
+        }
+
+        if (mongoose.isValidObjectId(obj.account)) {
+            filters.account_id = obj.account
+        }
+
+        const vendas = await VendaModule.find(filters)
+            .populate({
+                path: 'account_id',
+                populate: {
+                    path: 'users', // popula o campo users dentro de account_id
+                    model: 'User'  // nome do model do usuário
+                }
+            })
+            .sort({ data_venda: -1 })
+            .lean();
+
+        return vendas
     }
 
 

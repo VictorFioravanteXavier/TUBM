@@ -10,6 +10,7 @@ import { Accounts } from './modules/accounts';
 import { Vendas } from './modules/vendas';
 import { Compras } from './modules/compras';
 import { MinhaConta } from './modules/minhaConta';
+import { ShippingReporting } from './modules/shippingReporting';
 
 // Classes
 if (window.location.pathname === '/') {
@@ -57,6 +58,12 @@ if (window.location.pathname.includes("minha-conta")) {
     const minhaConta = new MinhaConta();
     minhaConta.init();
 }
+
+if (window.location.pathname.includes("envio-relatorios")) {
+    const shippingReporting = new ShippingReporting();
+    shippingReporting.init();
+}
+
 
 
 // Funções fixas

@@ -7,9 +7,15 @@
   <div class="container">
         <%- include('includes/messages') %>
         <div class="title-header">
-            <h1>
-                Minhas Compras
-            </h1>
+            <div class="row">
+                <h1>
+                    Minhas Compras  
+                </h1>
+                <div>
+                    <button class="button-primary clear-filters">Limpar Filtro</button>
+                </div>
+            </div>
+          
 
             <div class="filters">
                 <div class="search-cotainer">
@@ -42,9 +48,21 @@
                             Data que foi feita 
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
-                        <div class="dropdown-item compras-pagas">
-                            Em desenvolvimento :)
-                        </div>
+                            <div class="dropdown-item compras-pagas">
+                                <label class="dado-title" for="initial-date">
+                                    Data Inicial
+                                </label>
+                                <input type="date" class="form-control" id="initial-date" name="initial-date"></input>
+                            </div>
+                            <div class="dropdown-item compras-pagas">
+                                <label class="dado-title" for="final-date">
+                                    Data Final
+                                </label>
+                                <input type="date" class="form-control" id="final-date" name="final-date"></input>
+                            </div>
+                            <div class="dropdown-item compras-pagas">
+                                <button class="button-primary" id="apply-data">Aplicar</button>
+                            </div>
                         </div>
                     </div>
                 </div>
