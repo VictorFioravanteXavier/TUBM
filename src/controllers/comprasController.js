@@ -50,18 +50,20 @@ exports.index = async (req, res) => {
             totalPages = result.totalPages;
             currentPage = result.currentPage;
         } else {
-            const result = await Venda.findAllCompras(account._id, page);
+            if (req.session.user._id.verified) {
+                const result = await Venda.findAllCompras(account._id, page);
 
-            result.vendas.forEach(venda => {
-                venda.total_itens = 0;
-                for (const item of venda.itens) {
-                    venda.total_itens += item.quantidade;
-                }
-            });
+                result.vendas.forEach(venda => {
+                    venda.total_itens = 0;
+                    for (const item of venda.itens) {
+                        venda.total_itens += item.quantidade;
+                    }
+                });
 
-            compras = result.vendas;
-            totalPages = result.totalPages;
-            currentPage = result.currentPage;
+                compras = result.vendas;
+                totalPages = result.totalPages;
+                currentPage = result.currentPage;
+            }
         }
 
         res.render('compras', {

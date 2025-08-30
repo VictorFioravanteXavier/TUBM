@@ -42,9 +42,7 @@ exports.loginRequired = (req, res, next) => {
 
 exports.roleFind = async (req, res, next) => {
     if (req.session.user.role_name == "user") {
-        // TODO: Fazer as telas dos usuários
         res.redirect("/minha-conta/")
-        req.session.areaSolicitada
 
     } else if (req.session.user.role_name === "financeiro" || req.session.user.role_name === "venda") {
         res.locals.areaSolicitada = "financeiro"
@@ -52,4 +50,15 @@ exports.roleFind = async (req, res, next) => {
     }
 
     return
+}
+
+exports.activatedeAccount = async (req, res, next) => {
+    if (!req.session.user.verified) {
+        req.flash("errors", "Crie uma conta com o financeiro para entrar nessa página")
+        return req.session.save(function () {
+            return res.redirect("/minha-conta/")
+        })
+    } 
+
+    next()
 }
