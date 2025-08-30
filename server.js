@@ -1,12 +1,14 @@
 require('dotenv').config();
 const createRoles = require('./src/utils/createRoles');
+const createAccountAssistencia = require("./src/utils/createAccountAssistencia")
 const express = require('express');
 const { default: mongoose } = require('mongoose');
 
 const app = express();
 mongoose.connect(process.env.CONNECTIONSTRING)
-    .then(() => {
-        
+    .then(async () => {
+        await createRoles()
+        await createAccountAssistencia()
         app.emit('pronto')
     })
     .catch(e => console.log(e))

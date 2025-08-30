@@ -13,4 +13,4 @@ async function createRoles() {
     }
 }
 
-module.exports = createRoles()
+module.exports = createRoles
