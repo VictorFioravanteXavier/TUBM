@@ -9,5 +9,5 @@ exports.index = async (req, res) => {
         account = {}
     }
 
-    res.render('shippingReporting', { userData, account })
+    res.render('minhaConta', { userData, account })
 }

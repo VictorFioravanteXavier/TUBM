@@ -15,7 +15,7 @@
     <ul class="navbar-nav ml-auto">
 
       <% if(user) { %>
-        <% if (!role == "venda" || !role == "financeiro") {%>
+        <% if (role === "user") {%>
         <li class="nav-item">
           <a class="nav-link <%= currentUrl.includes('/minhas-compras/') ? 'selected' : '' %>" href="/minhas-compras/">Minhas Compras</a>
         </li>

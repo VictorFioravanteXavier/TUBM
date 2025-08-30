@@ -18,18 +18,15 @@ class Session {
 
         // Evento QR code (aparece só na primeira vez)
         client.on("qr", (qr) => {
-            console.log("📱 Escaneie este QR Code:", qr);
             this.qrTemp = qr;
         });
 
         // Quando o cliente estiver pronto
         client.on("ready", () => {
-            console.log("🚀 WhatsApp pronto!");
             this.qrTemp = null; // QR não é mais necessário
         });
 
         client.on("authenticated", () => {
-            console.log("✅ Autenticado com sucesso!");
             this.qrTemp = null;
         });
 
@@ -47,7 +44,6 @@ class Session {
         const client = await this.createClient();
 
         if (!client.info || !client.info.wid) {
-            console.log("⚠️ Cliente ainda não pronto. Tente novamente em alguns segundos.");
             return { success: false, message: "⚠️ Cliente ainda não pronto. Tente novamente em alguns segundos." };
         }
 
@@ -76,7 +72,6 @@ class Session {
 
             if (fs.existsSync(sessionPath)) {
                 fs.rmSync(sessionPath, { recursive: true, force: true });
-                console.log("🗑️ Cache da sessão removido com sucesso!");
             }
 
             this.qrTemp = null;
