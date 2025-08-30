@@ -11,8 +11,9 @@ const UserScreenController = require('./src/controllers/UserScreenController');
 const accountsController = require('./src/controllers/accountsController');
 const comprasController = require('./src/controllers/comprasController');
 const minhaContaController = require('./src/controllers/minhaContaController');
+const shippingReportingController = require('./src/controllers/shippingReportingController');
 
-const { loginRequired, roleFind } = require('./src/middlewares/middleware')
+const { loginRequired, roleFind, activatedeAccount } = require('./src/middlewares/middleware')
 
 // Rotas da Login
 router.get('/', loginController.index);
@@ -64,10 +65,19 @@ router.get('/fazer-venda/', loginRequired, fazerVendaController.index);
 router.post('/fazer-venda/register', loginRequired, fazerVendaController.registrar);
 
 /* Rotas Minhas Compras  */
-router.get('/minhas-compras/', loginRequired, comprasController.index)
-router.get('/minhas-compras/:page', loginRequired, comprasController.index)
+router.get('/minhas-compras/', loginRequired, activatedeAccount, comprasController.index)
+router.get('/minhas-compras/:page', loginRequired, activatedeAccount, comprasController.index)
 
 /* Rotas Minha Conta */
 router.get('/minha-conta/', loginRequired, minhaContaController.index)
+
+/* Rotas Envio & Relatórios */
+router.get('/envio-relatorios/', loginRequired, shippingReportingController.index)
+router.get('/envio-relatorios/getFiltred/', loginRequired, shippingReportingController.getDataFiltred)
+router.post('/envio-relatorios/getFiltred/:page', loginRequired, shippingReportingController.getDataFiltred)
+router.post('/envio-relatorios/sendEmail/', loginRequired, shippingReportingController.sendEmail)
+router.post('/envio-relatorios/sendWhats/', loginRequired, shippingReportingController.sendWhatsapp)
+router.get('/envio-relatorios/removeNumber/', loginRequired, shippingReportingController.removeNumber)
+
 
 module.exports = router;

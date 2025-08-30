@@ -13,7 +13,7 @@ const UserSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     create_date: { type: Date, default: Date.now() },
     update_date: { type: Date, default: Date.now() },
-    role: { type: mongoose.Schema.Types.ObjectId, ref: "Role", default: new mongoose.Types.ObjectId("6841e5f407b42d061c4b7b3e") },
+    role: { type: mongoose.Schema.Types.ObjectId, ref: "Role", default: new mongoose.Types.ObjectId("68b2b7d670b29e8900945de0") },
     verified: { type: Boolean, default: false },
     delete: { type: Boolean, default: false },
 })

@@ -23,6 +23,21 @@ export class Compras {
         this.btn_status_pago = document.querySelector(".compras-pagas")
         this.btn_status_pendente = document.querySelector(".compras-pendentes")
         this.btn_status_all = document.querySelector(".compras-todas")
+
+        this.inp_inital_date = document.querySelector("#initial-date")
+        this.inp_final_date = document.querySelector("#final-date")
+
+        this.button_apply_data = document.querySelector("#apply-data")
+        this.button_apply_data.addEventListener("click", (e) => {
+            e.preventDefault()
+            this.dataSearchApply()
+        })
+
+        this.btn_clear_filters = document.querySelector(".clear-filters")
+        this.btn_clear_filters.addEventListener("click", (e) => {
+            e.preventDefault
+            this.limparFiltros()
+        })
     }
 
     searchBuyCode() {
@@ -87,6 +102,29 @@ export class Compras {
         }
     }
 
+    dataSearchApply() {
+        const params = new URLSearchParams(window.location.search);
+        const initialDate = new Date(this.inp_inital_date.value);
+        const finalDate = new Date(this.inp_final_date.value);
+
+        if (!isNaN(initialDate.getTime()) && !isNaN(finalDate.getTime())) {
+            if (initialDate > finalDate) {
+                alert("A data inicial não pode ser maior que a final");
+                return false
+            } else {
+                params.set("InitialDate", initialDate.toISOString());
+                params.set("FinalDate", finalDate.toISOString());
+            }
+        } else if (!isNaN(initialDate.getTime())) {
+            params.set("InitialDate", initialDate.toISOString());
+        } else if (!isNaN(finalDate.getTime())) {
+            params.set("FinalDate", finalDate.toISOString());
+        }
+
+
+        window.location.href = `/minhas-compras/?${params.toString()}`;
+    }
+
     openDescriptionModal() {
         $('#completDescripionVendaModal').on('show.bs.modal', function (event) {
             const button = $(event.relatedTarget);
@@ -132,7 +170,12 @@ export class Compras {
 
                 modal.find("#description-item-tbody").append(dadosTable);
             });
-
         });
+    }
+
+    limparFiltros() {
+        const url = window.location.origin + window.location.pathname;
+        window.history.replaceState({}, document.title, url);
+        window.location.reload();
     }
 }

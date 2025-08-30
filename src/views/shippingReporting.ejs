@@ -1,0 +1,170 @@
+<%- include('includes/head')%>
+<%- include('includes/nav')%>
+<link rel="stylesheet" href="/frontend/assets/css/shippingReporting/style.css">
+
+<main>
+    <div class="container">
+        <%- include('includes/messages') %>
+        <div class="container-w">
+            <div class="title-header">
+                <h1>
+                    <i class="fa fa-sliders"></i>
+                    <span>Filtros de Compras</span>
+                </h1>
+            </div>
+            <div>
+                <form action="#" class="body-filtros">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <div class="form-group">
+                        <label class="dado-title" for="initial-date">
+                            Data Inicial
+                        </label>
+                        <input type="date" class="form-control" id="initial-date" name="initial-date"></input>
+                    </div>
+                    <div class="form-group">
+                        <label class="dado-title" for="final-date">
+                            Data Final
+                        </label>
+                        <input type="date" class="form-control" id="final-date" name="final-date"></input>
+                    </div>
+                    <div class="form-group">
+                        <label class="dado-title" for="status">
+                            Status da Compra
+                        </label>
+                        <select class="form-control" name="status" id="status">
+                            <option value="null" selected>
+                                Pagas/Pendentes
+                            </option>
+                            <option value="true">
+                                Pagas
+                            </option>
+                            <option value="false">
+                                Pendentes
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="dado-title" for="min-val">
+                            Valor Mínimo
+                        </label>
+                        <input class="form-control" id="min-val" name="min-val" placeholder="R$ 0,00"></input>
+                    </div>
+                    <div class="form-group">
+                        <label class="dado-title" for="max-val">
+                            Valor Máximo
+                        </label>
+                        <input class="form-control" id="max-val" name="max-val" placeholder="R$ 0,00"></input>
+                    </div>
+                    <div class="form-group">
+                        <label class="dado-title" for="account">
+                            Conta
+                        </label>
+                        <input 
+                            class="form-control" 
+                            id="account" 
+                            name="account" 
+                            placeholder="Buscar conta..." 
+                            list="accounts-list"
+                        >
+                        <input type="hidden" id="account-id" name="accountId">
+
+                        <datalist id="accounts-list">
+                            <% accounts.forEach(account => { %>
+                                <option value="<%= `${account.number} - ${account.name}` %>" data-id="<%= account._id %>"></option>
+                            <% }); %>
+                        </datalist>
+                    </div>
+                    <div class="buttons-form">
+                        <button type="button" class="button-primary limpar-filtros">Limpar filtros</button>
+
+                        <button type="submit" class="button-primary">Aplicar filtros</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="container-w filtros">
+            <div>
+                <div class="title-header">
+                    <h1>
+                        <span>Ações Disponíveis que funcionam com base no filtro</span>
+                    </h1>
+                </div>
+                <div class="buttons">
+                    <button class="button-primary sendEmail"
+                        data-toggle="modal"
+                        data-target="#confirmSend"
+                    >
+                        <i class="fa fa-envelope"></i>
+                        Enviar Conta por Email
+                    </button>
+                    <button class="button-primary sendWhatsapp"
+                        data-toggle="modal"
+                        data-target="#confirmSend"
+                        >
+                        <i class="fa-brands fa-whatsapp"></i>
+                        Enviar Conta por WhatsApp
+                    </button>
+                    <button class="button-primary">
+                        <i class="fa-solid fa-download"></i>
+                        Gerar PDF
+                    </button>
+                    <button class="button-primary">
+                        <i class="fa-solid fa-download"></i>
+                        Gerar XML
+                    </button>
+                </div>
+            </div>
+            <div>
+                <div class="title-header">
+                    <h1>
+                        <span>Ações Disponíveis idependentes do filtro</span>
+                    </h1>
+                </div>
+                <div class="buttons">
+                    <button class="button-primary removeNumber">
+                        <i class="fa-solid fa-trash"></i>
+                        Remover número cadastrado
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-w">
+            <div class="title-header">
+                <h1>
+                    <span>Lista com os filtros aplicados</span>
+                </h1>
+            </div>
+            <div class="container-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Cod. Venda</th>
+                            <th>Conta</th>
+                            <th>Valor</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+
+                    </ul>
+                </nav>
+            </div>
+            <div class="manesage-table">
+                Nenhum Filtro aplicado ainda
+            </div>
+        </div>
+    </div>
+</main>
+
+<%- include('includes/modals/confirmSendModal') %>
+<%- include('includes/modals/qrCodeModal') %>
+
+<%- include('includes/footer')%>

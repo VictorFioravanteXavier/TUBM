@@ -10,3 +10,4 @@
 9. Deixar as mensagens mais bonitas
 10. Arrumar para o admin poder editar o email do usuário também 
 11. tentar fazer com que o usuário possa editar algumas coisas da sua conta
+12. Arrumar a paginação no caso ele ir até um limite e dependendo que o usuário vai andando vai aumentando

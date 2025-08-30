@@ -7,6 +7,14 @@ h1 {
     font-size: 24px;
 }
 
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+}
+
 .search-cotainer {
     flex: 1;
     height: 100%;
@@ -180,6 +188,10 @@ h1 {
     box-shadow: none;
 }
 
+.button-primary {
+    margin: 0;
+}
+
 @media (max-width: 768px) {
     .filters {
         flex-direction: column;
@@ -198,6 +210,12 @@ h1 {
     .compra-body {
         flex-direction: column;
         gap: 15px;
+    }
+
+    .row {
+        padding: 0 15px;
+        flex-direction: column;
+        align-items: flex-start;
     }
 
 }
