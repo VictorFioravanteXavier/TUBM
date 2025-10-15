@@ -27,7 +27,7 @@
 
         <% if (role == "venda" || role == "financeiro") {%>
           <li class="nav-item">
-            <a class="nav-link <%= currentUrl === '/estoque/' ? 'selected' : '' %>" href="/estoque/">Estoque</a>
+            <a class="nav-link <%= currentUrl.includes('/estoque/') ? 'selected' : '' %>" href="/estoque/">Estoque</a>
           </li>
           
           <li class="nav-item">

@@ -103,19 +103,19 @@
         <ul class="pagination">
 
           <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
-            <a class="page-link" href="/vendas/<%= currentPage - 1 %>" aria-label="Previous">
+            <a class="page-link" href="/estoque/<%= currentPage - 1 %>" aria-label="Previous">
               <span aria-hidden="true">&laquo;</span>
             </a>
           </li>
 
           <% for (let i = 1; i <= totalPages; i++) { %>
             <li class="page-item <%= i === currentPage ? 'active' : '' %>">
-              <a class="page-link" href="/vendas/<%= i %>"><%= i %></a>
+              <a class="page-link" href="/estoque/<%= i %>"><%= i %></a>
             </li>
           <% } %>
 
           <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
-            <a class="page-link" href="/vendas/<%= currentPage + 1 %>" aria-label="Next">
+            <a class="page-link" href="/estoque/<%= currentPage + 1 %>" aria-label="Next">
               <span aria-hidden="true">&raquo;</span>
             </a>
           </li>
