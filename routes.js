@@ -12,6 +12,7 @@ const accountsController = require('./src/controllers/accountsController');
 const comprasController = require('./src/controllers/comprasController');
 const minhaContaController = require('./src/controllers/minhaContaController');
 const shippingReportingController = require('./src/controllers/shippingReportingController');
+const esqueciSenhaController = require('./src/controllers/esqueciSenhaController');
 
 const { loginRequired, roleFind, activatedeAccount } = require('./src/middlewares/middleware')
 
@@ -79,5 +80,8 @@ router.post('/envio-relatorios/sendEmail/', loginRequired, shippingReportingCont
 router.post('/envio-relatorios/sendWhats/', loginRequired, shippingReportingController.sendWhatsapp)
 router.get('/envio-relatorios/removeNumber/', loginRequired, shippingReportingController.removeNumber)
 
+/* Rotas Esqueci Minha Senha */
+router.get("/esqueci-senha/", esqueciSenhaController.index)
+router.post("/esqueci-senha/send/", esqueciSenhaController.enviarEmail)
 
 module.exports = router;

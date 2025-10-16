@@ -107,6 +107,17 @@ input[name=password-repeat] {
     }
 }
 
+.esqueci-senha {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    text-decoration: underline;
+    margin-top: 5px;
+}
+
+.esqueci-senha a:hover {
+    color: #B82627;
+}
 
 @media (max-width: 425px) {
     body {

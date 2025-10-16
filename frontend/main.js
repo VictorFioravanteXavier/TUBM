@@ -11,6 +11,7 @@ import { Vendas } from './modules/vendas';
 import { Compras } from './modules/compras';
 import { MinhaConta } from './modules/minhaConta';
 import { ShippingReporting } from './modules/shippingReporting';
+import { EsqueciSenha } from './modules/esqueciSenha';
 
 // Classes
 if (window.location.pathname === '/') {
@@ -62,6 +63,11 @@ if (window.location.pathname.includes("minha-conta")) {
 if (window.location.pathname.includes("envio-relatorios")) {
     const shippingReporting = new ShippingReporting();
     shippingReporting.init();
+}
+
+if (window.location.pathname.includes("esqueci-senha")) {
+    const esqueci_senha = new EsqueciSenha();
+    esqueci_senha.init();
 }
 
 
