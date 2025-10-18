@@ -1,62 +1,64 @@
 export class EsqueciSenha {
-    constructor(formClass) {
-        this.form = document.querySelector(formClass);
-    }
+    constructor() {}
 
     init() {
+        this.cacheSelectors();
         this.events();
     }
 
+    cacheSelectors() {
+        this.form = document.querySelector(".form-esqueci-senha"); // ID correto do form
+        this.pEmail = document.querySelector("#p-email"); // parágrafo para mensagens
+    }
+
     events() {
-        if (!this.form) return;
+        if (!this.form) {
+            console.warn("Formulário não encontrado!");
+            return;
+        }
 
-        this.form.addEventListener('submit', (e) => {
+        this.form.addEventListener("submit", (e) => {
             e.preventDefault();
-            this.validate(e)
+            this.validate(e);
         });
-
-        document.querySelector('#showPassword')?.addEventListener('click', (event) => {
-            event.preventDefault();
-            this.showPassword();
-        });
-
     }
 
     validate(e) {
+        console.log("AAAAA");
+        
         const el = e.target;
         const inp_email = el.querySelector('input[name="email"]');
-        const p = document.querySelector("#p-email");
+        const p = this.pEmail;
         const errors = [];
 
         p.innerHTML = "";
-        let error = false;
+        p.hidden = true;
 
+        // 🔍 Verificação de campo vazio
         if (!inp_email || inp_email.value.trim() === "") {
-            errors.push("Não é aceito o email vazio");
-            error = true;
+            errors.push("O campo de e-mail não pode ficar vazio.");
         } else {
             const email = inp_email.value.trim();
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+            // 🔍 Verificação de formato
             if (!emailRegex.test(email)) {
-                errors.push("Formato de e-mail inválido");
-                error = true;
+                errors.push("Formato de e-mail inválido.");
             }
         }
 
+        // ❌ Caso haja erros, mostra no <p> e não envia
         if (errors.length > 0) {
-            errors.forEach(errorMsg => {
-                const div = document.createElement("div");
-                div.textContent = errorMsg;
-                p.appendChild(div);
-            });
+            p.textContent = errors.join(" ");
             p.hidden = false;
-            return;
+            p.style.color = "red";
+            return; // impede envio
         }
 
+        // ✅ Tudo certo → pode enviar
+        p.textContent = "";
         p.hidden = true;
+        console.log("Formulário válido — enviando...");
         el.submit();
     }
-    
-
 }

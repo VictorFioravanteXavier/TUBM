@@ -74,14 +74,13 @@ if (window.location.pathname.includes("esqueci-senha")) {
 
 // Funções fixas
 const cpfStyle = () => {
-    const cpfInputs = document.querySelectorAll('.cpf-style'); // Corrigido: '.' para classe
-
+    const cpfInputs = document.querySelectorAll('.cpf-style');
     if (cpfInputs) {
         cpfInputs.forEach(cpfInput => {
             cpfInput.addEventListener('input', function () {
-                let value = this.value.replace(/\D/g, ''); // Remove tudo que não for dígito
+                let value = this.value.replace(/\D/g, ''); 
 
-                if (value.length > 11) value = value.slice(0, 11); // Limita a 11 dígitos
+                if (value.length > 11) value = value.slice(0, 11); 
 
                 value = value.replace(/(\d{3})(\d)/, '$1.$2');
                 value = value.replace(/(\d{3})(\d)/, '$1.$2');
@@ -98,17 +97,14 @@ const phoneStyle = () => {
 
     phoneInputs.forEach(phoneInput => {
         phoneInput.addEventListener('input', function () {
-            let value = this.value.replace(/\D/g, ''); // Remove tudo que não for dígito
+            let value = this.value.replace(/\D/g, '');
 
-            if (value.length > 11) value = value.slice(0, 11); // Limita a 11 dígitos
+            if (value.length > 11) value = value.slice(0, 11); 
 
-            // Aplica a máscara
             if (value.length <= 10) {
-                // Formato para telefone fixo (99) 9999-9999
                 value = value.replace(/(\d{2})(\d)/, '($1) $2');
                 value = value.replace(/(\d{4})(\d)/, '$1-$2');
             } else {
-                // Formato para celular (99) 99999-9999
                 value = value.replace(/(\d{2})(\d)/, '($1) $2');
                 value = value.replace(/(\d{5})(\d)/, '$1-$2');
             }

@@ -893,51 +893,59 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   EsqueciSenha: () => (/* binding */ EsqueciSenha)
 /* harmony export */ });
 class EsqueciSenha {
-  constructor(formClass) {
-    this.form = document.querySelector(formClass);
-  }
+  constructor() {}
   init() {
+    this.cacheSelectors();
     this.events();
   }
+  cacheSelectors() {
+    this.form = document.querySelector(".form-esqueci-senha"); // ID correto do form
+    this.pEmail = document.querySelector("#p-email"); // parágrafo para mensagens
+  }
   events() {
-    if (!this.form) return;
-    this.form.addEventListener('submit', e => {
+    if (!this.form) {
+      console.warn("Formulário não encontrado!");
+      return;
+    }
+    this.form.addEventListener("submit", e => {
       e.preventDefault();
       this.validate(e);
     });
-    document.querySelector('#showPassword')?.addEventListener('click', event => {
-      event.preventDefault();
-      this.showPassword();
-    });
   }
   validate(e) {
+    console.log("AAAAA");
     const el = e.target;
     const inp_email = el.querySelector('input[name="email"]');
-    const p = document.querySelector("#p-email");
+    const p = this.pEmail;
     const errors = [];
     p.innerHTML = "";
-    let error = false;
+    p.hidden = true;
+
+    // 🔍 Verificação de campo vazio
     if (!inp_email || inp_email.value.trim() === "") {
-      errors.push("Não é aceito o email vazio");
-      error = true;
+      errors.push("O campo de e-mail não pode ficar vazio.");
     } else {
       const email = inp_email.value.trim();
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      // 🔍 Verificação de formato
       if (!emailRegex.test(email)) {
-        errors.push("Formato de e-mail inválido");
-        error = true;
+        errors.push("Formato de e-mail inválido.");
       }
     }
+
+    // ❌ Caso haja erros, mostra no <p> e não envia
     if (errors.length > 0) {
-      errors.forEach(errorMsg => {
-        const div = document.createElement("div");
-        div.textContent = errorMsg;
-        p.appendChild(div);
-      });
+      p.textContent = errors.join(" ");
       p.hidden = false;
-      return;
+      p.style.color = "red";
+      return; // impede envio
     }
+
+    // ✅ Tudo certo → pode enviar
+    p.textContent = "";
     p.hidden = true;
+    console.log("Formulário válido — enviando...");
     el.submit();
   }
 }
@@ -26461,15 +26469,12 @@ if (window.location.pathname.includes("esqueci-senha")) {
 
 // Funções fixas
 const cpfStyle = () => {
-  const cpfInputs = document.querySelectorAll('.cpf-style'); // Corrigido: '.' para classe
-
+  const cpfInputs = document.querySelectorAll('.cpf-style');
   if (cpfInputs) {
     cpfInputs.forEach(cpfInput => {
       cpfInput.addEventListener('input', function () {
-        let value = this.value.replace(/\D/g, ''); // Remove tudo que não for dígito
-
-        if (value.length > 11) value = value.slice(0, 11); // Limita a 11 dígitos
-
+        let value = this.value.replace(/\D/g, '');
+        if (value.length > 11) value = value.slice(0, 11);
         value = value.replace(/(\d{3})(\d)/, '$1.$2');
         value = value.replace(/(\d{3})(\d)/, '$1.$2');
         value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
@@ -26482,17 +26487,12 @@ const phoneStyle = () => {
   const phoneInputs = document.querySelectorAll('.phone-style');
   phoneInputs.forEach(phoneInput => {
     phoneInput.addEventListener('input', function () {
-      let value = this.value.replace(/\D/g, ''); // Remove tudo que não for dígito
-
-      if (value.length > 11) value = value.slice(0, 11); // Limita a 11 dígitos
-
-      // Aplica a máscara
+      let value = this.value.replace(/\D/g, '');
+      if (value.length > 11) value = value.slice(0, 11);
       if (value.length <= 10) {
-        // Formato para telefone fixo (99) 9999-9999
         value = value.replace(/(\d{2})(\d)/, '($1) $2');
         value = value.replace(/(\d{4})(\d)/, '$1-$2');
       } else {
-        // Formato para celular (99) 99999-9999
         value = value.replace(/(\d{2})(\d)/, '($1) $2');
         value = value.replace(/(\d{5})(\d)/, '$1-$2');
       }
