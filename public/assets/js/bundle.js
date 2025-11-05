@@ -913,7 +913,6 @@ class EsqueciSenha {
     });
   }
   validate(e) {
-    console.log("AAAAA");
     const el = e.target;
     const inp_email = el.querySelector('input[name="email"]');
     const p = this.pEmail;
@@ -945,7 +944,6 @@ class EsqueciSenha {
     // ✅ Tudo certo → pode enviar
     p.textContent = "";
     p.hidden = true;
-    console.log("Formulário válido — enviando...");
     el.submit();
   }
 }

@@ -7,8 +7,8 @@ export class EsqueciSenha {
     }
 
     cacheSelectors() {
-        this.form = document.querySelector(".form-esqueci-senha"); // ID correto do form
-        this.pEmail = document.querySelector("#p-email"); // parágrafo para mensagens
+        this.form = document.querySelector(".form-esqueci-senha"); 
+        this.pEmail = document.querySelector("#p-email");
     }
 
     events() {
@@ -24,7 +24,6 @@ export class EsqueciSenha {
     }
 
     validate(e) {
-        console.log("AAAAA");
         
         const el = e.target;
         const inp_email = el.querySelector('input[name="email"]');
@@ -34,31 +33,26 @@ export class EsqueciSenha {
         p.innerHTML = "";
         p.hidden = true;
 
-        // 🔍 Verificação de campo vazio
         if (!inp_email || inp_email.value.trim() === "") {
             errors.push("O campo de e-mail não pode ficar vazio.");
         } else {
             const email = inp_email.value.trim();
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-            // 🔍 Verificação de formato
             if (!emailRegex.test(email)) {
                 errors.push("Formato de e-mail inválido.");
             }
         }
 
-        // ❌ Caso haja erros, mostra no <p> e não envia
         if (errors.length > 0) {
             p.textContent = errors.join(" ");
             p.hidden = false;
             p.style.color = "red";
-            return; // impede envio
+            return; 
         }
 
-        // ✅ Tudo certo → pode enviar
         p.textContent = "";
         p.hidden = true;
-        console.log("Formulário válido — enviando...");
         el.submit();
     }
 }

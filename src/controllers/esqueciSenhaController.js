@@ -1,4 +1,6 @@
 const User = require('../models/UserModel');
+const sendEmailUtils = require("../utils/sendEmail").default;
+const resetEmail = require('../utils/htmlEmailEsqueciSenha');
 
 exports.index = async (req, res) => {
     res.render('esqueciSenha');
@@ -24,5 +26,32 @@ exports.enviarEmail = async (req, res) => {
         })
         return
     }
+
+    const html = resetEmail({
+    });
+
+
+
+    const result = await sendEmailUtils(
+        email,
+        "Esqueci minha senha - Site TUBM",
+        "AAA",
+        html
+    );
+
+    if (!result) {
+        req.flash("errors", "Erro ao mandar o email.")
+        req.session.save(function () {
+            return res.redirect('/esqueci-senha/')
+        })
+        return
+    } else {
+        req.flash("success", "Email enviado com sucesso!")
+        req.session.save(function () {
+            return res.redirect('/esqueci-senha/')
+        })
+    }
+
+
 
 }
