@@ -50,7 +50,7 @@ exports.index = async (req, res) => {
             totalPages = result.totalPages;
             currentPage = result.currentPage;
         } else {
-            if (req.session.user._id.verified) {
+            if (req.session.user && req.session.user.verified) {
                 const result = await Venda.findAllCompras(account._id, page);
 
                 result.vendas.forEach(venda => {
