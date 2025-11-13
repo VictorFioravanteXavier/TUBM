@@ -51,7 +51,14 @@ exports.enviarEmail = async (req, res) => {
             return res.redirect('/esqueci-senha/')
         })
     }
+}
 
+exports.indexTrocarSenha = async (req, res) => {
+    const uuid = req.body.c
 
+    res.render('trocarSenha');    
+}
 
+exports.sendTrocarSenha = async (req, res) => {
+    console.log("Enviado");
 }

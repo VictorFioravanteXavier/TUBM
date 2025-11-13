@@ -189,7 +189,7 @@ export class Cadastro {
     const p = document.querySelector("#p-password");
     const errors = [];
 
-    p.innerHTML = ""; // Limpa mensagens anteriores
+    p.innerHTML = ""; 
 
     if (!inp_password || inp_password.value.trim() === "") {
       errors.push("A senha não pode estar vazia.");

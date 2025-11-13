@@ -12,6 +12,7 @@ import { Compras } from './modules/compras';
 import { MinhaConta } from './modules/minhaConta';
 import { ShippingReporting } from './modules/shippingReporting';
 import { EsqueciSenha } from './modules/esqueciSenha';
+import { TrocarSenha } from './modules/trocarSenha';
 
 // Classes
 if (window.location.pathname === '/') {
@@ -68,6 +69,11 @@ if (window.location.pathname.includes("envio-relatorios")) {
 if (window.location.pathname.includes("esqueci-senha")) {
     const esqueci_senha = new EsqueciSenha();
     esqueci_senha.init();
+}
+
+if (window.location.pathname.includes("trocar-senha")) {
+    const trocar_senha = new TrocarSenha();
+    trocar_senha.init();
 }
 
 

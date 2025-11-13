@@ -615,8 +615,7 @@ class Cadastro {
     const inp_password = form.querySelector('[name="password"]');
     const p = document.querySelector("#p-password");
     const errors = [];
-    p.innerHTML = ""; // Limpa mensagens anteriores
-
+    p.innerHTML = "";
     if (!inp_password || inp_password.value.trim() === "") {
       errors.push("A senha não pode estar vazia.");
     } else {
@@ -1697,6 +1696,148 @@ class ShippingReporting {
       } catch (e) {
         console.log(e);
       }
+    }
+  }
+}
+
+/***/ }),
+
+/***/ "./frontend/modules/trocarSenha.js":
+/*!*****************************************!*\
+  !*** ./frontend/modules/trocarSenha.js ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   TrocarSenha: () => (/* binding */ TrocarSenha)
+/* harmony export */ });
+class TrocarSenha {
+  constructor() {}
+  init() {
+    this.cacheSelectors();
+    this.events();
+  }
+  cacheSelectors() {
+    this.form = document.querySelector(".form-trocar-senha");
+    this.pSenha = document.querySelector("#p-senha");
+    this.pRepSenha = document.querySelector("#p-repSenha");
+    this.inp_senha = document.querySelector("[name='senha'");
+    this.inp_rep_senha = document.querySelector("[name='rep_senha'");
+    this.toggleButton = document.getElementById("showPassword");
+    this.toggleRepButton = document.getElementById("showPassword-repeat");
+  }
+  events() {
+    if (!this.form) {
+      console.warn("Formulário não encontrado!");
+      return;
+    }
+    this.form.addEventListener("submit", e => {
+      e.preventDefault();
+      this.validate();
+    });
+    this.toggleButton.addEventListener('click', e => {
+      e.preventDefault();
+      this.showPassword();
+    });
+    this.toggleRepButton.addEventListener('click', e => {
+      e.preventDefault();
+      this.showPasswordRepeat();
+    });
+  }
+  validate() {
+    const valid_password = this.validPassword();
+    if (!valid_password) {
+      alert("Senha inválida");
+      return;
+    }
+    const valid_rep_password = this.validRepeatPassword();
+    if (!valid_rep_password) {
+      return;
+    }
+    console.log("Enviado");
+  }
+  tradePassword(uuid) {}
+  showPassword() {
+    const icon = this.toggleButton.querySelector('i');
+    if (this.inp_senha.type === "password") {
+      this.inp_senha.type = "text";
+      icon.classList.remove("fa-eye-slash");
+      icon.classList.add("fa-eye");
+    } else {
+      this.inp_senha.type = "password";
+      icon.classList.remove("fa-eye");
+      icon.classList.add("fa-eye-slash");
+    }
+  }
+  showPasswordRepeat() {
+    const icon = this.toggleRepButton.querySelector('i');
+    if (this.inp_rep_senha.type === "password") {
+      this.inp_rep_senha.type = "text";
+      icon.classList.remove("fa-eye-slash");
+      icon.classList.add("fa-eye");
+    } else {
+      this.inp_rep_senha.type = "password";
+      icon.classList.remove("fa-eye");
+      icon.classList.add("fa-eye-slash");
+    }
+  }
+  validPassword() {
+    const errors = [];
+    this.pSenha.innerHTML = "";
+    if (!this.inp_senha || this.inp_senha.value.trim() === "") {
+      errors.push("A senha não pode estar vazia.");
+    } else {
+      const password = this.inp_senha.value.trim();
+      if (password.length < 8) {
+        errors.push("A senha deve ter pelo menos 8 caracteres.");
+      }
+      if (!/[A-Z]/.test(password)) {
+        errors.push("A senha deve conter ao menos uma letra maiúscula.");
+      }
+      if (!/[a-z]/.test(password)) {
+        errors.push("A senha deve conter ao menos uma letra minúscula.");
+      }
+      if (!/[0-9]/.test(password)) {
+        errors.push("A senha deve conter ao menos um número.");
+      }
+      if (!/[!@#\$%\^&\*\(\)_\+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+        errors.push("A senha deve conter ao menos um caractere especial.");
+      }
+    }
+    if (errors.length > 0) {
+      errors.forEach(error => {
+        const div = document.createElement("div");
+        div.textContent = error;
+        this.pSenha.appendChild(div);
+      });
+      this.pSenha.hidden = false;
+      return false;
+    } else {
+      this.pSenha.hidden = true;
+      return true;
+    }
+  }
+  validRepeatPassword() {
+    const errors = [];
+    this.pRepSenha.innerHTML = "";
+    if (!this.inp_rep_senha || this.inp_rep_senha.value.trim() === "" || !this.inp_senha || this.inp_senha.value.trim() === "") {
+      errors.push("O campo não pode estar vazio.");
+    } else if (this.inp_rep_senha.value !== this.inp_senha.value) {
+      errors.push("As duas senhas devem ser iguais.");
+    }
+    if (errors.length > 0) {
+      this.pRepSenha.hidden = false;
+      errors.forEach(error => {
+        const div = document.createElement("div");
+        div.textContent = error;
+        this.pRepSenha.appendChild(div);
+      });
+      return false;
+    } else {
+      this.pRepSenha.hidden = true;
+      return true;
     }
   }
 }
@@ -26397,6 +26538,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_minhaConta__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./modules/minhaConta */ "./frontend/modules/minhaConta.js");
 /* harmony import */ var _modules_shippingReporting__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./modules/shippingReporting */ "./frontend/modules/shippingReporting.js");
 /* harmony import */ var _modules_esqueciSenha__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./modules/esqueciSenha */ "./frontend/modules/esqueciSenha.js");
+/* harmony import */ var _modules_trocarSenha__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./modules/trocarSenha */ "./frontend/modules/trocarSenha.js");
+
 
 
 
@@ -26455,6 +26598,10 @@ if (window.location.pathname.includes("envio-relatorios")) {
 if (window.location.pathname.includes("esqueci-senha")) {
   const esqueci_senha = new _modules_esqueciSenha__WEBPACK_IMPORTED_MODULE_12__.EsqueciSenha();
   esqueci_senha.init();
+}
+if (window.location.pathname.includes("trocar-senha")) {
+  const trocar_senha = new _modules_trocarSenha__WEBPACK_IMPORTED_MODULE_13__.TrocarSenha();
+  trocar_senha.init();
 }
 
 // Funções fixas
