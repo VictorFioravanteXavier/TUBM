@@ -17,7 +17,6 @@
 ![MVC](https://img.shields.io/badge/MVC-4B0082?logoColor=white)
 
 **TUBM** é uma aplicação web de código aberto desenvolvida por **Victor Fioravante Xavier**.
-Ela funciona como um projeto-base modular, combinando **Node.js**, **Express**, **EJS** e **Webpack**, otimizado para uma estrutura limpa, escalabilidade e implantação via **Vercel**.
 
 Live demo: **https://tubm-teste.vercel.app**
 
@@ -25,11 +24,14 @@ Live demo: **https://tubm-teste.vercel.app**
 
 ## 🚀 Overview
 
-TUBM foi projetado para ser um gerenciador de vendas e compras simples e prático, proporcionando agilidade ao enviar contas pendentes de quem possui uma conta no sistema.
+**TUBM** é um gerenciador de vendas e compras prático e eficiente, projetado para agilizar o controle financeiro de usuários e empresas.  
+Ele permite enviar contas pendentes automaticamente, acompanhar vendas e compras, gerenciar o estoque e manter o sistema organizado de forma simples e intuitiva.  
+
+O projeto combina uma arquitetura modular e escalável com tecnologias como **Node.js**, **Express**, **EJS** e **Webpack**, garantindo fácil manutenção, rápida prototipagem e implantação simplificada via **Vercel**.
 
 ---
 
-## 🧱 Project Structure
+## 🧱 Estrutura do Projeto
 
 - **/frontend** → Código do frontend (EJS, CSS, JS)  
 - **/public/assets/js** → Scripts públicos  
