@@ -18,6 +18,7 @@
           <div class="col-lg"> 
             <form class="form-trocar-senha" action="/trocar-senha/send/" method="post">
               <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+              <input type="hidden" name="link" id="link">
               <div class="form-group">
                 <label>Nova senha</label>
                 <div class="input-group">

@@ -253,7 +253,7 @@ class User {
     static async isEmailRegistered(email) {
         try {
             const user = await UserModule.findOne({ email });
-            return {success: true, response: !!user }
+            return {success: true, response: !!user, user: user }
         } catch (error) {
             console.error('Erro ao verificar e-mail:', error);
             return {success: false, response: false }

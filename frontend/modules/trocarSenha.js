@@ -9,14 +9,13 @@ export class TrocarSenha {
     cacheSelectors() {
         this.form = document.querySelector(".form-trocar-senha");
         this.pSenha = document.querySelector("#p-senha");
-        this.pRepSenha = document.querySelector("#p-repSenha")
+        this.pRepSenha = document.querySelector("#p-repSenha");
 
-        this.inp_senha = document.querySelector("[name='senha'")
-        this.inp_rep_senha = document.querySelector("[name='rep_senha'")
+        this.inp_senha = document.querySelector("[name='senha']");
+        this.inp_rep_senha = document.querySelector("[name='rep_senha']");
 
         this.toggleButton = document.getElementById("showPassword");
         this.toggleRepButton = document.getElementById("showPassword-repeat");
-
     }
 
     events() {
@@ -31,34 +30,32 @@ export class TrocarSenha {
         });
 
         this.toggleButton.addEventListener('click', (e) => {
-            e.preventDefault()
-            this.showPassword()
-        })
+            e.preventDefault();
+            this.showPassword();
+        });
 
         this.toggleRepButton.addEventListener('click', (e) => {
-            e.preventDefault()
-            this.showPasswordRepeat()
-        })
+            e.preventDefault();
+            this.showPasswordRepeat();
+        });
     }
 
     validate() {
-
         const valid_password = this.validPassword();
         if (!valid_password) {
-            alert("Senha inválida")
-            return
+            alert("Senha inválida");
+            return;
         }
 
         const valid_rep_password = this.validRepeatPassword();
         if (!valid_rep_password) {
-            return
+            return;
         }
 
         console.log("Enviado");
-    }
 
-    tradePassword(uuid) {
-
+        // Agora sim envia o formulário
+        this.form.submit();
     }
 
     showPassword() {
@@ -91,7 +88,6 @@ export class TrocarSenha {
 
     validPassword() {
         const errors = [];
-
         this.pSenha.innerHTML = "";
 
         if (!this.inp_senha || this.inp_senha.value.trim() === "") {
@@ -128,16 +124,14 @@ export class TrocarSenha {
             });
             this.pSenha.hidden = false;
             return false;
-        } else {
-            this.pSenha.hidden = true;
-            return true;
         }
+
+        this.pSenha.hidden = true;
+        return true;
     }
 
     validRepeatPassword() {
-
         const errors = [];
-
         this.pRepSenha.innerHTML = "";
 
         if (
@@ -157,9 +151,9 @@ export class TrocarSenha {
                 this.pRepSenha.appendChild(div);
             });
             return false;
-        } else {
-            this.pRepSenha.hidden = true;
-            return true;
         }
+
+        this.pRepSenha.hidden = true;
+        return true;
     }
 }

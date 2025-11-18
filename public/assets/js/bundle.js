@@ -1723,8 +1723,8 @@ class TrocarSenha {
     this.form = document.querySelector(".form-trocar-senha");
     this.pSenha = document.querySelector("#p-senha");
     this.pRepSenha = document.querySelector("#p-repSenha");
-    this.inp_senha = document.querySelector("[name='senha'");
-    this.inp_rep_senha = document.querySelector("[name='rep_senha'");
+    this.inp_senha = document.querySelector("[name='senha']");
+    this.inp_rep_senha = document.querySelector("[name='rep_senha']");
     this.toggleButton = document.getElementById("showPassword");
     this.toggleRepButton = document.getElementById("showPassword-repeat");
   }
@@ -1757,8 +1757,10 @@ class TrocarSenha {
       return;
     }
     console.log("Enviado");
+
+    // Agora sim envia o formulário
+    this.form.submit();
   }
-  tradePassword(uuid) {}
   showPassword() {
     const icon = this.toggleButton.querySelector('i');
     if (this.inp_senha.type === "password") {
@@ -1814,10 +1816,9 @@ class TrocarSenha {
       });
       this.pSenha.hidden = false;
       return false;
-    } else {
-      this.pSenha.hidden = true;
-      return true;
     }
+    this.pSenha.hidden = true;
+    return true;
   }
   validRepeatPassword() {
     const errors = [];
@@ -1835,10 +1836,9 @@ class TrocarSenha {
         this.pRepSenha.appendChild(div);
       });
       return false;
-    } else {
-      this.pRepSenha.hidden = true;
-      return true;
     }
+    this.pRepSenha.hidden = true;
+    return true;
   }
 }
 
