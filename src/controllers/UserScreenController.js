@@ -58,29 +58,22 @@ exports.editUser = async (req, res) => {
     try {
         const { id, name, cpf, tel, role } = req.body;
 
-        // Validação do nome
         if (typeof name !== "string" || name.trim() === "") {
             return res.status(400).json({ error: "Nome inválido" });
         }
 
-        // Validação do CPF
         if (!validarCPF(cpf)) {
             return res.status(400).json({ error: "CPF inválido" });
         }
 
-        // Validação do telefone
         if (!validarTelefone(tel)) {
             return res.status(400).json({ error: "Telefone inválido" });
         }
 
-        // Verifica se o cargo existe no banco de dados
         const roleExistente = await Role.findOne({ name: role });
         if (!roleExistente) {
             return res.status(400).json({ error: "Role inválido" });
         }
-
-        // Aqui você faria a atualização no banco de dados, por exemplo:
-        // await User.findByIdAndUpdate(id, { name, cpf, telefone: tel, role });
 
         await User.editUser({ id: id, name: name, cpf: cpf, tel: tel, role: roleExistente._id })
 
@@ -100,7 +93,7 @@ exports.delete = async (req, res) => {
             return res.status(400).json({ error: "ID do usuário não fornecido." });
         }
 
-        await User.delete(id); // Certifique-se de que essa função existe no seu model
+        await User.delete(id);
 
         return res.status(200).json({ success: true });
     } catch (err) {

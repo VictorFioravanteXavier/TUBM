@@ -1,6 +1,6 @@
 module.exports = (password) => {
     if (!password || password.trim() === "") {
-        errors.push("A senha não pode estar vazia.");
+        return false
     } else {
         if (password.length < 8) {
             return false

@@ -84,6 +84,6 @@ router.get('/envio-relatorios/removeNumber/', loginRequired, shippingReportingCo
 router.get("/esqueci-senha/", esqueciSenhaController.index)
 router.post("/esqueci-senha/send/", esqueciSenhaController.enviarEmail)
 router.get("/trocar-senha/:code", esqueciSenhaController.indexTrocarSenha)
-router.post("/trocar-senha/send/", esqueciSenhaController.sendTrocarSenha)
+router.post("/trocar-senha/send/:code", esqueciSenhaController.sendTrocarSenha)
 
 module.exports = router;

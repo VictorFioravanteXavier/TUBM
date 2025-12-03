@@ -253,11 +253,10 @@ class User {
     static async isEmailRegistered(email) {
         try {
             const user = await UserModule.findOne({ email });
-            return {success: true, response: !!user, user: user }
+            return { success: true, response: !!user, user: user }
         } catch (error) {
             console.error('Erro ao verificar e-mail:', error);
-            return {success: false, response: false }
-
+            return { success: false, response: false }
         }
     }
 
@@ -282,6 +281,21 @@ class User {
             { new: true }
         );
         return conta;
+    }
+
+    static async TradePassword(userId, newPassword) {
+        try {
+            await UserModule.findByIdAndUpdate(
+                userId,
+                { password: newPassword },
+            );
+
+            return { response: true };
+            
+        } catch (error) {
+            console.error(`Erro ao encontrar usuário: ${error}`);
+            return { response: false };
+        }
     }
 }
 

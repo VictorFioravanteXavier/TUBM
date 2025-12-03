@@ -52,10 +52,7 @@ export class TrocarSenha {
             return;
         }
 
-        console.log("Enviado");
-
-        // Agora sim envia o formulário
-        this.form.submit();
+        this.sendNewPassword(this.inp_senha.value)
     }
 
     showPassword() {
@@ -156,4 +153,37 @@ export class TrocarSenha {
         this.pRepSenha.hidden = true;
         return true;
     }
+
+    async sendNewPassword(password) {
+        const path = window.location.pathname;
+        const parts = path.split("/");
+
+        const token = parts[parts.length - 1];
+        const csrfToken = document.querySelector("[name=_csrf]").value;
+
+        try {
+            const response = await fetch(`/trocar-senha/send/${token}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-Token": csrfToken
+                },
+                body: JSON.stringify({
+                    newPassword: password
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error("Erro ao enviar nova senha.");
+            }
+
+            window.location.reload();
+
+        } catch (err) {
+            console.error("Erro:", err);
+            window.location.reload();
+            alert("Ocorreu um erro ao alterar a senha.");
+        }
+    }
+
 }
