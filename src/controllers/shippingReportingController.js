@@ -15,7 +15,7 @@ exports.index = async (req, res) => {
 exports.getDataFiltred = async (req, res) => {
     try {
         const page = parseInt(req.params.page) || 1;
-        const filtros = req.body; // 🚀 agora vem no body
+        const filtros = req.body;
 
         const result = await Venda.findAllFiltredShippingReporting(filtros, page);
         return res.json(result);

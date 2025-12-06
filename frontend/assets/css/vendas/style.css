@@ -286,3 +286,10 @@ tr td .name {
         background-color: #a52222;
     }
 }
+
+@media (max-width: 2000px) {
+   .table-container {
+        margin: 24px 5px;
+        padding: 12px;
+   }
+}

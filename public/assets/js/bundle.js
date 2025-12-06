@@ -1448,32 +1448,55 @@ class ShippingReporting {
   attPagination(currentPage, totalPages) {
     this.pagination.innerHTML = "";
     this.pagination.style.display = "flex";
-    const left_index = `
+    const start = Math.max(1, currentPage - 5);
+    const end = Math.min(totalPages, currentPage + 5);
+
+    // Botão << (vai para página 1)
+    const firstPage = `
         <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-            <a href="#" class="page-link" data-page="${currentPage - 1}" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-            </a>
+            <a href="#" class="page-link" data-page="1">&laquo;</a>
         </li>
     `;
-    const right_index = `
-        <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-            <a href="#" class="page-link" data-page="${currentPage + 1}" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-            </a>
+
+    // Botão < (página anterior)
+    const prevPage = `
+        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+            <a href="#" class="page-link" data-page="${currentPage - 1}"><</a>
         </li>
     `;
     let indexes = "";
-    for (let i = 1; i <= totalPages; i++) {
-      const index = ` 
+
+    // Páginas limitadas pelo range
+    for (let i = start; i <= end; i++) {
+      indexes += `
             <li class="page-item ${i === currentPage ? 'active' : ''}">
                 <a href="#" class="page-link" data-page="${i}">${i}</a>
             </li>
         `;
-      indexes += index;
     }
-    this.pagination.innerHTML += left_index;
+
+    // Botão > (próxima página)
+    const nextPage = `
+        <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+            <a href="#" class="page-link" data-page="${currentPage + 1}">></a>
+        </li>
+    `;
+
+    // Botão >> (vai para última página)
+    const lastPage = `
+        <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+            <a href="#" class="page-link" data-page="${totalPages}">&raquo;</a>
+        </li>
+    `;
+
+    // Monta tudo na ordem
+    this.pagination.innerHTML += firstPage;
+    this.pagination.innerHTML += prevPage;
     this.pagination.innerHTML += indexes;
-    this.pagination.innerHTML += right_index;
+    this.pagination.innerHTML += nextPage;
+    this.pagination.innerHTML += lastPage;
+
+    // Reativa eventos
     this.funcionalidadesPagination();
   }
   funcionalidadesPagination() {
