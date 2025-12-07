@@ -61,3 +61,7 @@ exports.logout = (req, res) => {
     req.session.destroy()
     return res.redirect('/')
 }
+
+exports.termos_uso = (req, res) => {
+    return res.render('termosUso')
+}

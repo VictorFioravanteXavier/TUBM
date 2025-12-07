@@ -1,0 +1,111 @@
+body {
+    background-color: #FFF4E8;
+}
+
+main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0;
+}
+
+.container {
+    width: 80%;
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
+    padding: 50px;
+}
+
+h1 {
+    font-size: 24px;
+    margin: 0;
+}
+
+h2 {
+    font-size: 20px;
+    margin: 0;
+}
+
+h3 {
+    font-size: 18px;
+    margin: 0;
+}
+
+.secao {
+    margin: 20px 0px;
+}
+
+p {
+    font-size: 16px;
+    color: #4B5563;
+    margin: 0;
+}
+
+ul {
+    list-style: initial;
+}
+
+.separacao {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #929497;
+    margin-bottom: 20px;
+}
+
+.separacao span {
+    height: 1px;
+    flex: 1;
+    background-color: #ced4da;
+}
+
+.error div {
+    font-size: 14px;
+    color: rgb(202, 30, 30);
+
+    &::before {
+        content: "* ";
+    }
+}
+
+.termos-uso {
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.termos-uso a {
+    color: #B82627;
+    text-decoration: underline;
+
+    &:hover {
+        text-decoration: none;
+    }
+}
+
+.esqueci-senha {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    text-decoration: underline;
+    margin-top: 5px;
+}
+
+.esqueci-senha a:hover {
+    color: #B82627;
+}
+
+@media (max-width: 425px) {
+    body {
+        padding: 0px;
+    }
+
+    .container {
+        width: 90%;
+        padding: 25px;
+    }
+}

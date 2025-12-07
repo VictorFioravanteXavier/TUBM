@@ -22,6 +22,7 @@ router.post('/login', loginController.login);
 router.get('/logout', loginController.logout)
 router.get('/cadastro', loginController.cadastro)
 router.post('/register', loginController.register)
+router.get('/termos-uso', loginController.termos_uso)
 
 // Rotas Choices User
 router.get('/escolha', loginRequired, roleFind, choicesScreenController.index)
