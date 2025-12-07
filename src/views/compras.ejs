@@ -132,25 +132,35 @@
                     </div>
                 <% }); %>
             </div>
+
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
 
                 <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
-                    <a class="page-link" href="/minhas-compras/<%= currentPage - 1 %>" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                    </a>
+                    <a class="page-link" href="/minhas-compras/1">&laquo;</a>
                 </li>
 
-                <% for (let i = 1; i <= totalPages; i++) { %>
+                <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                    <a class="page-link" href="/minhas-compras/<%= currentPage - 1 %>"><</a>
+                </li>
+
+                <% 
+                    const start = Math.max(1, currentPage - 2);
+                    const end = Math.min(totalPages, currentPage + 2);
+                %>
+
+                <% for (let i = start; i <= end; i++) { %>
                     <li class="page-item <%= i === currentPage ? 'active' : '' %>">
                     <a class="page-link" href="/minhas-compras/<%= i %>"><%= i %></a>
                     </li>
                 <% } %>
 
                 <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
-                    <a class="page-link" href="/minhas-compras/<%= currentPage + 1 %>" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                    </a>
+                    <a class="page-link" href="/minhas-compras/<%= currentPage + 1 %>">></a>
+                </li>
+
+                <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                    <a class="page-link" href="/minhas-compras/<%= totalPages %>">&raquo;</a>
                 </li>
 
                 </ul>
