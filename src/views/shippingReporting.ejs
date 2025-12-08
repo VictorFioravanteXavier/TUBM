@@ -87,7 +87,7 @@
             <div>
                 <div class="title-header">
                     <h1>
-                        <span>Ações Disponíveis que funcionam com base no filtro</span>
+                        <span class="dependente-filtro">Envio</span>
                     </h1>
                 </div>
                 <div class="buttons">
@@ -101,34 +101,62 @@
                     <button class="button-primary sendWhatsapp"
                         data-toggle="modal"
                         data-target="#confirmSend"
-                        >
+                        disabled
+                    >
                         <i class="fa-brands fa-whatsapp"></i>
                         Enviar Conta por WhatsApp
                     </button>
-                    <button class="button-primary">
+                </div>
+            </div>
+
+            <div>
+                <div class="title-header">
+                    <h1>
+                        <span class="dependente-filtro">Downloads</span>
+                    </h1>
+                </div>
+                <div class="buttons">
+                    <button class="button-primary"
+                        disabled
+                    >
                         <i class="fa-solid fa-download"></i>
                         Gerar PDF
                     </button>
-                    <button class="button-primary">
+
+                    <button class="button-primary"
+                        disabled
+                    >
                         <i class="fa-solid fa-download"></i>
                         Gerar XML
                     </button>
                 </div>
             </div>
+
             <div>
                 <div class="title-header">
-                    <h1>
-                        <span>Ações Disponíveis idependentes do filtro</span>
-                    </h1>
+                    <h1><span class="dependente-filtro">Informações Conta</span></h1>
                 </div>
                 <div class="buttons">
-                    <button class="button-primary removeNumber">
-                        <i class="fa-solid fa-trash"></i>
-                        Remover número cadastrado
+
+                    <button class="button-primary showTotal">
+                        <i class="fa-solid fa-wallet"></i>
+                        Mostrar conta total
                     </button>
+
+                    <button class="button-primary toggleStatus" data-status="pendente">
+                        <i class="fa-solid fa-check"></i>
+                        Marcar como Pago
+                    </button>
+
+                    <button class="button-primary toggleStatus" data-status="pago">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        Marcar como Pendente
+                    </button>
+
                 </div>
             </div>
         </div>
+
 
         <div class="container-w">
             <div class="title-header">

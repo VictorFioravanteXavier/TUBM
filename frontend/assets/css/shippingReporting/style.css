@@ -203,9 +203,19 @@ tbody tr td {
     gap: 25px;
 }
 
-.filtros > div:first-child {
+.filtros > div {
     border-bottom: 1px solid rgba(0, 0, 0, 0.185);
     padding-bottom: 25px;
+}
+
+.filtros > div:last-child {
+    border-bottom: 0;
+    padding-bottom: 25px;
+}
+
+.dependente-filtro::after {
+    margin-left: 6px;
+    content: "(Dependente do filtro)";
 }
 
 @media (max-width: 768px) {

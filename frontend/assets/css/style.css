@@ -77,6 +77,11 @@ label {
     }
 }
 
+.button-primary:disabled {
+    background-color: #a1222277;
+    cursor: initial;
+}
+
 .button-secundary  {
     margin: 0 !important;
     border: 1px solid #B82627 !important;
