@@ -59,11 +59,17 @@ export class ShippingReporting {
             this.confirmSend(async () => await self.sendWhatsapp());
         });
 
-        this.removeButtonNumberWhatsapp = document.querySelector(".removeNumber")
-        this.removeButtonNumberWhatsapp.addEventListener("click", async (e) => {
-            e.preventDefault()
-            await this.removeNumberWhatsapp()
-        })
+        this.showTotalValueAccountButton = document.querySelector("#showTotalValueAccount")
+        this.showTotalValueAccountButton.addEventListener("click", async (e) => {
+            e.preventDefault();
+
+            const response = this.getDataForModalTotlaAcount();
+
+            if (response.success) {
+                this.showModalTotalAccount(response.data);
+                $('#totalValueAccount').modal('show');
+            }
+        });
     }
 
     async saveFiltros(page = 1) {
@@ -135,14 +141,12 @@ export class ShippingReporting {
         const start = Math.max(1, currentPage - 5);
         const end = Math.min(totalPages, currentPage + 5);
 
-        // Botão << (vai para página 1)
         const firstPage = `
         <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
             <a href="#" class="page-link" data-page="1">&laquo;</a>
         </li>
     `;
 
-        // Botão < (página anterior)
         const prevPage = `
         <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
             <a href="#" class="page-link" data-page="${currentPage - 1}"><</a>
@@ -151,7 +155,6 @@ export class ShippingReporting {
 
         let indexes = "";
 
-        // Páginas limitadas pelo range
         for (let i = start; i <= end; i++) {
             indexes += `
             <li class="page-item ${i === currentPage ? 'active' : ''}">
@@ -160,28 +163,24 @@ export class ShippingReporting {
         `;
         }
 
-        // Botão > (próxima página)
         const nextPage = `
         <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
             <a href="#" class="page-link" data-page="${currentPage + 1}">></a>
         </li>
     `;
 
-        // Botão >> (vai para última página)
         const lastPage = `
         <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
             <a href="#" class="page-link" data-page="${totalPages}">&raquo;</a>
         </li>
     `;
 
-        // Monta tudo na ordem
         this.pagination.innerHTML += firstPage;
         this.pagination.innerHTML += prevPage;
         this.pagination.innerHTML += indexes;
         this.pagination.innerHTML += nextPage;
         this.pagination.innerHTML += lastPage;
 
-        // Reativa eventos
         this.funcionalidadesPagination();
     }
 
@@ -210,6 +209,133 @@ export class ShippingReporting {
         this.inp_status.selectedIndex = 0;
 
         this.filtros = {}
+    }
+
+    getDataForModalTotlaAcount() {
+        let data = {}
+
+        if (!this.valid) {
+            alert("Adicione um filtro para acessar a funcionalidade")
+            return false
+        }
+
+        const validFilter = this.valida()
+
+        if (!validFilter) {
+            return false
+        }
+
+        if (!this.filtros.account) {
+            alert("Adicione uma conta. Não pode ser usada em mais de uma conta simultaneamente.")
+            return false
+        }
+
+        if (this.filtros.initial_date) {
+            data.initial_date = this.filtros.initial_date
+        }
+
+        if (this.filtros.final_date) {
+            data.final_date = this.filtros.final_date
+        }
+
+        if (this.filtros.status === "true" || this.filtros.status === "false") {
+            data.status = this.filtros.status
+        }
+
+
+        return { success: true, data: data }
+    }
+
+    async getTotalValueAccount(filter) {
+        try {
+            const response = await fetch(`/envio-relatorios/getTotalValueAccount/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'CSRF-Token': this.token
+                },
+                body: JSON.stringify({ filter: filter })
+            });
+
+            if (!response.ok) {
+                throw new Error("Erro ao buscar as contas filtrados");
+            }
+
+            const res = await response.json();
+
+            return res
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    async showModalTotalAccount(data) {
+        $('#totalValueAccount').off('show.bs.modal').on('show.bs.modal', async (event) => {
+            const modal = $(event.target);
+
+            modal.find("#account-name-modal").html("")
+            modal.find("#users-modal").html("")
+            modal.find("#value-modal").html("")
+            modal.find(".dates").show();
+            modal.find(".initial-date-div-modal").show();
+            modal.find(".final-date-div-modal").show();
+            modal.find("#initial-date-modal").text("00/00/0000");
+            modal.find("#final-date-modal").text("00/00/0000");
+
+            if (data.initial_date && data.final_date) {
+                modal.find("#initial-date-modal").text(
+                    new Date(data.initial_date).toLocaleDateString("pt-BR")
+                );
+                modal.find("#final-date-modal").text(
+                    new Date(data.final_date).toLocaleDateString("pt-BR")
+                );
+            } else if (data.initial_date || data.final_date) {
+                if (data.initial_date) {
+                    modal.find("#initial-date-modal").text(
+                        new Date(data.initial_date).toLocaleDateString("pt-BR")
+                    );
+                    modal.find(".final-date-div-modal").hide();
+                } else {
+                    modal.find("#final-date-modal").text(
+                        new Date(data.final_date).toLocaleDateString("pt-BR")
+                    );
+                    modal.find(".initial-date-div-modal").hide();
+                }
+            } else {
+                modal.find(".dates").hide();
+            }
+
+
+            if (!data.status) {
+                modal.find("#status-show-accounts-modal").text("Pendentes/Pagas")
+            } else if (data.status === "true") {
+                modal.find("#status-show-accounts-modal").text("Pagas")
+            } else {
+                modal.find("#status-show-accounts-modal").text("Pendentes")
+            }
+
+            const res = await this.getTotalValueAccount(this.filtros);
+
+            const account = res.data.account
+            const total_value = new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(res.data.total_value);
+
+            modal.find("#account-name-modal").show().text(account.name);
+            modal.find("#value-modal").show().text(total_value);
+
+            let users = "";
+            account.users.forEach((user) => {
+                users += `
+                    <div class="user">
+                        <p>Nome: <span class="user-name">${user.name}</span></p>
+                        <p>CPF: <span class="cpf-user">${user.cpf}</span></p>
+                    </div>
+                `
+            })
+            modal.find("#users-modal").html(users)
+        })
     }
 
     valida() {
@@ -295,7 +421,6 @@ export class ShippingReporting {
     }
 
     confirmSend(callback) {
-        const self = this;
         $('#confirmSend').off('show.bs.modal').on('show.bs.modal', (event) => {
             const modal = $(event.target);
             modal.find(".variables-vals").html("")
@@ -367,10 +492,9 @@ export class ShippingReporting {
             ${max_val_menssage}
         `);
 
-            // Usando jQuery para tratar o clique
             modal.find("#btn-confirm").off("click").on("click", async () => {
-                await callback(); // só aqui realmente chama o sendEmail
-                modal.modal("hide"); // fecha depois se quiser
+                await callback();
+                modal.modal("hide");
             });
         });
     }
@@ -413,25 +537,4 @@ export class ShippingReporting {
         }
     }
 
-    async removeNumberWhatsapp() {
-        if (confirm("Você realmete deseja deletar o número salvo para enviar as contas por Whatsapp?")) {
-            try {
-                const res = await fetch('/envio-relatorios/removeNumber/', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-                const data = await res.json();
-
-                if (data.error) {
-                    console.error(data.error);
-                } else {
-                    alert(data.message);
-                }
-            } catch (e) {
-                console.log(e);
-            }
-        }
-    }
 }

@@ -1,0 +1,36 @@
+.modal-body p {
+    margin: 0;
+}
+
+.section {
+    padding: 20px 0px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.section:first-child {
+    padding-top: 0px;
+}
+
+.section:last-child {
+    border-bottom: none;
+}
+
+.account-div {
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    color: #B82627;
+    font-weight: bold;
+}
+
+.big-text {
+    font-size: 20px;
+}
+
+#users-modal {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}

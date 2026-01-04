@@ -1,0 +1,56 @@
+<link rel="stylesheet" href="/frontend/assets/css/shippingReporting/modalShowTotalValue/style.css">
+
+
+<div class="modal fade" id="totalValueAccount" tabindex="-1" role="dialog" aria-labelledby="totalValueAccountLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="totalValueAccountLabel">Total conta (<span id="status-show-accounts-modal"></span>)</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="section account-div">
+                    <p class="title">
+                        Conta:
+                    </p>
+                    <p id="account-name-modal" class="big-text">
+                        Nome da conta
+                    </p>
+                </div>
+
+                <div class="section">
+                    <p class="title">Pessoas que participam da conta:</p>
+                    <div id="users-modal">
+                        
+                        <div class="user">
+                            <p>Nome: <span class="user-name">Name</span></p>
+                            <p>CPF: <span class="cpf-user">CPF</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section dates">
+                    <div class="initial-date-div-modal">
+                        <p class="title">Data Inicial:</p>
+                        <p id="initial-date-modal">00/00/0000</p>
+                    </div>
+                    <div class="final-date-div-modal">
+                        <p class="title">Data Final:</p>
+                        <p id="final-date-modal">00/00/0000</p>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <p class="title">Valor: </p>
+                    <p id="value-modal"  class="big-text">R$ 000000.00</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>

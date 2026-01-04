@@ -155,3 +155,37 @@ exports.removeNumber = async (req, res) => {
     }
 
 }
+
+exports.getTotalValueAccount = async (req, res) => {
+    try {
+        const filter = req.body.filter
+
+        if (!filter.account) {
+            return res.status(400).json({ success: false, error: "Tem que escolher um usuário para usar a funcionalidade. Não pode ser usada em mais de uma conta simultaneamente." });
+        }
+
+        const vendas = await Venda.findAllFiltredShippingReportingNoPage(filter);
+
+        const vendasAgrupadas = agruparVendasPorConta(vendas);
+        let valor_total = 0;
+        let account;
+
+        for (const accountId of Object.keys(vendasAgrupadas)) {
+            const vendasDaConta = vendasAgrupadas[accountId];
+
+            vendasDaConta.forEach((element) => {
+                valor_total += element.valor_total / 100;
+            });
+        }        
+
+        const data = {
+            account: vendas[0].account_id,
+            total_value: valor_total
+        }
+
+        return res.status(200).json({ success: false, data: data });
+    } catch (err) {
+        console.error(err)
+        return res.status(500).json({ success: false, error: err.message });
+    }
+}
