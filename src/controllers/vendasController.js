@@ -5,6 +5,10 @@ exports.index = async (req, res) => {
     const page = parseInt(req.params.page) || 1;
     let vendas, totalPages, currentPage;
 
+    const queryString = Object.keys(req.query).length
+    ? '?' + new URLSearchParams(req.query).toString()
+    : '';
+
     try {
         if (req.query.status || req.query.searchName || req.query.searchNumber) {
             let status;
@@ -41,7 +45,8 @@ exports.index = async (req, res) => {
         res.render('vendas', {
             vendas,
             totalPages,
-            currentPage
+            currentPage,
+            queryString
         });
     } catch (error) {
         console.error(error);
@@ -49,7 +54,8 @@ exports.index = async (req, res) => {
             users: [],
             totalPages: 1,
             currentPage: 1,
-            error: error.message
+            error: error.message,
+            queryString
         });
     }
 };

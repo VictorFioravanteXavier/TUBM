@@ -7,6 +7,10 @@ exports.index = async (req, res) => {
     const page = parseInt(req.params.page) || 1;
     let users, totalPages, currentPage;
 
+    const queryString = Object.keys(req.query).length
+    ? '?' + new URLSearchParams(req.query).toString()
+    : '';
+
     try {
         if (req.query.status || req.query.cargo || req.query.search) {
             let status;
@@ -41,7 +45,8 @@ exports.index = async (req, res) => {
         res.render('users', {
             users,
             totalPages,
-            currentPage
+            currentPage,
+            queryString
         });
     } catch (error) {
         console.error(error);
@@ -49,6 +54,7 @@ exports.index = async (req, res) => {
             users: [],
             totalPages: 1,
             currentPage: 1,
+            queryString,
             error: error.message
         });
     }

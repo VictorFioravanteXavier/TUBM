@@ -7,6 +7,10 @@ exports.index = async (req, res) => {
     let compras, totalPages, currentPage;
     const account = await Account.findAccountsByUserId(req.session.user._id)
 
+    const queryString = Object.keys(req.query).length
+    ? '?' + new URLSearchParams(req.query).toString()
+    : '';
+
     try {
         if (req.query.status || req.query.searchCode || req.query.InitialDate || req.query.FinalDate) {
             let status;
@@ -69,7 +73,8 @@ exports.index = async (req, res) => {
         res.render('compras', {
             compras,
             totalPages,
-            currentPage
+            currentPage,
+            queryString
         });
     } catch (error) {
         console.error(error);
@@ -77,6 +82,7 @@ exports.index = async (req, res) => {
             compras: [],
             totalPages: 1,
             currentPage: 1,
+            queryString,
             error: error.message
         });
     }

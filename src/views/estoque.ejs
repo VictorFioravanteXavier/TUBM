@@ -103,11 +103,11 @@
         <ul class="pagination">
 
           <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
-            <a class="page-link" href="/estoque/1">&laquo;</a>
+            <a class="page-link" href="/estoque/1<%= queryString %>">&laquo;</a>
           </li>
 
           <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
-            <a class="page-link" href="/estoque/<%= currentPage - 1 %>"><</a>
+            <a class="page-link" href="/estoque/<%= currentPage - 1 %><%= queryString %>"><</a>
           </li>
 
           <% 
@@ -117,16 +117,16 @@
 
           <% for (let i = start; i <= end; i++) { %>
             <li class="page-item <%= i === currentPage ? 'active' : '' %>">
-              <a class="page-link" href="/estoque/<%= i %>"><%= i %></a>
+              <a class="page-link" href="/estoque/<%= i %><%= queryString %>"><%= i %></a>
             </li>
           <% } %>
 
           <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
-            <a class="page-link" href="/estoque/<%= currentPage + 1 %>">></a>
+            <a class="page-link" href="/estoque/<%= currentPage + 1 %><%= queryString %>">></a>
           </li>
 
           <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
-            <a class="page-link" href="/estoque/<%= totalPages %>">&raquo;</a>
+            <a class="page-link" href="/estoque/<%= totalPages %><%= queryString %>">&raquo;</a>
           </li>
 
         </ul>
