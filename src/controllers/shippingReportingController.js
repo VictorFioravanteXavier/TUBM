@@ -5,6 +5,7 @@ const agruparVendasPorConta = require("../utils/agruparVendasPorConta");
 const htmlEmail = require("../utils/htmlEmail");
 const sendEmailUtils = require("../utils/sendEmail").default;
 const QRCode = require("qrcode");
+const transformFilters = require("../utils/transformFilters");
 
 exports.index = async (req, res) => {
     const accounts = await Account.findAllNoPage()
@@ -17,7 +18,26 @@ exports.getDataFiltred = async (req, res) => {
         const page = parseInt(req.params.page) || 1;
         const filtros = req.body;
 
-        const result = await Venda.findAllFiltredShippingReporting(filtros, page);
+        if (!filtros || Object.keys(filtros).length === 0) {
+            console.error('Filtro inválido');
+            return res.status(400).json({
+                success: false,
+                error: 'Filtro inválido'
+            });
+        }
+
+
+        const valid_filters = transformFilters(filtros)
+
+        if (!valid_filters.success) {
+            console.error('Filtro inválido');
+            return res.status(400).json({
+                success: false,
+                error: 'Filtro inválido'
+            });
+        }
+
+        const result = await Venda.findAllFiltredShippingReporting(valid_filters.data, page);
         return res.json(result);
 
     } catch (error) {
@@ -29,7 +49,26 @@ exports.getDataFiltred = async (req, res) => {
 exports.sendEmail = async (req, res) => {
     try {
         const filtros = req.body;
-        const vendas = await Venda.findAllFiltredShippingReportingNoPage(filtros);
+
+        if (!filtros || Object.keys(filtros).length === 0) {
+            console.error('Filtro inválido');
+            return res.status(400).json({
+                success: false,
+                error: 'Filtro inválido'
+            });
+        }
+
+        const valid_filters = transformFilters(filtros)
+
+        if (!valid_filters.success) {
+            console.error('Filtro inválido');
+            return res.status(400).json({
+                success: false,
+                error: 'Filtro inválido'
+            });
+        }
+
+        const vendas = await Venda.findAllFiltredShippingReportingNoPage(valid_filters.data);
 
         const vendasAgrupadas = agruparVendasPorConta(vendas);
 
@@ -158,13 +197,27 @@ exports.removeNumber = async (req, res) => {
 
 exports.getTotalValueAccount = async (req, res) => {
     try {
-        const filter = req.body.filter
+        const filtros = req.body.filter;
 
-        if (!filter.account) {
-            return res.status(400).json({ success: false, error: "Tem que escolher um usuário para usar a funcionalidade. Não pode ser usada em mais de uma conta simultaneamente." });
+        if (!filtros || Object.keys(filtros).length === 0) {
+            console.error('Filtro inválido');
+            return res.status(400).json({
+                success: false,
+                error: 'Filtro inválido'
+            });
         }
 
-        const vendas = await Venda.findAllFiltredShippingReportingNoPage(filter);
+        const valid_filters = transformFilters(filtros)
+
+        if (!valid_filters.success) {
+            console.error('Filtro inválido');
+            return res.status(400).json({
+                success: false,
+                error: 'Filtro inválido'
+            });
+        }
+
+        const vendas = await Venda.findAllFiltredShippingReportingNoPage(valid_filters.data);
 
         const vendasAgrupadas = agruparVendasPorConta(vendas);
         let valor_total = 0;
@@ -176,7 +229,7 @@ exports.getTotalValueAccount = async (req, res) => {
             vendasDaConta.forEach((element) => {
                 valor_total += element.valor_total / 100;
             });
-        }        
+        }
 
         const data = {
             account: vendas[0].account_id,
@@ -184,6 +237,53 @@ exports.getTotalValueAccount = async (req, res) => {
         }
 
         return res.status(200).json({ success: false, data: data });
+    } catch (err) {
+        console.error(err)
+        return res.status(500).json({ success: false, error: err.message });
+    }
+}
+
+exports.markAsPaid = async (req, res) => {
+    try {
+        const filter = req.body.filter
+
+        if (!filter || typeof filter !== 'object') {
+            return res.status(400).json({
+                success: false,
+                error: 'Filtro inválido'
+            });
+        }
+
+        const valid_filters = transformFilters(filter)
+
+        if (!valid_filters.success) {
+            console.error('Filtro inválido');
+            return res.status(400).json({
+                success: false,
+                error: 'Filtro inválido'
+            });
+        }
+
+        const result = await Venda.markAsPaid(valid_filters.data)
+
+        if (!result.success) {
+            console.error(result.error)
+            return res.status(500).json({ success: false, error: result.error });
+        }
+
+        if (result.matched < 1 || result.modified < 1) {
+            console.error("Nenhuma venda modificada ou pendente");
+            return res.status(404).json({ success: false, error: "Nenhuma venda modificada ou pendente" });
+        }
+
+
+        return res.status(200).json({
+            success: true,
+            data: {
+                matched: result.matched,
+                modified: result.modified,
+            }
+        });
     } catch (err) {
         console.error(err)
         return res.status(500).json({ success: false, error: err.message });

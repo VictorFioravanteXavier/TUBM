@@ -1394,9 +1394,17 @@ class ShippingReporting {
         $('#totalValueAccount').modal('show');
       }
     });
+    this.makeAsPaidButton = document.querySelector("#make-as-paid");
+    this.makeAsPaidButton.addEventListener("click", async e => {
+      e.preventDefault;
+      await this.makeAsPaid();
+    });
   }
   async saveFiltros(page = 1) {
-    this.valida();
+    if (!this.valida()) {
+      alert("Tem que ter dados validos para os dados poderem ser encontrados!");
+      return;
+    }
     try {
       const response = await fetch(`/envio-relatorios/getFiltred/${page}`, {
         method: 'POST',
@@ -1407,6 +1415,7 @@ class ShippingReporting {
         body: JSON.stringify(this.filtros)
       });
       if (!response.ok) {
+        alert("Erro ao buscar relatórios filtrados");
         throw new Error("Erro ao buscar relatórios filtrados");
       }
       const data = await response.json();
@@ -1787,6 +1796,38 @@ class ShippingReporting {
       }
     } catch (e) {
       console.log(e);
+    }
+  }
+  async makeAsPaid() {
+    if (!this.valida()) {
+      alert("Tem que ter dados validos para poder ser enviado!");
+      return;
+    }
+    if (!confirm("Você realmente deseja trocar as contas para Pagas?")) {
+      return;
+    }
+    try {
+      const response = await fetch('/envio-relatorios/markAsPaid/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'CSRF-Token': this.token
+        },
+        body: JSON.stringify({
+          filter: this.filtros
+        })
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        alert(data.error);
+        throw new Error(data.error);
+      }
+      if (data.success) {
+        alert(`Venda(s) marcadas como pagas com sucesso! ${data.data.modified} registros alterados.`);
+        window.location.reload();
+      }
+    } catch (e) {
+      console.error(e);
     }
   }
 }

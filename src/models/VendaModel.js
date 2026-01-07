@@ -4,7 +4,6 @@ const centTrasform = require('../utils/centTrasform.js');
 const Account = require('./AccountModel.js');
 const gerarNumeroVenda = require('../utils/vendaNumber.js');
 const isValidDate = require('../utils/isValidDate.js');
-const agruparVendasPorConta = require('../utils/agruparVendasPorConta.js');
 
 const VendaSchema = new mongoose.Schema({
     account_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Account', required: true },
@@ -273,51 +272,11 @@ class Venda {
         };
     }
 
-    static async findAllFiltredShippingReporting(obj, page = 1) {
+    static async findAllFiltredShippingReporting(filter, page = 1) {
         const limit = 10;
         const skip = (page - 1) * limit;
 
-        // Converte para Date
-        const initialDate = new Date(obj.initial_date);
-        const finalDate = new Date(obj.final_date);
-
-        // Monta filtro para vendas
-        const filters = { delete: false };
-
-        if (isValidDate(initialDate) || isValidDate(finalDate)) {
-            filters.data_venda = {};
-            if (isValidDate(initialDate)) {
-                filters.data_venda.$gte = new Date(initialDate);
-            }
-            if (isValidDate(finalDate)) {
-                const end = new Date(finalDate);
-                end.setDate(end.getDate() + 2); // garante o último ms do dia
-                filters.data_venda.$lte = end; // inclui o dia final inteiro
-            }
-        }
-
-
-
-        if (obj.min_val || obj.max_val) {
-            filters.valor_total = {};
-            if (obj.min_val && !isNaN(obj.min_val)) {
-                filters.valor_total.$gte = Number(obj.min_val) * 100;
-            }
-            if (obj.max_val && !isNaN(obj.max_val)) {
-                filters.valor_total.$lte = Number(obj.max_val) * 100;
-            }
-        }
-
-
-        if (obj.status === "false" || obj.status === "true") {
-            filters.status = obj.status;
-        }
-
-        if (mongoose.isValidObjectId(obj.account)) {
-            filters.account_id = obj.account
-        }
-
-        const vendas = await VendaModule.find(filters)
+        const vendas = await VendaModule.find(filter)
             .populate({
                 path: 'account_id',
                 populate: {
@@ -331,7 +290,7 @@ class Venda {
             .lean();
 
 
-        const total = await VendaModule.countDocuments(filters);
+        const total = await VendaModule.countDocuments(filter);
 
         return {
             vendas,
@@ -340,48 +299,9 @@ class Venda {
         };
     }
 
-    static async findAllFiltredShippingReportingNoPage(obj) {
-        // Converte para Date
-        const initialDate = new Date(obj.initial_date);
-        const finalDate = new Date(obj.final_date);
+    static async findAllFiltredShippingReportingNoPage(filter) {
 
-        // Monta filtro para vendas
-        const filters = { delete: false };
-
-        if (isValidDate(initialDate) || isValidDate(finalDate)) {
-            filters.data_venda = {};
-            if (isValidDate(initialDate)) {
-                filters.data_venda.$gte = new Date(initialDate);
-            }
-            if (isValidDate(finalDate)) {
-                const end = new Date(finalDate);
-                end.setDate(end.getDate() + 2); // garante o último ms do dia
-                filters.data_venda.$lte = end; // inclui o dia final inteiro
-            }
-        }
-
-
-
-        if (obj.min_val || obj.max_val) {
-            filters.valor_total = {};
-            if (obj.min_val && !isNaN(obj.min_val)) {
-                filters.valor_total.$gte = Number(obj.min_val) * 100;
-            }
-            if (obj.max_val && !isNaN(obj.max_val)) {
-                filters.valor_total.$lte = Number(obj.max_val) * 100;
-            }
-        }
-
-
-        if (obj.status === "false" || obj.status === "true") {
-            filters.status = obj.status;
-        }
-
-        if (mongoose.isValidObjectId(obj.account)) {
-            filters.account_id = obj.account
-        }
-
-        const vendas = await VendaModule.find(filters)
+        const vendas = await VendaModule.find(filter)
             .populate({
                 path: 'account_id',
                 populate: {
@@ -393,6 +313,44 @@ class Venda {
             .lean();
 
         return vendas
+    }
+
+    static async markAsPaid(filter) {
+        try {
+            const transformed_filter = filter
+
+            if (!transformed_filter || Object.keys(transformed_filter).length === 0) {
+                return {
+                    success: false,
+                    message: 'Filtro inválido ou vazio'
+                };
+            }
+
+            const result = await VendaModule.updateMany(
+                {
+                    ...transformed_filter,
+                    status: { $ne: true } // evita pagar de novo
+                },
+                {
+                    $set: {
+                        date_pay: new Date(),
+                        status: true
+                    }
+                }
+            );
+
+            return {
+                success: true,
+                matched: result.matchedCount,
+                modified: result.modifiedCount
+            };
+        } catch (err) {
+            console.error('Erro ao marcar vendas como pagas:', err);
+            return {
+                success: false,
+                error: err.message
+            };
+        }
     }
 
 

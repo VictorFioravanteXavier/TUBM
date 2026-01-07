@@ -81,6 +81,7 @@ router.post('/envio-relatorios/sendEmail/', loginRequired, shippingReportingCont
 router.post('/envio-relatorios/sendWhats/', loginRequired, shippingReportingController.sendWhatsapp)
 router.get('/envio-relatorios/removeNumber/', loginRequired, shippingReportingController.removeNumber)
 router.post('/envio-relatorios/getTotalValueAccount/', loginRequired, shippingReportingController.getTotalValueAccount)
+router.post('/envio-relatorios/markAsPaid/', loginRequired, shippingReportingController.markAsPaid)
 
 /* Rotas Esqueci Minha Senha */
 router.get("/esqueci-senha/", esqueciSenhaController.index)
