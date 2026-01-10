@@ -18,16 +18,10 @@ exports.getDataFiltred = async (req, res) => {
         const page = parseInt(req.params.page) || 1;
         const filtros = req.body;
 
-        if (!filtros || Object.keys(filtros).length === 0) {
-            console.error('Filtro inválido');
-            return res.status(400).json({
-                success: false,
-                error: 'Filtro inválido'
-            });
-        }
-
-
         const valid_filters = transformFilters(filtros)
+
+        console.log(valid_filters.data);
+        
 
         if (!valid_filters.success) {
             console.error('Filtro inválido');
@@ -274,6 +268,53 @@ exports.markAsPaid = async (req, res) => {
         if (result.matched < 1 || result.modified < 1) {
             console.error("Nenhuma venda modificada ou pendente");
             return res.status(404).json({ success: false, error: "Nenhuma venda modificada ou pendente" });
+        }
+
+
+        return res.status(200).json({
+            success: true,
+            data: {
+                matched: result.matched,
+                modified: result.modified,
+            }
+        });
+    } catch (err) {
+        console.error(err)
+        return res.status(500).json({ success: false, error: err.message });
+    }
+}
+
+exports.markAsPending = async (req, res) => {
+    try {
+        const filter = req.body.filter
+
+        if (!filter || typeof filter !== 'object') {
+            return res.status(400).json({
+                success: false,
+                error: 'Filtro inválido'
+            });
+        }
+
+        const valid_filters = transformFilters(filter)
+
+        if (!valid_filters.success) {
+            console.error('Filtro inválido');
+            return res.status(400).json({
+                success: false,
+                error: 'Filtro inválido'
+            });
+        }
+
+        const result = await Venda.markAsPending(valid_filters.data)
+
+        if (!result.success) {
+            console.error(result.error)
+            return res.status(500).json({ success: false, error: result.error });
+        }
+
+        if (result.matched < 1 || result.modified < 1) {
+            console.error("Nenhuma venda modificada ou paga");
+            return res.status(404).json({ success: false, error: "Nenhuma venda modificada ou paga" });
         }
 
 

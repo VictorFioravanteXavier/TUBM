@@ -353,6 +353,44 @@ class Venda {
         }
     }
 
+    static async markAsPending(filter) {
+        try {
+            const transformed_filter = filter
+
+            if (!transformed_filter || Object.keys(transformed_filter).length === 0) {
+                return {
+                    success: false,
+                    message: 'Filtro inválido ou vazio'
+                };
+            }
+
+            const result = await VendaModule.updateMany(
+                {
+                    ...transformed_filter,
+                    status: { $ne: false }
+                },
+                {
+                    $set: {
+                        date_pay: new Date(),
+                        status: false
+                    }
+                }
+            );
+
+            return {
+                success: true,
+                matched: result.matchedCount,
+                modified: result.modifiedCount
+            };
+        } catch (err) {
+            console.error('Erro ao marcar vendas como pagas:', err);
+            return {
+                success: false,
+                error: err.message
+            };
+        }
+    }
+
 
     static async delete(id) {
         if (!mongoose.isValidObjectId(id)) {

@@ -76,6 +76,12 @@ export class ShippingReporting {
             e.preventDefault;
             await this.makeAsPaid()
         })
+
+        this.markAsPendingButton = document.querySelector("#make-as-pending")
+        this.markAsPendingButton.addEventListener("click", async (e) => {
+            e.preventDefault;
+            await this.markAsPending()
+        })
     }
 
     async saveFiltros(page = 1) {
@@ -549,7 +555,7 @@ export class ShippingReporting {
 
 
     async makeAsPaid() {
-        if (!this.valida()) {
+        if (!this.valid) {
             alert("Tem que ter dados validos para poder ser enviado!")
             return
         }
@@ -580,7 +586,47 @@ export class ShippingReporting {
                 alert(
                     `Venda(s) marcadas como pagas com sucesso! ${data.data.modified} registros alterados.`
                 );
-                window.location.reload();
+                await this.saveFiltros()
+            }
+
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async markAsPending() {
+        if (!this.valid) {
+            alert("Tem que ter dados validos para poder ser enviado!")
+            return
+        }
+
+        if (!confirm("Você realmente deseja trocar as contas para Pendentes?")) {
+            return
+        }
+
+        try {
+            const response = await fetch('/envio-relatorios/markAsPending/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'CSRF-Token': this.token
+                },
+                body: JSON.stringify({ filter: this.filtros })
+            });
+            const data = await response.json()
+
+
+            if (!response.ok) {
+                alert(data.error)
+                throw new Error(data.error);
+            }
+
+
+            if (data.success) {
+                alert(
+                    `Venda(s) marcadas como pendentes com sucesso! ${data.data.modified} registros alterados.`
+                );
+                await this.saveFiltros()
             }
 
         } catch (e) {
