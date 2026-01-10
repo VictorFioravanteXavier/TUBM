@@ -18,10 +18,7 @@ exports.getDataFiltred = async (req, res) => {
         const page = parseInt(req.params.page) || 1;
         const filtros = req.body;
 
-        const valid_filters = transformFilters(filtros)
-
-        console.log(valid_filters.data);
-        
+        const valid_filters = transformFilters(filtros)        
 
         if (!valid_filters.success) {
             console.error('Filtro inválido');
