@@ -1825,7 +1825,7 @@ class ShippingReporting {
         alert(data.message);
       }
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   }
   async makeAsPaid() {
