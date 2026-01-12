@@ -6,6 +6,7 @@ const htmlEmail = require("../utils/htmlEmail");
 const sendEmailUtils = require("../utils/sendEmail").default;
 const QRCode = require("qrcode");
 const transformFilters = require("../utils/transformFilters");
+const isValidDate = require("../utils/isValidDate");
 
 exports.index = async (req, res) => {
     const accounts = await Account.findAllNoPage()
@@ -18,7 +19,7 @@ exports.getDataFiltred = async (req, res) => {
         const page = parseInt(req.params.page) || 1;
         const filtros = req.body;
 
-        const valid_filters = transformFilters(filtros)        
+        const valid_filters = transformFilters(filtros)
 
         if (!valid_filters.success) {
             console.error('Filtro inválido');
@@ -39,15 +40,43 @@ exports.getDataFiltred = async (req, res) => {
 
 exports.sendEmail = async (req, res) => {
     try {
-        const filtros = req.body;
+        const filtros = req.body.filter;
+        const dueDate = req.body.dueDate;
+        const penaltyRaw = req.body.penalty;
+        const typePenalty = req.body.typePenalty;
 
-        if (!filtros || Object.keys(filtros).length === 0) {
-            console.error('Filtro inválido');
+        const penalty = penaltyRaw === undefined || penaltyRaw === ''
+            ? 0
+            : Number(penaltyRaw);
+
+
+        if (!isValidDate(dueDate)) {
+            console.error('Data de vencimento inválida');
             return res.status(400).json({
                 success: false,
-                error: 'Filtro inválido'
+                error: 'Data de vencimento inválida'
             });
         }
+
+        const validDate = new Date(dueDate)
+
+        if (isNaN(penalty) && Number(penalty) > 0) {
+            console.error('Multa inválida, não é um número ou é menor que 0');
+            return res.status(400).json({
+                success: false,
+                error: 'Data de vencimento inválida, não é um número ou é menor que 0'
+            });
+        }
+
+        if (!(typePenalty === "true" || typePenalty === "false")) {
+            console.error('Erro no tipo de multa se é em R$ ou %.');
+            return res.status(400).json({
+                success: false,
+                error: 'Erro no tipo de multa se é em R$ ou %.'
+            });
+        }
+
+        const validTypePenalty = typePenalty === "true"
 
         const valid_filters = transformFilters(filtros)
 
@@ -71,14 +100,9 @@ exports.sendEmail = async (req, res) => {
                 valor_total += element.valor_total / 100;
             });
 
-            // aplica multa se existir
-            if (req.body.multa) {
-                valor_total += (valor_total * req.body.multa) / 100;
-            }
-
             // percorre usuários da conta e envia e-mail
             for (const usuario of vendasDaConta[0].account_id.users) {
-                const html_send = htmlEmail({ name: usuario.name, valor_total });
+                const html_send = htmlEmail({ name: usuario.name, valor_total, date: validDate, penalty: penalty, type_penalty: validTypePenalty });
 
                 await sendEmailUtils(
                     usuario.email,

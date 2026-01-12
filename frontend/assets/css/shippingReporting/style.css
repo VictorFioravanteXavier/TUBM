@@ -219,6 +219,27 @@ tbody tr td {
     content: "(Dependente do filtro)";
 }
 
+.specifications {
+    display: flex;
+    gap: 50px;
+
+    padding: 10px;
+    padding-top: 0;
+}
+
+.specifications input {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.185);
+}
+
+.specifications #due-date {
+    width: 13ch;
+}
+
+.specifications #penalty {
+    width: 6ch;
+}
+
+
 @media (max-width: 768px) {
     main {
         height: auto;

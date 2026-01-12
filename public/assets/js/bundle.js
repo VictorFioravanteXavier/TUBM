@@ -1404,6 +1404,9 @@ class ShippingReporting {
       e.preventDefault;
       await this.markAsPending();
     });
+    this.dueDateInput = document.querySelector("#due-date");
+    this.penaltyIntput = document.querySelector("#penalty");
+    this.typePenaltyInput = document.querySelector("#type-penalty");
   }
   async saveFiltros(page = 1) {
     if (!this.valida()) {
@@ -1585,9 +1588,17 @@ class ShippingReporting {
       modal.find(".final-date-div-modal").show();
       modal.find("#initial-date-modal").text("00/00/0000");
       modal.find("#final-date-modal").text("00/00/0000");
+      const day_initial = String(new Date(data.initial_date).getUTCDate()).padStart(2, '0');
+      const month_initial = String(new Date(data.initial_date).getUTCMonth() + 1).padStart(2, '0');
+      const year_initial = new Date(data.initial_date).getUTCFullYear();
+      const formattedDate_initial = `${day_initial}/${month_initial}/${year_initial}`;
+      const day_final = String(new Date(data.final_date).getUTCDate()).padStart(2, '0');
+      const month_final = String(new Date(data.final_date).getUTCMonth() + 1).padStart(2, '0');
+      const year_final = new Date(data.final_date).getUTCFullYear();
+      const formattedDate_final = `${day_final}/${month_final}/${year_final}`;
       if (data.initial_date && data.final_date) {
-        modal.find("#initial-date-modal").text(new Date(data.initial_date).toLocaleDateString("pt-BR"));
-        modal.find("#final-date-modal").text(new Date(data.final_date).toLocaleDateString("pt-BR"));
+        modal.find("#initial-date-modal").text(formattedDate_initial);
+        modal.find("#final-date-modal").text(formattedDate_final);
       } else if (data.initial_date || data.final_date) {
         if (data.initial_date) {
           modal.find("#initial-date-modal").text(new Date(data.initial_date).toLocaleDateString("pt-BR"));
@@ -1677,6 +1688,7 @@ class ShippingReporting {
       alert("Tem que ter dados validos para poder ser enviado!");
       return;
     }
+    const penaltyValue = Number(this.penaltyIntput.value);
     try {
       const response = await fetch(`/envio-relatorios/sendEmail/`, {
         method: 'POST',
@@ -1684,7 +1696,12 @@ class ShippingReporting {
           'Content-Type': 'application/json',
           'CSRF-Token': this.token
         },
-        body: JSON.stringify(this.filtros)
+        body: JSON.stringify({
+          filter: this.filtros,
+          dueDate: this.dueDateInput.value,
+          penalty: !isNaN(penaltyValue) && penaltyValue > 0 ? penaltyValue : 0,
+          typePenalty: this.typePenaltyInput.value
+        })
       });
       if (!response.ok) {
         throw new Error("Erro ao buscar relatórios filtrados");
@@ -1715,19 +1732,27 @@ class ShippingReporting {
       }
       let date_initial_menssage = "";
       if (this.filtros.initial_date) {
+        const day_initial = String(new Date(this.filtros.initial_date).getUTCDate()).padStart(2, '0');
+        const month_initial = String(new Date(this.filtros.initial_date).getUTCMonth() + 1).padStart(2, '0');
+        const year_initial = new Date(this.filtros.initial_date).getUTCFullYear();
+        const formattedDate_initial = `${day_initial}/${month_initial}/${year_initial}`;
         date_initial_menssage = `
-                <div class="menssage-date-initial">
-                    Compras feitas a partir de <span style="font-weight: bold;">${new Date(this.filtros.initial_date).toLocaleDateString("pt-BR")}</span>
-                </div>
-            `;
+                    <div class="menssage-date-initial">
+                        Compras feitas a partir de <span style="font-weight: bold;">${formattedDate_initial}</span>
+                    </div>
+                `;
       }
       let date_final_menssage = "";
       if (this.filtros.final_date) {
+        const day_final = String(new Date(this.filtros.final_date).getUTCDate()).padStart(2, '0');
+        const month_final = String(new Date(this.filtros.final_date).getUTCMonth() + 1).padStart(2, '0');
+        const year_final = new Date(this.filtros.final_date).getUTCFullYear();
+        const formattedDate_final = `${day_final}/${month_final}/${year_final}`;
         date_final_menssage = `
-                <div class="menssage-date-final">
-                    Compras feitas até <span style="font-weight: bold;">${new Date(this.filtros.final_date).toLocaleDateString("pt-BR")}</span>
-                </div>
-            `;
+                    <div class="menssage-date-final">
+                        Compras feitas até <span style="font-weight: bold;">${formattedDate_final}</span>
+                    </div>
+                `;
       }
       let min_val_menssage = "";
       if (this.filtros.min_val) {
