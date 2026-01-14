@@ -81,7 +81,7 @@ router.post('/envio-relatorios/sendEmail/', loginRequired, shippingReportingCont
 router.post('/envio-relatorios/getTotalValueAccount/', loginRequired, shippingReportingController.getTotalValueAccount)
 router.post('/envio-relatorios/markAsPaid/', loginRequired, shippingReportingController.markAsPaid)
 router.post('/envio-relatorios/markAsPending/', loginRequired, shippingReportingController.markAsPending)
-router.get('/envio-relatorios/pdf/', loginRequired, shippingReportingController.downloadPdf)
+router.post('/envio-relatorios/pdf/', loginRequired, shippingReportingController.downloadPdf)
 
 /* Rotas Esqueci Minha Senha */
 router.get("/esqueci-senha/", esqueciSenhaController.index)

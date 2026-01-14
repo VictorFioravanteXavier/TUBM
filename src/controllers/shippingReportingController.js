@@ -6,6 +6,7 @@ const sendEmailUtils = require("../utils/sendEmail").default;
 const transformFilters = require("../utils/transformFilters");
 const isValidDate = require("../utils/isValidDate");
 const generatePDF = require("../utils/generatePDF");
+const resumeVendasPDFHtml = require("../utils/resumeVendasPDFHtml")
 
 exports.index = async (req, res) => {
     const accounts = await Account.findAllNoPage()
@@ -263,10 +264,41 @@ exports.markAsPending = async (req, res) => {
 
 exports.downloadPdf = async (req, res) => {
     try {
-        const pdf = await generatePDF();
 
-        console.log('PDF type:', Buffer.isBuffer(pdf));
-        console.log('PDF size:', pdf?.length);
+        let data = ""
+
+        const filter = req.body.filter
+
+        if (!filter || typeof filter !== 'object') {
+            return res.status(400).json({
+                success: false,
+                error: 'Filtro inválido'
+            });
+        }
+
+        const valid_filters = transformFilters(filter)
+
+        if (!valid_filters.success) {
+            console.error('Filtro inválido');
+            return res.status(400).json({
+                success: false,
+                error: 'Filtro inválido'
+            });
+        }
+
+        const vendas = await Venda.findAllFiltredShippingReportingNoPage(
+            valid_filters.data
+        )
+
+
+        const dataVenda = valid_filters.data.data_venda;
+
+        const initial_date = dataVenda?.$gte ?? null;
+        const final_date = dataVenda?.$lte ?? null;
+
+        const html = resumeVendasPDFHtml({ vendas: vendas, initial_date: initial_date, final_date: final_date })
+
+        const pdf = await generatePDF(html);
 
         res.set({
             'Content-Type': 'application/pdf',

@@ -671,9 +671,22 @@ export class ShippingReporting {
     }
 
     async downloadPDF() {
+
+        if (!this.valid) {
+            alert("Tem que ter dados validos para poder ser enviado!")
+            return
+        }
+        
         try {
+            alert("Gerando...")
+
             const response = await fetch('/envio-relatorios/pdf/', {
-                method: 'GET',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'CSRF-Token': this.token
+                },
+                body: JSON.stringify({ filter: this.filtros })
             });
 
             if (!response.ok) {
