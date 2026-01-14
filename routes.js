@@ -78,11 +78,10 @@ router.get('/envio-relatorios/', loginRequired, shippingReportingController.inde
 router.get('/envio-relatorios/getFiltred/', loginRequired, shippingReportingController.getDataFiltred)
 router.post('/envio-relatorios/getFiltred/:page', loginRequired, shippingReportingController.getDataFiltred)
 router.post('/envio-relatorios/sendEmail/', loginRequired, shippingReportingController.sendEmail)
-router.post('/envio-relatorios/sendWhats/', loginRequired, shippingReportingController.sendWhatsapp)
-router.get('/envio-relatorios/removeNumber/', loginRequired, shippingReportingController.removeNumber)
 router.post('/envio-relatorios/getTotalValueAccount/', loginRequired, shippingReportingController.getTotalValueAccount)
 router.post('/envio-relatorios/markAsPaid/', loginRequired, shippingReportingController.markAsPaid)
 router.post('/envio-relatorios/markAsPending/', loginRequired, shippingReportingController.markAsPending)
+router.get('/envio-relatorios/pdf/', loginRequired, shippingReportingController.downloadPdf)
 
 /* Rotas Esqueci Minha Senha */
 router.get("/esqueci-senha/", esqueciSenhaController.index)

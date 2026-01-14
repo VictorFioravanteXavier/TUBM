@@ -1380,11 +1380,6 @@ class ShippingReporting {
       e.preventDefault();
       this.confirmSend(async () => await self.sendEmail());
     });
-    this.sendWhatsapplButton = document.querySelector(".sendWhatsapp");
-    this.sendWhatsapplButton.addEventListener("click", e => {
-      e.preventDefault();
-      this.confirmSend(async () => await self.sendWhatsapp());
-    });
     this.showTotalValueAccountButton = document.querySelector("#showTotalValueAccount");
     this.showTotalValueAccountButton.addEventListener("click", async e => {
       e.preventDefault();
@@ -1407,6 +1402,11 @@ class ShippingReporting {
     this.dueDateInput = document.querySelector("#due-date");
     this.penaltyIntput = document.querySelector("#penalty");
     this.typePenaltyInput = document.querySelector("#type-penalty");
+    this.downloadPDFButton = document.querySelector("#generate-pdf");
+    this.downloadPDFButton.addEventListener("click", async e => {
+      e.preventDefault;
+      await this.downloadPDF();
+    });
   }
   async saveFiltros(page = 1) {
     if (!this.valida()) {
@@ -1890,6 +1890,29 @@ class ShippingReporting {
       }
     } catch (e) {
       console.error(e);
+    }
+  }
+  async downloadPDF() {
+    try {
+      const response = await fetch('/envio-relatorios/pdf/', {
+        method: 'GET'
+      });
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || 'Erro ao baixar PDF');
+      }
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'relatorio.pdf';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error('Erro no download do PDF:', e);
+      alert('Erro ao baixar o PDF');
     }
   }
 }
