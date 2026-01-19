@@ -371,7 +371,7 @@ class Venda {
                 },
                 {
                     $set: {
-                        date_pay: new Date(),
+                        date_pay: null,
                         status: false
                     }
                 }
@@ -389,6 +389,23 @@ class Venda {
                 error: err.message
             };
         }
+    }
+
+    static async findAllFiltredShippingReportingNoPageProducts(filter) {
+
+        const vendas = await VendaModule.find(filter)
+            .populate({
+                path: 'account_id',
+                model: 'Account'
+            })
+            .populate({
+                path: 'itens.produto_id',
+                model: 'Produto'
+            })
+            .sort({ data_venda: -1 })
+            .lean();
+
+        return vendas
     }
 
 

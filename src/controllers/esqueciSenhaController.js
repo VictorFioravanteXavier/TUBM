@@ -3,7 +3,7 @@ const TokenForgottenPassword = require('../models/TokenForgottenPasswordModel');
 const bcryptjs = require('bcryptjs')
 
 const sendEmailUtils = require("../utils/sendEmail").default;
-const resetEmail = require('../utils/htmlEmailEsqueciSenha');
+const resetEmail = require('../utils/html/htmlEmailEsqueciSenha');
 const validPassword = require('../utils/validPassword');
 
 exports.index = async (req, res) => {

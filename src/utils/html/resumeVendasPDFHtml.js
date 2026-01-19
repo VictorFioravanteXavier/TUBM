@@ -1,4 +1,4 @@
-const formatDate = require("./formatDate");
+const formatDate = require("../formatDate");
 
 module.exports = (data) => {
 
@@ -7,9 +7,8 @@ module.exports = (data) => {
     const created_in_formated = formatDate(created_in, true)
 
     let total_value = 0;
-    let total_itens = 0;
     let total_contas = new Set();
-
+    const total_vendas = data.vendas.length
     let list_elements = ""
 
     data.vendas.forEach((venda) => {
@@ -17,22 +16,18 @@ module.exports = (data) => {
 
         total_contas.add(venda.account_id._id)
 
-        venda.itens.forEach((item) => {
-            total_itens += item.quantidade
-        })
 
-        list_elements+= `
+        list_elements += `
             <tr>
                 <td>${venda.cod_venda}</td>
                 <td>${venda.account_id.name}</td>
-                <td>${ venda.status ? formatDate(venda.date_pay, false) : "-"}</td>
-                <td class="${ venda.status ? "status-paid" : "status-pending"}">${ venda.status ? "Paga" : "Pendente"}</td>
+                <td>${venda.status ? formatDate(venda.date_pay, false) : "-"}</td>
+                <td class="${venda.status ? "status-paid" : "status-pending"}">${venda.status ? "Paga" : "Pendente"}</td>
                 <td>${formatDate(venda.data_venda, false)}</td>
                 <td>${(venda.valor_total / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
             </tr>
         `
     })
-
 
     const html = `
         <!DOCTYPE html>
@@ -163,30 +158,29 @@ module.exports = (data) => {
                             </div>
                             <div class="info-box">
                                 <strong>Total de Vendas:</strong><br>
-                                ${total_itens}
+                                ${total_vendas}
                             </div>
                             <div class="info-box">
                                 <strong>Total de Contas no Escopo:</strong><br>
                                 ${total_contas.size}
                             </div>
-                            ${ data.initial_date ? 
-                                `
+                            ${data.initial_date ?
+            `
                                 <div class="info-box">
                                     <strong>Data Inicial:</strong><br>
                                     ${formatDate(data.initial_date, false)}
                                 </div>
                                 ` : ""
-                            }
+        }
 
-                            ${ 
-                                data.final_date ? 
-                                `
+                            ${data.final_date ?
+            `
                                 <div class="info-box">
                                     <strong>Data Final:</strong><br>
-                                    ${formatDate(data.initial_date, false)}
+                                    ${formatDate(data.final_date, false)}
                                 </div>
                                 ` : ""
-                            }
+        }
                             
                         </div>
                     </div>

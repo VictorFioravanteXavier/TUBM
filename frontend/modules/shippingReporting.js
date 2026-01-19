@@ -670,13 +670,28 @@ export class ShippingReporting {
         }
     }
 
+    getSalesItemsValue() {
+        const radio = document.querySelector(
+            'input[name="sales_items_inp"]:checked'
+        );
+
+        return radio ? radio.value : null;
+    }
+
     async downloadPDF() {
 
         if (!this.valid) {
             alert("Tem que ter dados validos para poder ser enviado!")
             return
         }
-        
+
+        const salesItemsValue = this.getSalesItemsValue();
+
+        if (!salesItemsValue) {
+            alert('Selecione Vendas ou Itens');
+            return;
+        }
+
         try {
             alert("Gerando...")
 
@@ -686,7 +701,10 @@ export class ShippingReporting {
                     'Content-Type': 'application/json',
                     'CSRF-Token': this.token
                 },
-                body: JSON.stringify({ filter: this.filtros })
+                body: JSON.stringify({
+                    filter: this.filtros,
+                    sales_itens: salesItemsValue
+                })
             });
 
             if (!response.ok) {

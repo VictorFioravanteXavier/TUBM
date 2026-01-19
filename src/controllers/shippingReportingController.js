@@ -1,13 +1,13 @@
 const Account = require("../models/AccountModel");
 const Venda = require("../models/VendaModel");
 const agruparVendasPorConta = require("../utils/agruparVendasPorConta");
-const htmlEmail = require("../utils/htmlEmail");
+const htmlEmail = require("../utils/html/htmlEmail");
 const sendEmailUtils = require("../utils/sendEmail").default;
 const transformFilters = require("../utils/transformFilters");
 const isValidDate = require("../utils/isValidDate");
 const generatePDF = require("../utils/generatePDF");
-const resumeVendasPDFHtml = require("../utils/resumeVendasPDFHtml")
-
+const resumeVendasPDFHtml = require("../utils/html/resumeVendasPDFHtml")
+const resumeItensVendasPDFHtml = require("../utils/html/resumeItensVendasPDFHtml")
 exports.index = async (req, res) => {
     const accounts = await Account.findAllNoPage()
 
@@ -263,9 +263,7 @@ exports.markAsPending = async (req, res) => {
 }
 
 exports.downloadPdf = async (req, res) => {
-    try {
-
-        let data = ""
+    try {        
 
         const filter = req.body.filter
 
@@ -286,7 +284,26 @@ exports.downloadPdf = async (req, res) => {
             });
         }
 
-        const vendas = await Venda.findAllFiltredShippingReportingNoPage(
+        let sales_or_itens
+
+        switch (req.body.sales_itens) {
+            case "vendas":
+                sales_or_itens = "vendas"
+                break;
+
+            case "itens":
+                sales_or_itens = "itens"
+                break;
+
+            default:
+                console.error('Somente vendas ou itens são validos na escolha');
+                return res.status(400).json({
+                    success: false,
+                    error: 'Somente vendas ou itens são validos na escolha'
+                });
+        }
+
+        const vendas = await Venda.findAllFiltredShippingReportingNoPageProducts(
             valid_filters.data
         )
 
@@ -296,7 +313,20 @@ exports.downloadPdf = async (req, res) => {
         const initial_date = dataVenda?.$gte ?? null;
         const final_date = dataVenda?.$lte ?? null;
 
-        const html = resumeVendasPDFHtml({ vendas: vendas, initial_date: initial_date, final_date: final_date })
+        let html
+
+        switch (sales_or_itens) {
+            case "vendas":
+                html = resumeVendasPDFHtml({ vendas: vendas, initial_date: initial_date, final_date: final_date })
+                break;
+        
+            case "itens":
+                html = resumeItensVendasPDFHtml({ vendas: vendas, initial_date: initial_date, final_date: final_date })
+                break;
+
+            default:
+                break;
+        }
 
         const pdf = await generatePDF(html);
 

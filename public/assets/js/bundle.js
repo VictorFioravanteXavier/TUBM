@@ -1892,9 +1892,18 @@ class ShippingReporting {
       console.error(e);
     }
   }
+  getSalesItemsValue() {
+    const radio = document.querySelector('input[name="sales_items_inp"]:checked');
+    return radio ? radio.value : null;
+  }
   async downloadPDF() {
     if (!this.valid) {
       alert("Tem que ter dados validos para poder ser enviado!");
+      return;
+    }
+    const salesItemsValue = this.getSalesItemsValue();
+    if (!salesItemsValue) {
+      alert('Selecione Vendas ou Itens');
       return;
     }
     try {
@@ -1906,7 +1915,8 @@ class ShippingReporting {
           'CSRF-Token': this.token
         },
         body: JSON.stringify({
-          filter: this.filtros
+          filter: this.filtros,
+          sales_itens: salesItemsValue
         })
       });
       if (!response.ok) {

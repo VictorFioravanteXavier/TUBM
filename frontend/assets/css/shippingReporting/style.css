@@ -239,6 +239,19 @@ tbody tr td {
     width: 6ch;
 }
 
+.sales_items {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    margin-bottom: 10px;
+}
+
+.sales_items_item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
 
 @media (max-width: 768px) {
     main {
