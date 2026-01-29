@@ -14,6 +14,13 @@ module.exports = async (html) => {
   const pdf = await page.pdf({
     format: 'A4',
     printBackground: true,
+    margin: {
+      top: '25mm',
+      right: '20mm',
+      bottom: '25mm',
+      left: '30mm'
+    }
+
   });
 
   await browser.close();
