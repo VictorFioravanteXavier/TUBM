@@ -679,10 +679,9 @@ export class ShippingReporting {
     }
 
     async downloadPDF() {
-
         if (!this.valid) {
-            alert("Tem que ter dados validos para poder ser enviado!")
-            return
+            alert('Tem que ter dados válidos para enviar!');
+            return;
         }
 
         const salesItemsValue = this.getSalesItemsValue();
@@ -693,12 +692,13 @@ export class ShippingReporting {
         }
 
         try {
-            alert("Gerando...")
+            alert('Gerando PDF...');
 
             const response = await fetch('/envio-relatorios/pdf/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/pdf',
                     'CSRF-Token': this.token
                 },
                 body: JSON.stringify({
@@ -708,8 +708,15 @@ export class ShippingReporting {
             });
 
             if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(errorText || 'Erro ao baixar PDF');
+                const text = await response.text();
+                throw new Error(text || 'Erro ao gerar PDF');
+            }
+
+            const contentType = response.headers.get('Content-Type');
+
+            if (!contentType || !contentType.includes('application/pdf')) {
+                const text = await response.text();
+                throw new Error('Resposta não é PDF: ' + text);
             }
 
             const blob = await response.blob();
@@ -723,9 +730,8 @@ export class ShippingReporting {
 
             a.remove();
             window.URL.revokeObjectURL(url);
-
-        } catch (e) {
-            console.error('Erro no download do PDF:', e);
+        } catch (err) {
+            console.error(err);
             alert('Erro ao baixar o PDF');
         }
     }

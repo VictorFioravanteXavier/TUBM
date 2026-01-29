@@ -263,7 +263,7 @@ exports.markAsPending = async (req, res) => {
 }
 
 exports.downloadPdf = async (req, res) => {
-    try {        
+    try {
 
         const filter = req.body.filter
 
@@ -319,7 +319,7 @@ exports.downloadPdf = async (req, res) => {
             case "vendas":
                 html = resumeVendasPDFHtml({ vendas: vendas, initial_date: initial_date, final_date: final_date })
                 break;
-        
+
             case "itens":
                 html = resumeItensVendasPDFHtml({ vendas: vendas, initial_date: initial_date, final_date: final_date })
                 break;
@@ -330,12 +330,12 @@ exports.downloadPdf = async (req, res) => {
 
         const pdf = await generatePDF(html);
 
-        res.set({
-            'Content-Type': 'application/pdf',
-            'Content-Disposition': 'attachment; filename=relatorio.pdf',
-        });
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename="relatorio.pdf"');
+        res.setHeader('Content-Length', pdf.length);
+        res.setHeader('Cache-Control', 'no-store');
 
-        return res.send(pdf);
+        return res.status(200).end(pdf);
     } catch (err) {
         console.error(err);
         return res.status(500).json({ error: 'Erro ao gerar PDF' });
