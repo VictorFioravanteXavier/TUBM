@@ -34,7 +34,7 @@ module.exports = (data) => {
         });
     });
 
-
+    console.log(data)
 
     const html = `
         <!DOCTYPE html>
