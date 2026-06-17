@@ -396,15 +396,15 @@ class Venda {
         const vendas = await VendaModule.find(filter)
             .populate({
                 path: 'account_id',
-                model: 'Account'
+                model: 'Account',
+                populate: {
+                    path: 'users',
+                    model: 'User'
+                }
             })
             .populate({
                 path: 'itens.produto_id',
                 model: 'Produto'
-            })
-            .populate({
-                path: 'users',
-                model: 'User'
             })
             .sort({ data_venda: -1 })
             .lean();
