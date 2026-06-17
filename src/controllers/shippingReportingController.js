@@ -321,7 +321,7 @@ exports.downloadPdf = async (req, res) => {
                 break;
 
             case "itens":
-                html = resumeItensVendasPDFHtml({ vendas: vendas, initial_date: initial_date, final_date: final_date })
+                html = resumeItensVendasPDFHtml({ vendas: vendas, initial_date: initial_date, final_date: final_date, users: vendas[0]?.account_id?.users })
                 break;
 
             default:

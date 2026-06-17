@@ -7,33 +7,28 @@ module.exports = (data) => {
     const created_in_formated = formatDate(created_in, true)
 
     let total_value = 0;
-    let total_custo = 0
     let total_contas = new Set();
     let total_itens = 0
     let list_elements = ""
 
     data.vendas.forEach(venda => {
         total_value += venda.valor_total / 100;
-        total_contas.add(venda.account_id._id);        
+        total_contas.add(venda.account_id._id);
 
         venda.itens.forEach(item => {
-            
-            const custoTotal = item.custo_produto * item.quantidade;
+
             const subtotal = item.subtotal;
-            const lucro = subtotal - custoTotal;
             total_itens += item.quantidade
-            total_custo += custoTotal / 100;
 
             list_elements += `
             <tr>
                 <td>${venda.cod_venda}</td>
                 <td>${item.produto_id.code}</td>
-                <td>${item.produto_id.name}</td>
+                <td>${item.data_venda}</td>
                 <td>${item.quantidade}</td>
-                <td>${(item.custo_produto / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+                <td>${item.produto_id.name}</td>
                 <td>${(item.valor_venda / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
                 <td>${(subtotal / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
-                <td>${(lucro / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
             </tr>
         `;
         });
@@ -169,8 +164,8 @@ module.exports = (data) => {
                                 ${total_value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                             </div>
                             <div class="info-box">
-                                <strong>Custo Total da Conta:</strong><br>
-                                ${total_custo.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                <strong>Nome Usuário:</strong><br>
+                                ${data.users?.map(user => user.name).join(', ')}
                             </div>
                             <div class="info-box">
                                 <strong>Total de Itens:</strong><br>
@@ -180,6 +175,15 @@ module.exports = (data) => {
                                 <strong>Total de Contas no Escopo:</strong><br>
                                 ${total_contas.size}
                             </div>
+
+                            ${total_contas.size === 1 ?
+                            `
+                            <div class="info-box">
+                                <strong>Conta:</strong><br>
+                                ${data.vendas?.account_id?.name}
+                            </div>` : ""
+                            }
+
                             ${data.initial_date ?
             `
                                 <div class="info-box">
@@ -209,12 +213,11 @@ module.exports = (data) => {
                     <tr>
                         <th>Cód. Venda</th>
                         <th>Cód. Produto</th>
-                        <th>Nome</th>
+                        <th>Data</th>
                         <th>Qtd.</th>
-                        <th>Custo Produto</th>
-                        <th>Valor Venda</th>
+                        <th>Produto (Nome)</th>
+                        <th>Valor de Venda</th>
                         <th>Subtotal</th>
-                        <th>Lucro</th>
                     </tr>
                     </thead>
                     <tbody>

@@ -30,7 +30,7 @@ export default async (to, subject, text, html = null) => {
         });
 
         const mailOptions = {
-            from: `"Cantina do Zé" <${process.env.EMAIL_USER}>`,
+            from: `"Assunto: Conta TUBM Mensalidade e Café do Zé" <${process.env.EMAIL_USER}>`,
             to,
             subject,
             text,

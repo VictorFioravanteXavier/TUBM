@@ -402,6 +402,10 @@ class Venda {
                 path: 'itens.produto_id',
                 model: 'Produto'
             })
+            .populate({
+                path: 'users',
+                model: 'User'
+            })
             .sort({ data_venda: -1 })
             .lean();
 

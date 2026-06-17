@@ -72,9 +72,10 @@ module.exports = (data) => {
             <tr>
             <td style="padding:20px 0; border-bottom:1px solid #ddd;">
                 <h3 style="margin:0 0 10px 0; font-size:16px; color:#1F2937;">Informações Importantes</h3>
-                <p style="margin:0 0 10px 0; color:#4B5563;">Se dividir a conta com outra pessoa é aconselhável conferir se já foi pago pela outra pessoa.</p>
-                <p style="margin:0 0 10px 0; color:#4B5563;">O pagamento deve ser realizado até o dia  <strong>${formattedDate}, ${weekday}</strong>.</p>
-                <p style="margin:0 0 10px 0; color:#4B5563;">Pague até a data de vencimento para evitar juros e multas!</p>
+                <p style="margin:0 0 10px 0; color:#4B5563;">O pagamento deve ser realizado até o 5º dia útil. Fique atento! Em caso de pagamento após a data de vencimento, haverá um acréscimo de R$ 10,00 (dez reais) ao valor da mensalidade e a conta da cantina permanecerá suspensa até a regularização.</p>
+                <br>
+                <p style="margin:0 0 10px 0; color:#4B5563;">Cada conta é pessoal e instransferível. Não há mais contas conjuntas.</p>
+                <br>
                 <p style="margin:0 0 10px 0; color:#4B5563;">Após o pagamento, envie o comprovante para:</p>
                 <p style="margin:0; color:#4B5563;">📱 WhatsApp: (41) 99691-1727</p>
             </td>
