@@ -24,7 +24,9 @@ module.exports = (data) => {
             <tr>
                 <td>${venda.cod_venda}</td>
                 <td>${item.produto_id.code}</td>
-                <td>${item.data_venda}</td>
+                <td>
+                    ${new Date(venda.data_venda).toLocaleDateString('pt-BR')}
+                </td>
                 <td>${item.quantidade}</td>
                 <td>${item.produto_id.name}</td>
                 <td>${(item.valor_venda / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
@@ -175,12 +177,12 @@ module.exports = (data) => {
                             </div>
 
                             ${total_contas.size === 1 ?
-                            `
+            `
                             <div class="info-box">
                                 <strong>Conta:</strong><br>
                                 ${data.vendas[0]?.account_id?.name}
                             </div>` : ""
-                            }
+        }
 
                             ${data.initial_date ?
             `
