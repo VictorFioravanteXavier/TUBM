@@ -34,8 +34,6 @@ module.exports = (data) => {
         });
     });
 
-    console.log(data)
-
     const html = `
         <!DOCTYPE html>
         <html lang="pt-BR">
@@ -180,7 +178,7 @@ module.exports = (data) => {
                             `
                             <div class="info-box">
                                 <strong>Conta:</strong><br>
-                                ${data.vendas?.account_id?.name}
+                                ${data.vendas[0]?.account_id?.name}
                             </div>` : ""
                             }
 
