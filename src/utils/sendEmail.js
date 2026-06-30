@@ -33,9 +33,9 @@ module.exports = async (to, subject, text, html = null) => {
         });
 
         const mailOptions = {
-            from: `"Conta TUBM - Mensalidade e Café do Zé" <${process.env.EMAIL_USER}>`,
+            from: `"Tenda de Umbanda Beira Mar" <${process.env.EMAIL_USER}>`,
             to,
-            subject,
+            subject: "Conta TUBM - Mensalidade e Café do Zé",
             text,
             html: html || text,
         };
