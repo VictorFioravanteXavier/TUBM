@@ -1,4 +1,4 @@
-export function validarCPF(cpf) {
+module.exports = (cpf) => {
     cpf = cpf.replace(/[^\d]+/g, ''); // Remove tudo que não for número
 
     if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) {

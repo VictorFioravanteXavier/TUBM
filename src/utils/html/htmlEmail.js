@@ -70,15 +70,29 @@ module.exports = (data) => {
             </tr>
 
             <tr>
-            <td style="padding:20px 0; border-bottom:1px solid #ddd;">
-                <h3 style="margin:0 0 10px 0; font-size:16px; color:#1F2937;">Informações Importantes</h3>
-                <p style="margin:0 0 10px 0; color:#4B5563;">O pagamento deve ser realizado até o 5º dia útil. Fique atento! Em caso de pagamento após a data de vencimento, haverá um acréscimo de R$ 10,00 (dez reais) ao valor da mensalidade e a conta da cantina permanecerá suspensa até a regularização.</p>
-                <br>
-                <p style="margin:0 0 10px 0; color:#4B5563;">Cada conta é pessoal e instransferível. Não há mais contas conjuntas.</p>
-                <br>
-                <p style="margin:0 0 10px 0; color:#4B5563;">Após o pagamento, envie o comprovante para:</p>
-                <p style="margin:0; color:#4B5563;">📱 WhatsApp: (41) 99691-1727</p>
-            </td>
+                <td>
+                    <p style="margin:0 0 10px 0; color:#4B5563;">Você está recebendo o valor da sua contribuição mensal à Tenda de Umbanda Beira Mar, que inclui: </p>
+                    <ul style="margin:0 0 10px 0; color:#4B5563;"> 
+                        <li>Mensalidade: R$ 40,00<li>
+                        <li>Consumo realizado no último mês no Café do Zé (cantina)<li>
+                    </ul>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="padding:20px 0; border-bottom:1px solid #ddd;">
+                    <h3 style="margin:0 0 10px 0; font-size:16px; color:#1F2937;">Informações Importantes</h3>
+                    <p style="margin:0 0 10px 0; color:#4B5563;">O pagamento deve ser feito até o 5º dia útil. Fique atento!</p>
+                    <br>
+                    <p style="margin:0 0 10px 0; color:#4B5563;">Em caso de pagamento após a data de vencimento, haverá um acréscimo de R$ 10,00 (dez reais) ao valor da mensalidade.</p>
+                    <br>
+                    <p style="margin:0 0 10px 0; color:#4B5563;">A conta da cantina ficará suspensa até a regularização do pagamento.</p>
+                    <br>
+                    <p style="margin:0 0 10px 0; color:#4B5563;">As contas são individuais. Não existem mais contas conjuntas.</p>
+                    <br>
+                    <p style="margin:0 0 10px 0; color:#4B5563;">Após o pagamento, envie o comprovante para:</p>
+                    <p style="margin:0; color:#4B5563;">📱 WhatsApp: (41) 99691-1727</p>
+                </td>
             </tr>
 
             <tr>

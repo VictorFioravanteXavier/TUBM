@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcryptjs = require('bcryptjs')
-const { validarCPF } = require('../utils/validaCpf');
-const { validarTelefone } = require('../utils/validaTelefone');
+const validarCPF = require('../utils/validaCpf');
+const validarTelefone = require('../utils/validaTelefone');
 const validPassword = require('../utils/validPassword');
 const { default: isEmail } = require('validator/lib/isEmail');
 

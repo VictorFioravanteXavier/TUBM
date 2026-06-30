@@ -1,7 +1,7 @@
 const User = require('../models/UserModel');
 const Role = require('../models/RoleModel');
-const { validarCPF } = require('../utils/validaCpf');
-const { validarTelefone } = require('../utils/validaTelefone');
+const validarCPF = require('../utils/validaCpf');
+const validarTelefone = require('../utils/validaTelefone');
 
 exports.index = async (req, res) => {
     const page = parseInt(req.params.page) || 1;

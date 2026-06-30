@@ -1,5 +1,5 @@
-import { validarCPF } from "../../src/utils/validaCpf"
-import { validarTelefone } from "../../src/utils/validaTelefone"
+const validarCpf = require('../../src/utils/validaCpf');
+const validarTelefone = require('../../src/utils/validaTelefone');
 
 export class UsersScreen {
     constructor() {
