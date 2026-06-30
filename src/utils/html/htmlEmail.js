@@ -73,8 +73,8 @@ module.exports = (data) => {
                 <td>
                     <p style="margin:0 0 10px 0; color:#4B5563;">Você está recebendo o valor da sua contribuição mensal à Tenda de Umbanda Beira Mar, que inclui: </p>
                     <ul style="margin:0 0 10px 0; color:#4B5563;"> 
-                        <li>Mensalidade: R$ 40,00<li>
-                        <li>Consumo realizado no último mês no Café do Zé (cantina)<li>
+                        <li>Mensalidade: R$ 40,00</li>
+                        <li>Consumo realizado no último mês no Café do Zé (cantina)</li>
                     </ul>
                 </td>
             </tr>
