@@ -80,6 +80,7 @@ export class ShippingReporting {
         this.dueDateInput = document.querySelector("#due-date")
         this.penaltyIntput = document.querySelector("#penalty")
         this.typePenaltyInput = document.querySelector("#type-penalty")
+        this.monthlyPayment = document.querySelector("#monthly-payment")
 
         this.downloadPDFButton = document.querySelector("#generate-pdf")
         this.downloadPDFButton.addEventListener("click", async (e) => {
@@ -446,6 +447,7 @@ export class ShippingReporting {
                         ? penaltyValue
                         : 0,
                     typePenalty: this.typePenaltyInput.value,
+                    
                 })
             });
 

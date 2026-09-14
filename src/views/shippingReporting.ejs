@@ -104,6 +104,15 @@
                             <option value="false">%</option>
                         </select>
                     </div>
+
+                    <div class="specification">
+                        <label for="monthly-payment">Mensalidade:</label>
+                        <select name="monthly-payment" id="monthly-payment">
+                            <option value="0" selected>R$ 0,00</option>
+                            <option value="40">R$ 40,00</option>
+                            <option value="50">R$ 50,00</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="buttons">
                     <button class="button-primary sendEmail"
@@ -140,12 +149,6 @@
                         Gerar PDF
                     </button>
 
-                    <button class="button-primary"
-                        disabled
-                    >
-                        <i class="fa-solid fa-download"></i>
-                        Gerar XML
-                    </button>
                 </div>
             </div>
 

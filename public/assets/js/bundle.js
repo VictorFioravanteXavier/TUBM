@@ -1402,6 +1402,7 @@ class ShippingReporting {
     this.dueDateInput = document.querySelector("#due-date");
     this.penaltyIntput = document.querySelector("#penalty");
     this.typePenaltyInput = document.querySelector("#type-penalty");
+    this.monthlyPayment = document.querySelector("#monthly-payment");
     this.downloadPDFButton = document.querySelector("#generate-pdf");
     this.downloadPDFButton.addEventListener("click", async e => {
       e.preventDefault;
@@ -2123,10 +2124,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   UsersScreen: () => (/* binding */ UsersScreen)
 /* harmony export */ });
-/* harmony import */ var _src_utils_validaCpf__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../src/utils/validaCpf */ "./src/utils/validaCpf.js");
-/* harmony import */ var _src_utils_validaTelefone__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../src/utils/validaTelefone */ "./src/utils/validaTelefone.js");
-
-
+const validarCpf = __webpack_require__(/*! ../../src/utils/validaCpf */ "./src/utils/validaCpf.js");
+const validarTelefone = __webpack_require__(/*! ../../src/utils/validaTelefone */ "./src/utils/validaTelefone.js");
 class UsersScreen {
   constructor() {}
   init() {
@@ -2318,11 +2317,11 @@ class UsersScreen {
       alert("Coloque um nome válido!");
       return false;
     }
-    if (!(0,_src_utils_validaCpf__WEBPACK_IMPORTED_MODULE_0__.validarCPF)(inp_cpf)) {
+    if (!validarCPF(inp_cpf)) {
       alert("Coloque um CPF válido!");
       return false;
     }
-    if (!(0,_src_utils_validaTelefone__WEBPACK_IMPORTED_MODULE_1__.validarTelefone)(inp_tel)) {
+    if (!validarTelefone(inp_tel)) {
       alert("Coloque um telefone válido!");
       return false;
     }
@@ -26646,14 +26645,9 @@ try {
 /*!********************************!*\
   !*** ./src/utils/validaCpf.js ***!
   \********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((module) => {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   validarCPF: () => (/* binding */ validarCPF)
-/* harmony export */ });
-function validarCPF(cpf) {
+module.exports = cpf => {
   cpf = cpf.replace(/[^\d]+/g, ''); // Remove tudo que não for número
 
   if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) {
@@ -26678,7 +26672,7 @@ function validarCPF(cpf) {
   if (resto === 10 || resto === 11) resto = 0;
   if (resto !== parseInt(cpf.charAt(10))) return false;
   return true;
-}
+};
 
 /***/ }),
 
@@ -26686,20 +26680,15 @@ function validarCPF(cpf) {
 /*!*************************************!*\
   !*** ./src/utils/validaTelefone.js ***!
   \*************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((module) => {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   validarTelefone: () => (/* binding */ validarTelefone)
-/* harmony export */ });
-function validarTelefone(telefone) {
+module.exports = telefone => {
   const telefoneLimpo = telefone.replace(/[^\d]+/g, ''); // Remove tudo que não for número
 
   // Valida se tem 11 dígitos (DDD + 9 dígitos do celular)
   const regex = /^\d{11}$/;
   return regex.test(telefoneLimpo);
-}
+};
 
 /***/ })
 

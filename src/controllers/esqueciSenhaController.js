@@ -2,7 +2,7 @@ const User = require('../models/UserModel');
 const TokenForgottenPassword = require('../models/TokenForgottenPasswordModel');
 const bcryptjs = require('bcryptjs')
 
-const sendEmailUtils = require("../utils/sendEmail").default;
+const sendEmailUtils = require("../utils/sendEmail");
 const resetEmail = require('../utils/html/htmlEmailEsqueciSenha');
 const validPassword = require('../utils/validPassword');
 
